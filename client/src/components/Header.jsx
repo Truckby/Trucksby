@@ -16,26 +16,25 @@ export default function Header() {
           </a>
 
           <nav className="hidden md:flex">
-      {[
-        { name: "Home", to: "/" },
-        { name: "Privacy", to: "/privacy" },
-        { name: "Contact", to: "/contact" },
-      ].map((item) => (
-        <NavLink
-          key={item.to}
-          to={item.to}
-          className={({ isActive }) =>
-            `relative pb-2 mb-0 ml-[86px] transition-colors ${
-              isActive
-                ? "text-[#DF0805] border-b-2 border-[#DF0805]"
-                : "text-gray-700 hover:text-[#DF0805]"
-            }`
-          }
-        >
-          {item.name}
-        </NavLink>
-      ))}
-    </nav>
+            {[
+              { name: "Home", to: "/" },
+              { name: "Privacy", to: "/PrivacyPage" },
+              { name: "Contact", to: "/contact" },
+            ].map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `relative pb-2 mb-0 ml-[86px] transition-colors ${isActive
+                    ? "text-[#DF0805] border-b-2 border-[#DF0805]"
+                    : "text-gray-700 hover:text-[#DF0805]"
+                  }`
+                }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+          </nav>
         </div>
 
         <div className="flex space-x-4">

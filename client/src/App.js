@@ -16,6 +16,7 @@ import Profile from "./pages/common/profile/Profile";
 import PrivateRoute from "./routes/PrivateRoute";
 import Home from "./pages/common/home/Home";
 import MainLayout from "./components/layout/MainLayout";
+import PrivacyPage from "./pages/common/privacy/PrivacyPage";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           
           {/* Common Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/PrivacyPage" element={<PrivacyPage />} />
           <Route
             path="/profile"
             element={

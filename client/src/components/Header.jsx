@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/images/logo.svg"; 
+import logo from "../assets/images/logo.svg";
 
 export default function Header() {
   // Retrieve the current pathname from the browser.
@@ -23,11 +23,10 @@ export default function Header() {
               <a
                 key={item.href}
                 href={item.href}
-                className={`relative pb-2 mb-0 transition-colors ${
-                  pathname === item.href
+                className={`relative pb-2 mb-0 transition-colors ${pathname === item.href
                     ? "text-[#DF0805] border-b-2 border-[#DF0805]"
                     : "text-gray-700 hover:text-[#DF0805]"
-                }`}
+                  }`}
               >
                 {item.name}
               </a>

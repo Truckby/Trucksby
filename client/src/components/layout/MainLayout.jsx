@@ -21,18 +21,13 @@ const MainLayout = () => {
             {role === "seller" && (
                 <Header />
             )}
-            {!role && location.pathname !== "/login" && location.pathname !== "/signup" && (
+            {!role && (
                 <Header />
             )}
-
-            {/* Main content area */}
-            <main className="p-6">
+            <div className="min-h-[100vh]">
                 <Outlet />
-            </main>
-
-            
-
-            <Footer/>
+            </div>
+            <Footer />
         </div>
     );
 };

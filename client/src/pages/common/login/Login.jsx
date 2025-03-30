@@ -10,8 +10,8 @@ export default function Login() {
   style={{ backgroundImage: `url(${bgImage})` }}
 ></div>
 
-      <div className="relative z-10 flex justify-center items-start mt-[20vh]">
-        <div className="bg-white rounded-lg w-full max-w-[80vw] h-[619px] px-4 md:px-0 flex items-center justify-center">
+      <div className="relative z-10 flex justify-center items-start my-[20vh]">
+        <div className="bg-white shadow rounded-lg w-full max-w-[883px] h-[619px] px-4 md:px-0 flex items-center justify-center">
           <LoginSelector />
         </div>
       </div>

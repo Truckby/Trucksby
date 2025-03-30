@@ -1,6 +1,7 @@
 import React from "react";
 import { FaFacebookF, FaTwitter, FaYoutube, FaTelegramPlane } from "react-icons/fa";
 import logo from "../assets/images/footer_logo.svg";  
+import { Link } from "react-router";
 
 export default function Footer() {
   return (
@@ -24,31 +25,31 @@ export default function Footer() {
             </div>
           </div>
 
-          <nav className="flex space-x-18 text-[#FFFFFF] text-sm">
-            <a href="#" className="hover:text-white">
+          <nav className="flex space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
+            <Link to={'/'} className="hover:text-white">
               Home
-            </a>
-            <a href="#" className="hover:text-white">
+            </Link>
+            <Link to={'/'} className="hover:text-white">
               Explore
-            </a>
-            <a href="#" className="hover:text-white">
+            </Link>
+            <Link to={'/'} className="hover:text-white">
               Profile
-            </a>
-            <a href="#" className="hover:text-white">
+            </Link>
+            <Link to={'/'} className="hover:text-white">
               Help
-            </a>
+            </Link>
           </nav>
           <div className="flex flex-col items-center md:items-end">
             <div className="flex space-x-4 text-[#FFFFFF] mt-6 md:mt-0">
-              <a href="#" className="hover:text-white">
+              <Link to={'/'} className="hover:text-white">
                 <FaFacebookF size={18} />
-              </a>
-              <a href="#" className="hover:text-white">
+              </Link>
+              <Link to={'/'} className="hover:text-white">
                 <FaTwitter size={18} />
-              </a>
-              <a href="#" className="hover:text-white">
+              </Link>
+              <Link to={'/'} className="hover:text-white">
                 <FaYoutube size={18} />
-              </a>
+              </Link>
             </div>
             <div className="text-center text-[#FFFFFF] text-xs mt-6">
               © Copyright 2024 - Coolpai

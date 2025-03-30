@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/images/logo.svg";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   // Retrieve the current pathname from the browser.
@@ -8,30 +9,33 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="mx-auto px-4 md:px-0 max-w-7xl py-3 flex justify-between items-center">
         <div className="flex items-center gap-18">
           <a href="/">
             <img src={logo} alt="Logo" width={109} height={80} />
           </a>
 
-          <nav className="hidden md:flex space-x-14">
-            {[
-              { name: "Home", href: "/" },
-              { name: "Privacy", href: "/privacy" },
-              { name: "Contact", href: "/contact" },
-            ].map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`relative pb-2 mb-0 transition-colors ${pathname === item.href
-                    ? "text-[#DF0805] border-b-2 border-[#DF0805]"
-                    : "text-gray-700 hover:text-[#DF0805]"
-                  }`}
-              >
-                {item.name}
-              </a>
-            ))}
-          </nav>
+          <nav className="hidden md:flex">
+      {[
+        { name: "Home", to: "/" },
+        { name: "Privacy", to: "/privacy" },
+        { name: "Contact", to: "/contact" },
+      ].map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) =>
+            `relative pb-2 mb-0 ml-[86px] transition-colors ${
+              isActive
+                ? "text-[#DF0805] border-b-2 border-[#DF0805]"
+                : "text-gray-700 hover:text-[#DF0805]"
+            }`
+          }
+        >
+          {item.name}
+        </NavLink>
+      ))}
+    </nav>
         </div>
 
         <div className="flex space-x-4">

@@ -39,7 +39,8 @@ export default function Footer() {
               Help
             </Link>
           </nav>
-          <div className="flex flex-col items-center md:items-end">
+
+          <div className=" lg:w-[260px] flex flex-col items-center md:items-end">
             <div className="flex space-x-4 text-[#FFFFFF] mt-6 md:mt-0">
               <Link to={'/'} className="hover:text-white">
                 <FaFacebookF size={18} />

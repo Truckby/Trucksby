@@ -13,7 +13,7 @@ const MainLayout = () => {
     const location = useLocation();
 
     return (
-        <div>
+        <div className="bg-[#FBFBFB]">
             {/* Optional: show header/nav based on role */}
             {role === "user" && (
                 <Header />
@@ -24,7 +24,7 @@ const MainLayout = () => {
             {!role && (
                 <Header />
             )}
-            <div className="min-h-[100vh]">
+            <div className="min-h-[100vh] mx-auto px-4 md:px-0 max-w-7xl">
                 <Outlet />
             </div>
             <Footer />

@@ -1,22 +1,16 @@
-'use client';
-
 import React, { useState } from 'react';
-import { BsEyeFill,BsEyeSlashFill } from 'react-icons/bs';
+import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 import { IoIosMail } from "react-icons/io";
 import { BiSolidLock } from "react-icons/bi";
-interface FormData {
-  email: string;
-  password: string;
-}
 
-const BuyerLoginForm: React.FC = () => {
+const BuyerLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -24,7 +18,7 @@ const BuyerLoginForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Buyer login submitted:', formData);
   };
@@ -65,6 +59,7 @@ const BuyerLoginForm: React.FC = () => {
           {showPassword ? <BsEyeSlashFill size={20} /> : <BsEyeFill size={20} />}
         </button>
       </div>
+
       <button
         type="submit"
         className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] focus:outline-none transition-colors"

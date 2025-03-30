@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import BuyerLoginForm from "./BuyerLoginForm";
 import SellerLoginForm from "./SellerLoginForm";
 import { BsFillPersonFill } from "react-icons/bs";
-import logo from "@/public/images/login_logo.svg";
-import Image from "next/image";
+import logo from "../../../../assets/images/login_logo.svg"; // ✅ Update this path to your actual image location
 
-export default function LoginSelector() {
-  const [activeForm, setActiveForm] = useState<"buyer" | "seller">("buyer");
+const LoginSelector = () => {
+  const [activeForm, setActiveForm] = useState("buyer");
 
   return (
     <div className="w-full mx-auto my-10 p-6 flex flex-col items-center justify-center">
-      <Image src={logo} alt="Logo" width={177} height={127} className="mb-5" />
+      <img src={logo} alt="Logo" width={177} height={127} className="mb-5" />
 
       <div className="flex flex-wrap justify-center gap-4 mb-6">
         <button
@@ -49,4 +48,6 @@ export default function LoginSelector() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginSelector;

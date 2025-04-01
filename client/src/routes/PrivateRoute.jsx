@@ -5,11 +5,13 @@ import { Navigate } from "react-router-dom";
 const getUserRole = () => {
 //   const user = JSON.parse(localStorage.getItem("user"));
   const user = 'user';
-  return user?.role; // e.g., 'user' or 'seller'
+  // return user?.role; // e.g., 'user' or 'seller'
+  return 'user'; // e.g., 'user' or 'seller'
 };
 
 const isAuthenticated = () => {
-  return !!localStorage.getItem("user");
+  // return !!localStorage.getItem("user");
+  return true;
 };
 
 const PrivateRoute = ({ children, role }) => {

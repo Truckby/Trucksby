@@ -24,7 +24,7 @@ const MainLayout = () => {
             {!role && (
                 <Header />
             )}
-            <div className="min-h-[100vh] mx-auto px-4 md:px-0 max-w-7xl">
+            <div className="min-h-[100vh] mx-auto px-4 md:px-0 max-w-[1300px]">
                 <Outlet />
             </div>
             <Footer />

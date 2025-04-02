@@ -8,7 +8,7 @@ import { IoIosSpeedometer } from "react-icons/io";
 
 const TruckCard = ({ images, title, price, location, miles }) => {
   return (
-    <div className=" rounded-[10px] shadow w-[255px] mt-8 bg-white">
+    <div className=" rounded-[10px] shadow w-[240px] m-2 mt-8 bg-white">
       {/* Carousel Section */}
       <div className="relative">
         <Carousel showThumbs={false} infiniteLoop autoPlay>

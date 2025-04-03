@@ -4,11 +4,13 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosSpeedometer } from "react-icons/io";
+import { useNavigate } from "react-router";
 
 
 const TruckCard = ({ images, title, price, location, miles }) => {
+  const navigate = useNavigate()
   return (
-    <div className=" rounded-[10px] shadow w-[240px] m-2 mb-8 bg-white cursor-pointer">
+    <div onClick={()=>navigate(`/user/detail`)} className=" rounded-[10px] shadow w-[240px] m-2 mb-8 bg-white cursor-pointer">
       {/* Carousel Section */}
       <div className="relative">
         <Carousel showThumbs={false} infiniteLoop autoPlay>

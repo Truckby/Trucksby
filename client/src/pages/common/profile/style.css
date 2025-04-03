@@ -1,0 +1,25 @@
+.label {
+    font-family: Lato;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    margin-bottom: 11px;
+    display: block;
+}
+
+.input{
+    border-radius: 10px;
+    box-shadow: 0px 0px 7px 0px #0000000D;
+    height: 60px;
+    width: 100%;
+    margin-bottom: 36px;
+    padding-left: 29px;
+    border: none;
+    overflow: unset;
+}
+
+input::placeholder {
+    color: #767676;
+    opacity: 1; /* Adjust opacity if needed */
+  }

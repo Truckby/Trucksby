@@ -5,56 +5,56 @@ import cardImage from '../../../assets/images/card.svg'
 import TruckCard from '../../common/home/components/TruckCard'
 
 const FilterPage = () => {
-    const truckData = [
-      {
-        images: [
-          cardImage,
-          cardImage,
-          cardImage,
-        ],
-        title: "2024 ISUZU",
-        price: "50,000",
-        location: "Pocatello, Idaho",
-        miles: "120,000",
-      },
-      {
-        images: [
-          cardImage,
-          cardImage,
-          cardImage,
-        ],
-        title: "2022 Ford F-750",
-        price: "45,500",
-        location: "Dallas, Texas",
-        miles: "98,000",
-      },
-      {
-        images: [
-          cardImage,
-          cardImage,
-          cardImage,
-        ],
-        title: "2023 Freightliner M2",
-        price: "60,000",
-        location: "Los Angeles",
-        miles: "75,000",
-      },
-      {
-        images: [
-          cardImage,
-          cardImage,
-          cardImage,
-        ],
-        title: "2024 ISUZU",
-        price: "50,000",
-        location: "Pocatello, Idaho",
-        miles: "120,000",
-      },
-    ];
-  
+  const truckData = [
+    {
+      images: [
+        cardImage,
+        cardImage,
+        cardImage,
+      ],
+      title: "2024 ISUZU",
+      price: "50,000",
+      location: "Pocatello, Idaho",
+      miles: "120,000",
+    },
+    {
+      images: [
+        cardImage,
+        cardImage,
+        cardImage,
+      ],
+      title: "2022 Ford F-750",
+      price: "45,500",
+      location: "Dallas, Texas",
+      miles: "98,000",
+    },
+    {
+      images: [
+        cardImage,
+        cardImage,
+        cardImage,
+      ],
+      title: "2023 Freightliner M2",
+      price: "60,000",
+      location: "Los Angeles",
+      miles: "75,000",
+    },
+    {
+      images: [
+        cardImage,
+        cardImage,
+        cardImage,
+      ],
+      title: "2024 ISUZU",
+      price: "50,000",
+      location: "Pocatello, Idaho",
+      miles: "120,000",
+    },
+  ];
+
 
   return (
-    <div>
+    <div className='pb-20'>
       <div className='flex justify-between items-center mt-9'>
         <div className="flex w-[587px] flex-wrap md:flex-nowrap rounded-[10px] items-center shadow">
           <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px]  min-w-[250px] md:w-auto  rounded-l-[10px]" />
@@ -82,17 +82,15 @@ const FilterPage = () => {
 
       <div className='flex'>
         <div>
-          <FilterComponent/>
+          <FilterComponent />
         </div>
 
-         <div className='flex justify-between flex-wrap'>
+        <div className='flex justify-between flex-wrap '>
           {truckData.map((truck, index) => (
             <div key={index}>
               <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
-
             </div>
           ))}
-
         </div>
       </div>
     </div>

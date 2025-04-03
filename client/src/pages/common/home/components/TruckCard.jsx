@@ -8,7 +8,7 @@ import { IoIosSpeedometer } from "react-icons/io";
 
 const TruckCard = ({ images, title, price, location, miles }) => {
   return (
-    <div className=" rounded-[10px] shadow w-[240px] m-2 mt-8 bg-white">
+    <div className=" rounded-[10px] shadow w-[240px] m-2 mb-8 bg-white">
       {/* Carousel Section */}
       <div className="relative">
         <Carousel showThumbs={false} infiniteLoop autoPlay>
@@ -26,14 +26,14 @@ const TruckCard = ({ images, title, price, location, miles }) => {
           <FaRegHeart className="text-gray-600" size={18} />
         </button>
       </div>
-      
+
       {/* Details Section */}
       <div className="p-[15px] pt-[10px]">
         <h3 className="text-base font-medium">{title}</h3>
         <p className="text-[#DF0805] mt-[6px]">{price} $</p>
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">
-          <p className="flex items-center"><FaLocationDot className="pr-1" />          {location}</p>
-          <p className="flex items-center"><IoIosSpeedometer className="pr-1" />          {miles} Miles</p>
+          <p className="flex items-center"><FaLocationDot className="mr-1" />{location}</p>
+          <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{miles} Miles</p>
         </div>
       </div>
     </div>

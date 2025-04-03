@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FaAngleDown } from "react-icons/fa6";
+import { FaChevronUp } from "react-icons/fa";
 
 const FilterComponent = () => {
   const [openSections, setOpenSections] = useState({});
@@ -8,28 +10,40 @@ const FilterComponent = () => {
   };
 
   return (
-    <div className="w-[274px] bg-white p-4 border rounded-lg shadow-md">
+    <div className="w-[274px] bg-white p-[21px] rounded-[11px] shadow">
       {/* Listing Type */}
       <FilterSection title="Listing Type" isOpen={openSections.listingType} toggle={() => toggleSection("listingType")}>
-        <Checkbox label="Option 1" />
-        <Checkbox label="Option 2" />
-        <Checkbox label="Option 3" />
+        <Checkbox label="For Sale" />
+        <Checkbox label="For Lease" />
+        <Checkbox label="For Auction" />
       </FilterSection>
 
       {/* Category */}
       <FilterSection title="Category" isOpen={openSections.category} toggle={() => toggleSection("category")}>
-        <Checkbox label="Category 1" />
-        <Checkbox label="Category 2" />
+        <Checkbox label="For Sale" />
+        <Checkbox label="For Lease" />
+        <Checkbox label="For Auction" />
       </FilterSection>
 
       {/* Manufacturer */}
       <FilterSection title="Manufacturer" isOpen={openSections.manufacturer} toggle={() => toggleSection("manufacturer")}>
         <SearchInput placeholder="Search Manufacturer" />
+        <Checkbox label="Hyundia" />
+        <Checkbox label="KIA" />
+        <Checkbox label="Isuzu" />
+        <Checkbox label="Mitsubishi" />
+        <Checkbox label="Hino" />
       </FilterSection>
 
       {/* Year Range */}
       <FilterSection title="Year" isOpen={openSections.year} toggle={() => toggleSection("year")}>
         <RangeInput />
+      </FilterSection>
+
+      <FilterSection title="Gross Vehicle Weight" isOpen={openSections.vehicle} toggle={() => toggleSection("vehicle")}>
+        <Checkbox label="Heavy Weight" />
+        <Checkbox label="Class 7" />
+        <Checkbox label="Class 8" />
       </FilterSection>
 
       {/* Mileage */}
@@ -38,13 +52,27 @@ const FilterComponent = () => {
       </FilterSection>
 
       {/* Engine Manufacturer */}
-      <FilterSection title="Engine Manufacturer" isOpen={openSections.engine} toggle={() => toggleSection("engine")}>
+      <FilterSection title="Manufacturer" isOpen={openSections.engine} toggle={() => toggleSection("engine")}>
         <SearchInput placeholder="Search Engine Manufacturer" />
+        <Checkbox label="Hyundia" />
+        <Checkbox label="KIA" />
+        <Checkbox label="Isuzu" />
+        <Checkbox label="Mitsubishi" />
       </FilterSection>
 
       {/* Horsepower */}
       <FilterSection title="Horsepower" isOpen={openSections.horsepower} toggle={() => toggleSection("horsepower")}>
         <RangeInput />
+      </FilterSection>
+
+      <FilterSection title="Wheelbase" isOpen={openSections.wheelbase} toggle={() => toggleSection("wheelbase")}>
+        <RangeInput />
+      </FilterSection>
+
+      <FilterSection title="Suspension" isOpen={openSections.suspension} toggle={() => toggleSection("suspension")}>
+        <SearchInput placeholder="Search Suspension" />
+        <Checkbox label="Air Ride" />
+        <Checkbox label="Flex Air" />
       </FilterSection>
 
       {/* Transmission */}
@@ -58,36 +86,40 @@ const FilterComponent = () => {
 
 const FilterSection = ({ title, isOpen, toggle, children }) => {
   return (
-    <div className="border-b py-2">
+    <div className="pb-6">
       <button className="w-full flex justify-between items-center font-semibold" onClick={toggle}>
         {title}
-        <span className="text-gray-500">{isOpen ? "▲" : "▼"}</span>
+        <span >{isOpen ? <FaChevronUp /> : <FaAngleDown />}</span>
       </button>
-      {isOpen && <div className="mt-2">{children}</div>}
+      {isOpen && <div className="mt-4">{children}</div>}
     </div>
   );
 };
 
 const Checkbox = ({ label }) => (
-  <label className="flex items-center space-x-2 text-gray-700">
-    <input type="checkbox" className="h-4 w-4 border-gray-300" />
-    <span>{label}</span>
+  <label className="flex mb-[8px] items-center cursor-pointer">
+    <input
+      type="checkbox"
+      className="h-[14px] w-[14px] accent-[#DF0805] mr-[13px] border-gray-300 rounded"
+    />
+    <span className="text-sm">{label}</span>
   </label>
 );
+
 
 const SearchInput = ({ placeholder }) => (
   <input
     type="text"
     placeholder={placeholder}
-    className="w-full p-2 border rounded-md text-gray-700 mt-2"
+    className="w-full h-[45px] p-2 text-sm border-none outline-none shadow mb-6 rounded-[4px] mt-2"
   />
 );
 
 const RangeInput = () => (
-  <div className="flex gap-2 mt-2">
-    <input type="number" placeholder="Min" className="w-1/2 p-2 border rounded-md" />
-    <input type="number" placeholder="Max" className="w-1/2 p-2 border rounded-md" />
-    <button className="bg-blue-500 text-white p-2 rounded-md">Search</button>
+  <div className="flex gap-3 text-sm mt-2">
+    <input type="number" placeholder="Min" className="w-[63px] h-[45px] p-2 shadow border-none outline-none rounded-md" />
+    <input type="number" placeholder="Max" className="w-[63px] h-[45px] p-2 shadow border-none outline-none rounded-md" />
+    <button className="bg-black h-[45px] w-[75px] text-white p-2 rounded-md">Search</button>
   </div>
 );
 

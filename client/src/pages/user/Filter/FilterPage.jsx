@@ -54,7 +54,7 @@ const FilterPage = () => {
 
 
   return (
-    <div className='pb-20'>
+    <div className='pb-20 max-w-[1300px] mx-auto'>
       <div className='flex justify-between items-center mt-9'>
         <div className="flex w-[587px] flex-wrap md:flex-nowrap rounded-[10px] items-center shadow">
           <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px]  min-w-[250px] md:w-auto  rounded-l-[10px]" />

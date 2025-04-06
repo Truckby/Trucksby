@@ -71,7 +71,7 @@ const Home = () => {
 
 
   return (
-    <div className=''>
+    <div className='max-w-[1300px] mx-auto'>
       <div className="flex flex-col md:flex-row items-center justify-between ">
         {/* Left Section */}
         <div className="md:w-1/2 space-y-4">

@@ -62,7 +62,7 @@ const App = () => {
           <Route
             path="/seller/listing"
             element={
-              <PrivateRoute role="seller">
+              <PrivateRoute role="user">
                 <Listing />
               </PrivateRoute>
             }

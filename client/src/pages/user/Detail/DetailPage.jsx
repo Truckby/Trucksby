@@ -2,6 +2,9 @@ import React from 'react'
 import Info from './components/Info';
 import DetailInfo from './components/DetailInfo';
 import { FaSearch } from 'react-icons/fa';
+import TruckCard from '../../common/home/components/TruckCard';
+
+import cardImage from '../../../assets/images/card.svg'
 
 const DetailPage = () => {
 
@@ -35,6 +38,53 @@ const DetailPage = () => {
     },
   };
 
+
+  const truckData = [
+      {
+        images: [
+          cardImage,
+          cardImage,
+          cardImage,
+        ],
+        title: "2024 ISUZU",
+        price: "50,000",
+        location: "Pocatello, Idaho",
+        miles: "120,000",
+      },
+      {
+        images: [
+          cardImage,
+          cardImage,
+          cardImage,
+        ],
+        title: "2022 Ford F-750",
+        price: "45,500",
+        location: "Dallas, Texas",
+        miles: "98,000",
+      },
+      {
+        images: [
+          cardImage,
+          cardImage,
+          cardImage,
+        ],
+        title: "2023 Freightliner M2",
+        price: "60,000",
+        location: "Los Angeles",
+        miles: "75,000",
+      },
+      {
+        images: [
+          cardImage,
+          cardImage,
+          cardImage,
+        ],
+        title: "2024 ISUZU",
+        price: "50,000",
+        location: "Pocatello, Idaho",
+        miles: "120,000",
+      },
+    ];
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto'>
@@ -72,6 +122,20 @@ const DetailPage = () => {
 
         <div className='block lg:hidden'>
           <DetailInfo data={sampleData} />
+        </div>
+      </div>
+
+      <div className='pt-[60px] pb-[70px]'>
+        <h3 className='text-[32px] font-bold'>More like this</h3>
+
+        <div className='flex justify-between flex-wrap w-full'>
+          {truckData.map((truck, index) => (
+            <div key={index}>
+              <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
+
+            </div>
+          ))}
+
         </div>
       </div>
     </div>

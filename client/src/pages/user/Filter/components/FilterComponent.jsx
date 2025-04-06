@@ -27,9 +27,9 @@ const FilterComponent = () => {
 
   return (
 
-    <div>
+    <div className="">
       {selectedFilters.length > 0 && (
-        <div className="mb-4 p-3 py-4 w-[274px] bg-white shadow rounded-[11px]">
+        <div className="mb-4 p-3 py-4 md:w-[274px] bg-white shadow rounded-[11px]">
           <div className="flex justify-between items-center mb-2">
             <span className="font-semibold">Applied Filters</span>
             <button onClick={clearAllFilters} className="text-red-600 text-sm">
@@ -55,7 +55,7 @@ const FilterComponent = () => {
         </div>
       )}
 
-      <div className="w-[274px] bg-white p-[21px] rounded-[11px] shadow">
+      <div className="md:w-[274px] bg-white pr-2 md:p-[21px] rounded-[11px] md:shadow h-[95vh] overflow-y-auto md:overflow-hidden">
         {/* Listing Type */}
         <FilterSection title="Listing Type" isOpen={openSections.listingType} toggle={() => toggleSection("listingType")}>
           <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="For Sale" />

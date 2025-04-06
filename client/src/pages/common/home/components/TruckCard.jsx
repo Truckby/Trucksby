@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 const TruckCard = ({ images, title, price, location, miles }) => {
   const navigate = useNavigate()
   return (
-    <div onClick={()=>navigate(`/user/detail`)} className=" rounded-[10px] shadow mx-auto w-[240px] m-2 mb-8 bg-white cursor-pointer">
+    <div onClick={()=>navigate(`/user/detail`)} className=" rounded-[10px] shadow  w-[240px] m-2 mb-8 bg-white cursor-pointer">
       {/* Carousel Section */}
       <div className="relative">
         <Carousel showThumbs={false} infiniteLoop autoPlay>

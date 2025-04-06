@@ -1,10 +1,13 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import FilterComponent from './components/FilterComponent'
 import cardImage from '../../../assets/images/card.svg'
 import TruckCard from '../../common/home/components/TruckCard'
+import { IoMdClose } from 'react-icons/io'
 
 const FilterPage = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const truckData = [
     {
       images: [
@@ -55,9 +58,9 @@ const FilterPage = () => {
 
   return (
     <div className='pb-20 max-w-[1300px] mx-auto'>
-      <div className='flex justify-between items-center mt-9'>
-        <div className="flex w-[587px] flex-wrap md:flex-nowrap rounded-[10px] items-center shadow">
-          <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px]  min-w-[250px] md:w-auto  rounded-l-[10px]" />
+      <div className='flex flex-col lg:flex-row justify-between items-center mt-9'>
+        <div className="flex md:w-[587px]  rounded-[10px] items-center shadow">
+          <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" />
           <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
             <option>All Cities</option>
           </select>
@@ -70,8 +73,8 @@ const FilterPage = () => {
         </div>
 
         {/* Search Input */}
-        <div className="relative lg:w-[587px]">
-          <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] lg:w-[587px] shadow rounded-[10px]" />
+        <div className="relative w-full mt-4 lg:mt-0 md:w-[587px]">
+          <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full lg:w-[587px] shadow rounded-[10px]" />
           <span className='absolute top-5 right-5'>
             <FaSearch fontSize={20} color='#8E8E8E' />
           </span>
@@ -80,15 +83,47 @@ const FilterPage = () => {
 
       <h1 className='text-[32px] font-bold mt-[50px] mb-[40px]'>Trucks for sale in California</h1>
 
-      <div className='flex'>
-        <div>
+      <div className="flex flex-col md:flex-row">
+        <div className="hidden md:block">
           <FilterComponent />
         </div>
 
-        <div className='flex justify-between flex-wrap '>
+        <div className="md:hidden pb-4">
+          <button
+            className="bg-[#DF0805] text-white px-4 py-2 rounded"
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            Filters
+          </button>
+        </div>
+
+        {/* Drawer for mobile filters */}
+        {isDrawerOpen && (
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 p-4 transition-transform transform md:hidden">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">Filters</h2>
+              <button
+                className="text-red-500 font-bold"
+                onClick={() => setIsDrawerOpen(false)}
+              >
+                <IoMdClose />
+              </button>
+            </div>
+            <FilterComponent />
+          </div>
+        )}
+
+        {/* Truck cards container */}
+        <div className=" flex flex-wrap h-[280px]">
           {truckData.map((truck, index) => (
-            <div key={index}>
-              <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
+            <div className='' key={index}>
+              <TruckCard
+                images={truck?.images}
+                title={truck?.title}
+                price={truck?.price}
+                location={truck?.location}
+                miles={truck?.miles}
+              />
             </div>
           ))}
         </div>

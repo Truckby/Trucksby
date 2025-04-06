@@ -38,9 +38,9 @@ const DetailPage = () => {
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto'>
-      <div className='md:flex justify-between items-center mt-9'>
-        <div className="flex w-[587px] flex-wrap md:flex-nowrap rounded-[10px] items-center shadow">
-          <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px]  min-w-[250px] md:w-auto  rounded-l-[10px]" />
+      <div className='flex flex-col lg:flex-row justify-between items-center mt-9'>
+        <div className="flex md:w-[587px]  rounded-[10px] items-center shadow">
+          <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" />
           <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
             <option>All Cities</option>
           </select>
@@ -53,21 +53,25 @@ const DetailPage = () => {
         </div>
 
         {/* Search Input */}
-        <div className="relative lg:w-[587px]">
-          <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] lg:w-[587px] shadow rounded-[10px]" />
+        <div className="relative w-full mt-4 lg:mt-0 md:w-[587px]">
+          <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full lg:w-[587px] shadow rounded-[10px]" />
           <span className='absolute top-5 right-5'>
             <FaSearch fontSize={20} color='#8E8E8E' />
           </span>
         </div>
       </div>
 
-      <div className='grid md:grid-cols-2 mt-20'>
-        <div>
-          <DetailInfo data={sampleData}/>
+      <div className='grid lg:grid-cols-2 mt-20'>
+        <div className='hidden lg:block'>
+          <DetailInfo data={sampleData} />
         </div>
 
-        <div>
-          <Info/>
+        <div className='mb-8 lg:mb-0'>
+          <Info />
+        </div>
+
+        <div className='block lg:hidden'>
+          <DetailInfo data={sampleData} />
         </div>
       </div>
     </div>

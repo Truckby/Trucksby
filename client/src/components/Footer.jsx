@@ -25,7 +25,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <nav className="flex space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
+          <nav className="flex space-x-10 sm:space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
             <Link to={'/'} className="hover:text-white">
               Home
             </Link>
@@ -40,7 +40,7 @@ export default function Footer() {
             </Link>
           </nav>
 
-          <div className=" lg:w-[260px] flex flex-col items-center md:items-end">
+          <div className=" lg:w-[260px] flex flex-col  items-center md:items-end">
             <div className="flex space-x-4 text-[#FFFFFF] mt-6 md:mt-0">
               <Link to={'/'} className="hover:text-white">
                 <FaFacebookF size={18} />

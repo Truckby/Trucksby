@@ -3,6 +3,7 @@ import BuyerSignupForm from "./BuyerSignupForm";
 import SellerSignupForm from "./SellerSignupForm";
 import { BsFillPersonFill } from "react-icons/bs";
 import logo from "../../../../assets/images/login_logo.svg"; // update the path as needed
+import { Link } from "react-router";
 
 export default function SignupSelector() {
   const [activeForm, setActiveForm] = useState("buyer");
@@ -20,7 +21,7 @@ export default function SignupSelector() {
   };
 
   return (
-    <div className="w-full mx-auto my-10 p-6 flex flex-col items-center justify-center">
+    <div className="w-full mx-auto my-10 sm:p-6 flex flex-col items-center justify-center">
       <img
         src={logo}
         alt="Logo"
@@ -34,7 +35,7 @@ export default function SignupSelector() {
           onClick={() => setActiveForm("buyer")}
           className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${
             activeForm === "buyer"
-              ? "border border-2 border-[#DF0805] text-[#DF0805]"
+              ? " border-2 border-[#DF0805] text-[#DF0805]"
               : "shadow-sm text-gray-700"
           }`}
         >
@@ -45,7 +46,7 @@ export default function SignupSelector() {
           onClick={() => setActiveForm("seller")}
           className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${
             activeForm === "seller"
-              ? "border border-2 border-[#DF0805] text-[#DF0805]"
+              ? " border-2 border-[#DF0805] text-[#DF0805]"
               : "shadow-sm text-gray-700"
           }`}
         >
@@ -83,9 +84,9 @@ export default function SignupSelector() {
       <div className="mt-4 text-center">
         <p className="text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-[#DF0805] transition-colors">
+          <Link to="/login" className="text-[#DF0805] transition-colors">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

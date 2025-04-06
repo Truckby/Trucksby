@@ -23,11 +23,12 @@ const App = () => {
     <Router>
       <Routes>
         {/* Routes with MainLayout */}
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        
         <Route element={<MainLayout />}>
           {/* Public Routes (without layout) */}
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          
+
           {/* Common Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/PrivacyPage" element={<PrivacyPage />} />

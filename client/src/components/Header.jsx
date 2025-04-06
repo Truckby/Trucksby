@@ -75,7 +75,7 @@ export default function Header() {
                 to={item.to}
                 onClick={() => setIsMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block py-2 border-b transition-colors ${isActive
+                  `block py-2 border-b transition-colors w-fit ${isActive
                     ? "text-[#DF0805] border-[#DF0805]"
                     : "text-gray-700 hover:text-[#DF0805] border-transparent"
                   }`

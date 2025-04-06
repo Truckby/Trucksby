@@ -71,16 +71,20 @@ const Home = () => {
 
 
   return (
-    <div className='max-w-[1300px] mx-auto'>
-      <div className="flex flex-col md:flex-row items-center justify-between ">
+    <div className='max-w-[1300px] lg:px-4 mx-auto'>
+      <div className="flex flex-col lg:flex-row items-center justify-between ">
+        <div className="flex lg:hidden lg:w-full">
+          <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " />
+        </div>
+
         {/* Left Section */}
-        <div className="md:w-1/2 space-y-4">
+        <div className="lg:w-1/2 space-y-4 mt-8 lg:mt-0 pr-4 lg:mr-0">
           <h1 className="text-4xl md:text-[64px] leading-[61px] font-bold text-black " style={{ fontFamily: 'Oswald' }}>Drive Your <br /> Business Forward</h1>
           <h4 className="text-2xl text-gray-600">Sell Trucks with Confidence!</h4>
 
           {/* Search Filters */}
-          <div className="flex w-[587px] flex-wrap md:flex-nowrap rounded-[10px] items-center mt-6 shadow">
-            <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px]  min-w-[250px] md:w-auto  rounded-l-[10px]" />
+          <div className="flex w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
+            <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" />
             <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
               <option>All Cities</option>
             </select>
@@ -93,8 +97,8 @@ const Home = () => {
           </div>
 
           {/* Search Input */}
-          <div className="relative mt-4 lg:w-[587px]">
-            <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] lg:w-[587px] shadow rounded-[10px]" />
+          <div className="relative mt-4 w-full xl:w-[587px]">
+            <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
             <span className='absolute top-5 right-5'>
               <FaSearch fontSize={20} color='#8E8E8E' />
             </span>
@@ -102,7 +106,7 @@ const Home = () => {
         </div>
 
         {/* Right Section - Image */}
-        <div className="md:w-1/2">
+        <div className="hidden lg:flex lg:w-1/2">
           <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " />
         </div>
 
@@ -116,7 +120,7 @@ const Home = () => {
           {truckTypes.map((truck, index) => (
             <div
               key={index}
-              className='w-[188px] h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
+              className='w-[188px] mx-auto h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
               <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
               <span className='text-xl font-semibold pt-9'>{truck}</span>
@@ -130,7 +134,7 @@ const Home = () => {
       <div className='pt-[60px] pb-[70px]'>
         <h3 className='text-[32px] font-bold'>Browse by Type</h3>
 
-        <div className='flex justify-between flex-wrap'>
+        <div className='flex justify-between flex-wrap w-full'>
           {truckData.map((truck, index) => (
             <div key={index}>
               <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />

@@ -1,5 +1,6 @@
 import React from 'react';
-import trick from '../../../assets/images/truck_image.png'
+// import trick from '../../../assets/images/truck_image.png'
+import trick from '../../../assets/videos/truck.mov'
 import { FaSearch } from 'react-icons/fa';
 import TypeTruck from '../../../assets/images/type.svg'
 import TruckCard from './components/TruckCard';
@@ -66,6 +67,17 @@ const Home = () => {
       location: "Pocatello, Idaho",
       miles: "120,000",
     },
+    {
+      images: [
+        cardImage,
+        cardImage,
+        cardImage,
+      ],
+      title: "2022 Ford F-750",
+      price: "45,500",
+      location: "Dallas, Texas",
+      miles: "98,000",
+    },
   ];
 
 
@@ -74,7 +86,15 @@ const Home = () => {
     <div className='max-w-[1300px] lg:px-4 mx-auto'>
       <div className="flex flex-col lg:flex-row items-center justify-between ">
         <div className="flex lg:hidden lg:w-full">
-          <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " />
+        <video
+            src={trick}
+            className="w-full object-cover h-[585px]"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          {/* <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " /> */}
         </div>
 
         {/* Left Section */}
@@ -107,7 +127,16 @@ const Home = () => {
 
         {/* Right Section - Image */}
         <div className="hidden lg:flex lg:w-1/2">
-          <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " />
+          {/* <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " /> */}
+          <video
+            src={trick}
+            className="w-full object-cover h-[585px]"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+
         </div>
 
 
@@ -116,11 +145,11 @@ const Home = () => {
       <div className='pt-[60px] pb-[70px]'>
         <h3 className='text-[32px] font-bold'>Browse by Type</h3>
 
-        <div className='flex justify-between flex-wrap'>
+        <div className='flex justify-center items-center flex-wrap'>
           {truckTypes.map((truck, index) => (
             <div
               key={index}
-              className='w-[188px] mx-auto h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
+              className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
               <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
               <span className='text-xl font-semibold pt-9'>{truck}</span>
@@ -131,10 +160,10 @@ const Home = () => {
       </div>
 
 
-      <div className='pt-[60px] pb-[70px]'>
-        <h3 className='text-[32px] font-bold'>Browse by Type</h3>
+      <div className='pt-[60px] pb-[70px] bg-white'>
+        <h3 className='text-[32px] font-bold mb-8'>Browse by Type</h3>
 
-        <div className='flex justify-between flex-wrap w-full'>
+        <div className='flex justify-center items-center flex-wrap'>
           {truckData.map((truck, index) => (
             <div key={index}>
               <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />

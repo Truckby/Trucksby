@@ -6,9 +6,9 @@
     letter-spacing: 0%;
     margin-bottom: 11px;
     display: block;
-}
-
-.input{
+  }
+  
+  .input {
     border-radius: 10px;
     box-shadow: 0px 5px 5px 0px #0000000D;
     height: 60px;
@@ -17,9 +17,24 @@
     padding-left: 29px;
     border: none;
     overflow: unset;
-}
-
-input::placeholder {
-    color: #767676;
-    opacity: 1; /* Adjust opacity if needed */
   }
+  
+  /* Placeholder styling */
+  input::placeholder {
+    color: #767676;
+    opacity: 1;
+  }
+  
+  /* Media Query for small screens */
+  @media screen and (max-width: 640px) {
+    .input {
+      height: 50px;         /* slightly shorter for mobile */
+      font-size: 14px;      /* smaller text for smaller screens */
+      padding-left: 20px;   /* reduced padding */
+    }
+  
+    .label {
+      font-size: 14px;      /* smaller label */
+    }
+  }
+  

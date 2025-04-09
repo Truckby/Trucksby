@@ -146,7 +146,7 @@ const Profile = () => {
           </div>
           {/* Save Button */}
           <div className="col-span-2 flex justify-end">
-            <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[54px] w-[214px] flex justify-center items-center ml-auto">Save Changes</button>
+            <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto">Save Changes</button>
           </div>
         </form>
       </div>

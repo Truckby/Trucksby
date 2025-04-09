@@ -236,7 +236,7 @@ const AddTruckPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[54px] w-[214px] flex justify-center items-center ml-auto">List Truck</button>
+          <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto">List Truck</button>
         </form>
       </div>
     </div>

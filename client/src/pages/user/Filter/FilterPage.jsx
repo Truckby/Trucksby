@@ -61,7 +61,7 @@ const FilterPage = () => {
     <div className='pb-20 max-w-[1340px] mx-auto '>
         <SearchFilter/>
 
-      <h1 className='text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks for sale in California</h1>
+      <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks for sale in California</h1>
 
       <div className="flex flex-col md:flex-row lg:mx-4">
         <div className="hidden md:block">

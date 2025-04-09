@@ -38,7 +38,7 @@ const Profile = () => {
   return (
     <div className='py-[65px]'>
       <div className="max-w-[1147px] mx-auto bg-white rounded-[20px] md:px-[79px] md:py-[65px] p-4 shadow">
-        <h2 className="text-[32px] font-bold leading-[61px] pb-[45px]">My Profile</h2>
+        <h2 className="text-2xl sm:text-[32px] font-bold leading-[61px] pb-[45px]">My Profile</h2>
 
         <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
           <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">

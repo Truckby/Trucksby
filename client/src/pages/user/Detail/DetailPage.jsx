@@ -106,7 +106,7 @@ const DetailPage = () => {
       </div>
 
       <div className='pt-[60px] pb-[70px] bg-white lg:mx-4'>
-        <h3 className='text-[32px] font-bold mb-8'>More like this</h3>
+        <h3 className='text-2xl sm:text-[32px] font-bold mb-8'>More like this</h3>
 
         <div className='flex justify-center items-center flex-wrap'>
           {truckData.map((truck, index) => (

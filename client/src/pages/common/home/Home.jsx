@@ -88,7 +88,7 @@ const Home = () => {
         <div className="flex lg:hidden lg:w-full">
         <video
             src={trick}
-            className="w-full object-cover h-[585px]"
+            className="w-full object-cover h-[350px] sm:h-[585px]"
             autoPlay
             muted
             loop
@@ -99,8 +99,8 @@ const Home = () => {
 
         {/* Left Section */}
         <div className="lg:w-1/2 space-y-4 mt-8 lg:mt-0 pr-4 lg:mr-0">
-          <h1 className="text-4xl md:text-[64px] leading-[61px] font-bold text-black " style={{ fontFamily: 'Oswald' }}>Drive Your <br /> Business Forward</h1>
-          <h4 className="text-2xl text-gray-600">Sell Trucks with Confidence!</h4>
+          <h1 className=" text-2xl sm:text-4xl md:text-[64px] md:leading-[61px] font-bold text-black " style={{ fontFamily: 'Oswald' }}>Drive Your <br /> Business Forward</h1>
+          <h4 className=" text-lg md:text-2xl text-gray-600">Sell Trucks with Confidence!</h4>
 
           {/* Search Filters */}
           <div className="flex w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
@@ -143,7 +143,7 @@ const Home = () => {
       </div>
 
       <div className='pt-[60px] pb-[70px]'>
-        <h3 className='text-[32px] font-bold'>Browse by Type</h3>
+        <h3 className=' text-2xl sm:text-[32px] font-bold'>Browse by Type</h3>
 
         <div className='flex justify-center items-center flex-wrap'>
           {truckTypes.map((truck, index) => (
@@ -152,7 +152,7 @@ const Home = () => {
               className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
               <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
-              <span className='text-xl font-semibold pt-9'>{truck}</span>
+              <span className=' text-lg sm:text-xl font-semibold pt-9'>{truck}</span>
             </div>
           ))}
 
@@ -161,7 +161,7 @@ const Home = () => {
 
 
       <div className='pt-[60px] pb-[70px] bg-white'>
-        <h3 className='text-[32px] font-bold mb-8'>Browse by Type</h3>
+        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8'>Browse by Type</h3>
 
         <div className='flex justify-center items-center flex-wrap'>
           {truckData.map((truck, index) => (

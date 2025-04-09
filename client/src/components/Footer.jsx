@@ -1,6 +1,6 @@
 import React from "react";
 import { FaFacebookF, FaTwitter, FaYoutube, FaTelegramPlane } from "react-icons/fa";
-import logo from "../assets/images/footer_logo.svg";  
+import logo from "../assets/images/footer_logo.svg";
 import { Link } from "react-router";
 
 export default function Footer() {
@@ -10,8 +10,8 @@ export default function Footer() {
         <img src={logo} alt="Logo" height={133} width={180} />
       </div>
       <div className="container mx-auto px-10 mt-10">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-6 md:mb-0">
+        <div className="flex flex-col lg:flex-row justify-between items-center">
+          <div className="mb-6 lg:mb-0">
             <h2 className="text-sm text-gray-300 mb-2">Newsletter</h2>
             <div className="relative flex items-center">
               <input
@@ -25,7 +25,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <nav className="flex space-x-10 sm:space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
+          <nav className="flex mb-6 lg:mb-0 space-x-10 sm:space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
             <Link to={'/'} className="hover:text-white">
               Home
             </Link>
@@ -40,7 +40,7 @@ export default function Footer() {
             </Link>
           </nav>
 
-          <div className=" lg:w-[260px] flex flex-col  items-center md:items-end">
+          <div className="mb-6 lg:mb-0 lg:w-[260px] flex flex-col  items-center lg:items-end">
             <div className="flex space-x-4 text-[#FFFFFF] mt-6 md:mt-0">
               <Link to={'/'} className="hover:text-white">
                 <FaFacebookF size={18} />

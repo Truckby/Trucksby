@@ -6,7 +6,7 @@ import img from "../../../../assets/images/card.svg";
 // Section Component
 const Section = ({ title, data }) => (
   <div className="mb-4">
-    <div className="bg-gray-800 text-white text-2xl mt-10 h-[54px] pl-6 items-center flex font-semibold rounded-[5px]">
+    <div className="bg-gray-800 text-white text-lg sm:text-2xl mt-5 sm:mt-10 h-[40px] sm:h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">
       {title}
     </div>
     <div className="">
@@ -19,7 +19,7 @@ const Section = ({ title, data }) => (
 
 // Info Row Component
 const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between text-[#1E1E1E] font-medium pt-6 pb-[22px] text-lg border-b">
+  <div className="flex justify-between text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
     <span className="font-medium">{label}</span>
     <span>{value}</span>
   </div>
@@ -38,7 +38,7 @@ const DetailInfo = ({ data }) => {
             <img
               src={img}
               alt={`image - ${index + 1}`}
-              className="w-auto h-[465px] object-cover rounded-[15px]"
+              className="w-auto h-[300px] sm:h-[465px] object-cover rounded-[15px]"
             />
           </div>
         ))}
@@ -51,7 +51,7 @@ const DetailInfo = ({ data }) => {
             <img
               src={img}
               alt={`image - ${index + 1}`}
-              className="w-[164px] h-[143px] object-cover rounded-[15px]"
+              className=" w-[120px] h-[100px] sm:w-[164px] sm:h-[143px] object-cover rounded-[15px]"
             />
           </div>
         ))}

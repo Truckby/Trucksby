@@ -6,7 +6,7 @@ import { FaWhatsapp } from "react-icons/fa";
 const Info = () => {
   return (
     <div>
-      <div className='md:pl-20'>
+      <div className='lg:pl-20'>
         <div className='flex justify-between'>
           <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'>1998 MACK CH613</h2>
 
@@ -29,7 +29,7 @@ const Info = () => {
 
           {/* Mileage & Location */}
           <div className="flex justify-between  text-sm mb-4">
-            <p className="text-[#DF0805] text-[32px] font-bold">50,000 $</p>
+            <p className="text-[#DF0805] text-lg sm:text-[32px] font-bold">50,000 $</p>
 
             <p className="flex items-center gap-1 text-sm">
               <FaMapMarkerAlt />

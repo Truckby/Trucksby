@@ -57,7 +57,7 @@ const AddTruckPage = () => {
   return (
     <div className='py-[65px]'>
       <div className='max-w-[1147px] mx-auto bg-white rounded-[20px] md:px-[79px] md:py-[65px] p-4 shadow'>
-        <h2 className='text-[32px] font-bold leading-[61px] pb-[45px]'>List your vehicle</h2>
+        <h2 className=' text-2xl sm:text-[32px] font-bold leading-[61px] pb-[45px]'>List your vehicle</h2>
 
         <form onSubmit={handleSubmit}>
           {/* Vehicle Details */}
@@ -95,7 +95,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Personal Info */}
-          <h3 className="bg-gray-800 text-white text-2xl mb-10 h-[54px] pl-6 items-center flex font-semibold rounded-[5px]">Personal Info</h3>
+          <h3 className="bg-gray-800 text-white  text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Personal Info</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div>
               <label className="label" htmlFor="Name">Name</label>
@@ -116,7 +116,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* General Info */}
-          <h3 className="bg-gray-800 text-white text-2xl mb-10 h-[54px] pl-6 items-center flex font-semibold rounded-[5px]">General</h3>
+          <h3 className="bg-gray-800 text-white  text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">General</h3>
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div>
@@ -156,7 +156,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Vehicle Info */}
-          <h3 className="bg-gray-800 text-white text-2xl mb-10 h-[54px] pl-6 items-center flex font-semibold rounded-[5px]">Vehicle Info</h3>
+          <h3 className="bg-gray-800 text-white  text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Vehicle Info</h3>
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div>
@@ -203,7 +203,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Price & Finalize */}
-          <h3 className="bg-gray-800 text-white text-2xl mb-10 h-[54px] pl-6 items-center flex font-semibold rounded-[5px]">Powertrain</h3>
+          <h3 className="bg-gray-800 text-white  text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Powertrain</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div>
               <label className="label" htmlFor="TransmissionType">Transmission Type</label>
@@ -216,7 +216,7 @@ const AddTruckPage = () => {
             </div>
           </div>
 
-          <h3 className="bg-gray-800 text-white text-2xl mb-10 h-[54px] pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
+          <h3 className="bg-gray-800 text-white  text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div>
               <label className="label" htmlFor="NumberofRearAxles">Number of Rear Axles</label>

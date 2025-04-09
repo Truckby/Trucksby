@@ -45,7 +45,7 @@ const DetailInfo = ({ data }) => {
       </Carousel>
 
       {/* Thumbnail Images */}
-      <div className="flex gap-3 mt-8">
+      <div className="flex flex-wrap gap-3 mt-8">
         {images.map((img, index) => (
           <div key={index}>
             <img

@@ -55,7 +55,7 @@ const FilterComponent = () => {
         </div>
       )}
 
-      <div className="md:w-[274px] bg-white pr-2 md:p-[21px] rounded-[11px] md:shadow h-[95vh] overflow-y-auto md:overflow-hidden">
+      <div className="md:w-[274px] bg-white pr-2 md:p-[21px] rounded-[11px] md:shadow h-[95vh] md:h-full overflow-y-auto ">
         {/* Listing Type */}
         <FilterSection title="Listing Type" isOpen={openSections.listingType} toggle={() => toggleSection("listingType")}>
           <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="For Sale" />

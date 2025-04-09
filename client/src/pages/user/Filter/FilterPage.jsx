@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import FilterComponent from './components/FilterComponent'
 import cardImage from '../../../assets/images/card.svg'
-import TruckCard from '../../common/home/components/TruckCard'
 import { IoMdClose } from 'react-icons/io'
+import TruckCard from './components/TruckCard'
 
 const FilterPage = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -57,8 +57,8 @@ const FilterPage = () => {
 
 
   return (
-    <div className='pb-20 max-w-[1300px] mx-auto'>
-      <div className='flex flex-col lg:flex-row justify-between items-center mt-9'>
+    <div className='pb-20 max-w-[1300px] mx-auto '>
+      <div className='flex flex-col lg:flex-row justify-between items-center mt-9 lg:mx-4'>
         <div className="flex md:w-[587px]  rounded-[10px] items-center shadow">
           <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" />
           <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
@@ -114,7 +114,7 @@ const FilterPage = () => {
         )}
 
         {/* Truck cards container */}
-        <div className=" flex flex-wrap h-[280px]">
+        <div className=" flex justify-center items-center flex-wrap">
           {truckData.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard

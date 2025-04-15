@@ -89,7 +89,6 @@ const DetailPage = () => {
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto'>
-      <SearchFilter />
 
       <div className='grid lg:grid-cols-2 mt-20 lg:mx-4'>
         <div className='hidden lg:block'>

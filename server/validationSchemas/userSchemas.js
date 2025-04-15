@@ -4,15 +4,14 @@ const mongoose = require('mongoose');
 const ObjectId = yup.string().test('is-valid', 'Invalid user ID', value => mongoose.Types.ObjectId.isValid(value));
 
 const registerSchema = yup.object().shape({
-  name: yup.string().trim().required('Name is required'),
+  name: yup.string().trim().optional(),
+  userName: yup.string().trim().optional(),
   email: yup.string().trim().email('Invalid email address').required('Email is required'),
-  number: yup.string().trim().required('Number is required'),
-  totalContacts: yup.number(),
-  dateOfBirth: yup.string().trim(),
-  address: yup.string().trim().required('Address is required'),
-  city: yup.string().trim().required('City is required'),
-  zip: yup.string().trim().required('Zip is required'),
   password: yup.string().trim().required('Password is required'),
+  city: yup.string().trim().optional(),
+  country: yup.string().trim().optional(),
+  gender: yup.string().trim().optional(),
+  role: yup.string().trim().optional(),
 });
 
 const loginSchema = yup.object().shape({
@@ -34,27 +33,25 @@ const resetPasswordSchema = yup.object().shape({
 });
 
 const createUserSchema = yup.object().shape({
-  name: yup.string().trim().required('Name is required'),
-  email: yup.string().email('Invalid email address').trim().required('Email is required'),
-  number: yup.string().trim().required('Number is required'),
-  dateOfBirth: yup.string().trim().required('Date of birth is required'),
-  address: yup.string().trim().required('Address is required'),
-  city: yup.string().trim().required('City is required'),
-  zip: yup.string().trim().required('Zip is required'),
+  name: yup.string().trim().optional(),
+  userName: yup.string().trim().optional(),
+  email: yup.string().trim().email('Invalid email address').required('Email is required'),
   password: yup.string().trim().required('Password is required'),
-  notes: yup.string().trim()
+  city: yup.string().trim().optional(),
+  country: yup.string().trim().optional(),
+  gender: yup.string().trim().optional(),
+  role: yup.string().trim().optional(),
 });
 
 const updateUserSchema = yup.object().shape({
-  name: yup.string().trim(),
-  email: yup.string().trim().email('Invalid email address'),
-  number: yup.string().trim(),
-  totalContacts: yup.number(),
-  dateOfBirth: yup.string().trim(),
-  address: yup.string().trim(),
-  city: yup.string().trim(),
-  zip: yup.string().trim(),
-  // password: yup.string().trim(),
+  name: yup.string().trim().optional(),
+  userName: yup.string().trim().optional(),
+  email: yup.string().trim().email('Invalid email address').optional(),
+  password: yup.string().trim().optional(),
+  city: yup.string().trim().optional(),
+  country: yup.string().trim().optional(),
+  gender: yup.string().trim().optional(),
+  role: yup.string().trim().optional(),
 });
 
 const userIdSchema = yup.object().shape({

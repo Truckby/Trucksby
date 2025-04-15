@@ -7,39 +7,24 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    
+    userName: {
+      type: String,
+      required: true,
+      trim: true
+    },
     email: {
       type: String,
       required: true,
       unique: true,
       trim: true
     },
-    number: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    totalContacts: {
-      type: Number,
-      default: 0
-    },
-    dateOfBirth: {
-      type: String,
-      default: null,
-      trim: true
-    },
-    address: {
-      type: String,
-      required: true,
-      trim: true
-    },
     city: {
       type: String,
-      required: true,
       trim: true
     },
-    zip: {
+    country: {
       type: String,
-      required: true,
       trim: true
     },
     password: {
@@ -47,10 +32,15 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    gender: {
+      type: String,
+      default: 'male',
+      enum: ['male', 'female','other']
+    },
     role: {
       type: String,
       default: 'user',
-      enum: ['admin', 'company', 'user']
+      enum: ['seller', 'user']
     },
     refreshToken: {
       type: String,

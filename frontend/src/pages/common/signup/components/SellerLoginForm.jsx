@@ -16,19 +16,18 @@ const SellerLoginForm = () => {
     password: '',
     confirmPassword: ''
   });
-
   const [image, setImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setImage(file); // Save the actual file
+      setPreviewUrl(URL.createObjectURL(file)); // Safe preview
     }
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,15 +71,16 @@ const SellerLoginForm = () => {
     <div className='w-full'>
       <div className="flex flex-col items-center mb-4">
         <div className="w-20 h-20 border border-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-          {previewUrl ? (
-            <img
-              src={previewUrl}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <BsFillPersonFill className="text-gray-500 text-4xl" />
-          )}
+        {previewUrl ? (
+  <img
+    src={previewUrl}
+    alt="Profile"
+    className="w-full h-full object-cover"
+  />
+) : (
+  <BsFillPersonFill className="text-gray-500 text-4xl" />
+)}
+
 
         </div>
         <label className="cursor-pointer bg-gray-200 text-gray-700 py-2 px-4 mt-2 rounded-md text-sm">

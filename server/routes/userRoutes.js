@@ -7,7 +7,6 @@ const upload = require("../configs/multer.config");
 
 router.post(
   "/:userType-register",
-  upload.single("file"),
   validationMiddleware.validateParams(userSchemas.userTypeSchema),
   validationMiddleware.validateRequest(userSchemas.registerSchema),
   controller.Register

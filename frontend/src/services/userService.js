@@ -22,7 +22,6 @@ const userService = {
         {
           withCredentials: true,
           skipAuthRefresh: true,
-          headers: { "Content-Type": "multipart/form-data" },
         }
       );
       return response.data;

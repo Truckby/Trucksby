@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { BsEyeFill, BsEyeSlashFill, BsFillPersonFill } from 'react-icons/bs';
 import { IoIosMail } from "react-icons/io";
 import { BiSolidLock } from "react-icons/bi";
+import toast from 'react-hot-toast';
+import userService from '../../../../services/userService';
+import { uploadImg } from '../../../../services/image';
 
 const BuyerLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,46 +17,77 @@ const BuyerLoginForm = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(file); // Save the actual file
-      setPreviewUrl(URL.createObjectURL(file)); // Safe preview
+      setImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
-
-
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: ''
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email format').required('Email is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm Password is required')
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+      confirmPassword: ''
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      let imageUrl = null;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Buyer login submitted:', formData);
-  };
+      if (image) {
+        try {
+          const imgForm = new FormData();
+          imgForm.append("images", image);
+          const res = await uploadImg(imgForm);
+
+          if (res?.success && res?.urls?.length > 0) {
+            imageUrl = res.urls[0];
+          } else {
+            toast.error("Image upload failed");
+            return;
+          }
+        } catch (error) {
+          toast.error("Error uploading image");
+          return;
+        }
+      }
+
+      const payload = {
+        email: values.email,
+        password: values.password,
+        image: imageUrl
+      };
+
+      try {
+        await userService.registerUser(payload, 'user');
+        toast.success('User registered successfully!');
+        formik.resetForm();
+        setImage(null);
+        setPreviewUrl(null);
+
+      } catch (error) {
+        toast.error(error?.response?.data?.error || 'Registration failed');
+        console.error('Registration error:', error);
+      }
+    }
+
+  });
 
   return (
     <div className='w-full'>
       <div className="flex flex-col items-center mb-4">
         <div className="w-20 h-20 border border-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-          {image ? (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
+          {previewUrl ? (
+            <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
           ) : (
             <BsFillPersonFill className="text-gray-500 text-4xl" />
           )}
-
         </div>
         <label className="cursor-pointer bg-gray-200 text-gray-700 py-2 px-4 mt-2 rounded-md text-sm">
           Upload Image
@@ -63,32 +99,36 @@ const BuyerLoginForm = () => {
           />
         </label>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4 w-full lg:px-[15%] mt-5">
+
+      <form onSubmit={formik.handleSubmit} className="space-y-4 w-full lg:px-[15%] mt-5">
+        {/* Email Field */}
         <div className="relative">
           <IoIosMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
             type="email"
-            id="buyer-email"
-            placeholder="Email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            placeholder="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="p-4 pl-12 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
-            required
           />
+          {formik.touched.email && formik.errors.email && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
+          )}
         </div>
 
+        {/* Password Field */}
         <div className="relative">
           <BiSolidLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
             type={showPassword ? "text" : "password"}
-            id="buyer-password"
-            placeholder="Password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            placeholder="Password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="p-4 pl-12 pr-12 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
-            required
           />
           <button
             type="button"
@@ -97,19 +137,22 @@ const BuyerLoginForm = () => {
           >
             {showPassword ? <BsEyeSlashFill size={20} /> : <BsEyeFill size={20} />}
           </button>
+          {formik.touched.password && formik.errors.password && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
+          )}
         </div>
 
+        {/* Confirm Password Field */}
         <div className="relative">
           <BiSolidLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
             type={showConfirmPassword ? "text" : "password"}
-            id="buyer-confirm-password"
-            placeholder="Confirm Password"
             name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
+            placeholder="Confirm Password"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="p-4 pl-12 pr-12 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
-            required
           />
           <button
             type="button"
@@ -118,17 +161,20 @@ const BuyerLoginForm = () => {
           >
             {showConfirmPassword ? <BsEyeSlashFill size={20} /> : <BsEyeFill size={20} />}
           </button>
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.confirmPassword}</div>
+          )}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] focus:outline-none transition-colors"
+          className="w-full flex cursor-pointer justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] focus:outline-none transition-colors"
         >
           Signup
         </button>
       </form>
     </div>
-
   );
 };
 

@@ -11,6 +11,7 @@ const registerSchema = yup.object().shape({
   city: yup.string().trim().optional(),
   country: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
+  image: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
 });
 
@@ -37,6 +38,7 @@ const createUserSchema = yup.object().shape({
   userName: yup.string().trim().optional(),
   email: yup.string().trim().email('Invalid email address').required('Email is required'),
   password: yup.string().trim().required('Password is required'),
+  image: yup.string().trim().optional(),
   city: yup.string().trim().optional(),
   country: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
@@ -48,6 +50,7 @@ const updateUserSchema = yup.object().shape({
   userName: yup.string().trim().optional(),
   email: yup.string().trim().email('Invalid email address').optional(),
   password: yup.string().trim().optional(),
+  image: yup.string().trim().optional(),
   city: yup.string().trim().optional(),
   country: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),

@@ -5,32 +5,38 @@ const stripeService = require('./stripeService');
 const subscriptionService = require('./subscriptionService');
 
 const createUser = async (userData, role) => {
-  const { name, email, number, totalContacts, dateOfBirth, address, city, zip, password } = userData;
+  const { name, email, userName, image, gender, city, country, password } = userData;
   let existingUser = await User.findOne({ email });
   if (existingUser) {
     const error = new Error('A user with that email has already been registered!');
     error.code = 409;
     throw error;
   }
-  existingUser = await User.findOne({ number });
-  if (existingUser) {
-    const error = new Error('A user with that number has already been registered!');
-    error.code = 409;
-    throw error;
-  }
+
   let passwordDigest = await authUtils.hashPassword(password);
-  const user = await User.create({
-    name,
-    email,
-    number,
-    totalContacts: role === 'user' ? totalContacts : 0,
-    dateOfBirth: role === 'user' ? dateOfBirth : null,
-    address,
-    city,
-    zip,
-    password: passwordDigest,
-    role,
-  });
+
+  let user;
+
+  if (role === 'user') {
+    user = await User.create({
+      email,
+      password: passwordDigest,
+      image,
+      role,
+    });
+  } else {
+    user = await User.create({
+      name,
+      email,
+      userName,
+      image,
+      gender,
+      city,
+      country,
+      password: passwordDigest,
+      role,
+    });
+  }
 
   return user;
 };
@@ -126,12 +132,10 @@ const fetchUser = async (userId) => {
   const userProjection = {
     name: 1,
     email: 1,
-    number: 1,
-    totalContacts: 1,
-    dateOfBirth: 1,
-    address: 1,
+    userName: 1,
+    gender: 1,
     city: 1,
-    zip: 1,
+    country: 1,
     role: 1,
     _id: 0
   };
@@ -164,11 +168,9 @@ const searchUsers = async (pageIndex, limit, searchQuery, role) => {
   const userProjection = {
     name: 1,
     email: 1,
-    number: 1,
-    dateOfBirth: 1,
-    address: 1,
+    gender: 1,
     city: 1,
-    zip: 1,
+    country: 1,
     role: 1,
     notes: 1,
     createdAt: 1
@@ -310,10 +312,10 @@ const test = async () => {
     name: 'Admin Test',
     email: 'admin1@gmail.com',
     number: '+923047845281',
-    dateOfBirth: '1990-05-16',
+    gender: '1990-05-16',
     address: "Johar Town",
     city: "Lahore",
-    zip: "7600",
+    country: "7600",
     password: '12345678',
     role: 'admin'
   };

@@ -13,7 +13,7 @@ const SellerLoginForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-
+  const [loading, setLoading] = useState(false)
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -50,8 +50,8 @@ const SellerLoginForm = () => {
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      let imageUrl = null;
-
+      let imageUrl = '';
+      setLoading(true)
       // Handle image upload if an image is selected
       if (image) {
         try {
@@ -80,7 +80,7 @@ const SellerLoginForm = () => {
         city: values.city,
         email: values.email,
         password: values.password,
-        image: imageUrl, 
+        image: imageUrl,
       };
 
       try {
@@ -94,6 +94,7 @@ const SellerLoginForm = () => {
         toast.error(error?.response?.data?.error || 'Registration failed');
         console.error('Registration error:', error);
       }
+      setLoading(false)
     },
 
   });
@@ -273,10 +274,11 @@ const SellerLoginForm = () => {
         </div>
 
         <button
+          disabled={loading}
           type="submit"
-          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] hover:bg-[#b60705] focus:outline-none"
+          className="w-full flex justify-center cursor-pointer py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] hover:bg-[#b60705] focus:outline-none"
         >
-          Signup
+          {loading ? 'loading...' : 'Signup'}
         </button>
       </form>
     </div>

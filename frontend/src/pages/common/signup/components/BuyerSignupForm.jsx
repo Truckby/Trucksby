@@ -13,6 +13,7 @@ const BuyerLoginForm = () => {
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -38,7 +39,8 @@ const BuyerLoginForm = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      let imageUrl = null;
+      let imageUrl = '';
+      setLoading(true)
 
       if (image) {
         try {
@@ -75,6 +77,7 @@ const BuyerLoginForm = () => {
         toast.error(error?.response?.data?.error || 'Registration failed');
         console.error('Registration error:', error);
       }
+      setLoading(false)
     }
 
   });
@@ -171,7 +174,7 @@ const BuyerLoginForm = () => {
           type="submit"
           className="w-full flex cursor-pointer justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] focus:outline-none transition-colors"
         >
-          Signup
+           {loading ? 'loading...' : 'Signup'}
         </button>
       </form>
     </div>

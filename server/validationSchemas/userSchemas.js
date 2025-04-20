@@ -24,7 +24,7 @@ const forgotPasswordSchema = yup.object().shape({
 });
 
 const userTypeSchema = yup.object().shape({
-  userType: yup.string().oneOf(['user', 'company'], 'Invalid user type').required('User type is required')
+  userType: yup.string().oneOf(['user', 'seller'], 'Invalid user type').required('User type is required')
 });
 
 const resetPasswordSchema = yup.object().shape({

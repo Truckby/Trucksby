@@ -35,7 +35,7 @@ const LoginSelector = () => {
         </button>
       </div>
 
-      {activeForm === "buyer" ? <BuyerLoginForm /> : <SellerLoginForm />}
+      {activeForm === "buyer" ? <BuyerLoginForm /> : <BuyerLoginForm />}
 
       <div className="mt-4 text-center">
         <p className="text-sm text-gray-600">

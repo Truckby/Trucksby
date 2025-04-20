@@ -7,7 +7,6 @@ import Footer from "../../../components/Footer";
 export default function Login() {
   return (
     <div>
-      <Header/>
       <div className="min-h-screen flex flex-col relative px-4">
       <div
         className="absolute top-0 left-0 w-full h-[60vh] bg-cover bg-center bg-no-repeat"
@@ -21,7 +20,6 @@ export default function Login() {
       </div>
 
     </div>
-      <Footer/>
     </div>
   );
 }

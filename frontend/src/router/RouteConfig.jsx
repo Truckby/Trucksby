@@ -26,7 +26,7 @@ const routes = [
   { path: "/login", element: <Login />, protected: false, authRedirect: true },
   { path: "/home", element: <Home />, protected: false, authRedirect: false },
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true },
-  { path: "/PrivacyPage", element: <PrivacyPage />, protected: false, authRedirect: true },
+  { path: "/PrivacyPage", element: <PrivacyPage />, protected: false, authRedirect: false },
   { path: "*", element: <NotFound />, protected: false },
 ];
 

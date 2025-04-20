@@ -5,7 +5,7 @@ const BASE_URL = "/api/truck";
 const truckService = {
     createTruck: async (payload) => {
         try {
-            const response = await axiosInstance.post(`${BASE_URL}/`, payload);
+            const response = await axiosInstance.post(`${BASE_URL}`, payload);
             return response.data;
         } catch (error) {
             throw error;

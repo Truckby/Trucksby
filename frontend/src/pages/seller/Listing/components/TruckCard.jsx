@@ -6,7 +6,7 @@ import { IoSpeedometer } from "react-icons/io5";
 
 export default function TruckCard() {
   return (
-    <div className="flex md:flex-row flex-col bg-white shadow rounded-lg  overflow-hidden border">
+    <div className="flex md:flex-row flex-col bg-white shadow rounded-lg overflow-hidden">
       <img
         src={image}
         alt="Truck"

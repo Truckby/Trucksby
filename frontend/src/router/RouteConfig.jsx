@@ -1,18 +1,14 @@
-import Login from '../pages/common/Login/Login.jsx';
-import Redirect from '../pages/common/Redirect/Redirect.jsx';
-import NotFound from '../pages/common/NotFound/NotFound.jsx';
 import Home from '../pages/common/Home/Home.jsx';
-import UserHome from '../pages/user/Home/Home.jsx';
-import UserBooking from '../pages/user/booking/Booking.jsx';
-import Dashboard from '../pages/serviceProvider/dashboard/Dashboard.jsx';
-import Calendar from '../pages/serviceProvider/calendar/Calendar.jsx';
-import SignUp from '../pages/common/signup/SignUp.jsx';
+import Login from '../pages/common/Login/Login.jsx';
+import NotFound from '../pages/common/NotFound/NotFound.jsx';
+import Redirect from '../pages/common/Redirect/Redirect.jsx';
 import PrivacyPage from '../pages/common/privacy/PrivacyPage.jsx';
 import Profile from '../pages/common/profile/Profile.jsx';
-import FilterPage from '../pages/user/Filter/FilterPage.jsx';
-import DetailPage from '../pages/user/Detail/DetailPage.jsx';
-import Listing from '../pages/seller/Listing/Listing.jsx';
+import SignUp from '../pages/common/signup/SignUp.jsx';
 import AddTruckPage from '../pages/seller/AddTruck/AddTruckPage.jsx';
+import Listing from '../pages/seller/Listing/Listing.jsx';
+import DetailPage from '../pages/user/Detail/DetailPage.jsx';
+import FilterPage from '../pages/user/Filter/FilterPage.jsx';
 
 const routes = [
   //user

@@ -7,6 +7,7 @@ import Profile from '../pages/common/profile/Profile.jsx';
 import SignUp from '../pages/common/signup/SignUp.jsx';
 import AddTruckPage from '../pages/seller/AddTruck/AddTruckPage.jsx';
 import Listing from '../pages/seller/Listing/Listing.jsx';
+import Plans from '../pages/seller/Plans/Plans.jsx';
 import DetailPage from '../pages/user/Detail/DetailPage.jsx';
 import FilterPage from '../pages/user/Filter/FilterPage.jsx';
 
@@ -20,6 +21,7 @@ const routes = [
   { path: "/seller/add-truck", element: <AddTruckPage />, protected: true, authRedirect: false },
 
   { path: "/profile", element: <Profile />, protected: true, authRedirect: true },
+  { path: "/plans", element: <Plans />, protected: false, authRedirect: false },
 
   //common
   { path: "/", element: <Redirect />, protected: true, authRedirect: false },

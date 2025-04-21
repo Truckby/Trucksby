@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { useDispatch } from 'react-redux';
 import truckService from '../../../services/truckService';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
+import ExpirePlan from './components/expirePlan';
 
 const Listing = () => {
   const dispatch = useDispatch();
@@ -40,12 +41,16 @@ const Listing = () => {
         </Link>
 
       </div>
-      {listData.map((data, index) => (
 
+      {listData.map((data, index) => (
         <div key={index}>
           <TruckCard data={data} />
         </div>
       ))}
+
+      <div>
+        <ExpirePlan />
+      </div>
 
     </div>
   )

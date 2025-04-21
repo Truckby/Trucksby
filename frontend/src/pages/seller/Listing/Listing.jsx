@@ -1,8 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TruckCard from './components/TruckCard'
 import { Link } from 'react-router'
+import { useDispatch } from 'react-redux';
+import truckService from '../../../services/truckService';
+import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 
 const Listing = () => {
+  const dispatch = useDispatch();
+  const [listData, setListData] = useState([])
+
+  const fetchAllTrucks = async () => {
+    dispatch(ShowLoading());
+    try {
+      const response = await truckService.getAllTrucks();
+      setListData(response);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      dispatch(HideLoading());
+    }
+  };
+  console.log(listData, 'listData')
+
+  useEffect(() => {
+    fetchAllTrucks()
+  }, [])
+
   return (
     <div className='max-w-[993px] mx-auto md:pt-10 '>
 
@@ -17,7 +40,13 @@ const Listing = () => {
         </Link>
 
       </div>
-      <TruckCard />
+      {listData.map((data, index) => (
+
+        <div key={index}>
+          <TruckCard data={data} />
+        </div>
+      ))}
+
     </div>
   )
 }

@@ -4,13 +4,16 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import truckService from '../../../services/truckService';
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AddTruckPage = () => {
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const user = useSelector((state) => state.user.user);
 
   const formik = useFormik({
     initialValues: {
+      user: user._id,
       vehicleName: "",
       vehiclePrice: "",
       truckCategory: "",
@@ -73,7 +76,7 @@ const AddTruckPage = () => {
       }
 
       try {
-        await truckService.createTruck(formData, 'user');
+        await truckService.createTruck(formData);
         toast.success('Truck listed successfully!');
         formik.resetForm();
         setImage(null);

@@ -2,7 +2,8 @@ const truckService = require('../services/truckService');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
-    const trucks = await truckService.getAllTrucks();
+    console.log(req.user,'req.user')
+    const trucks = await truckService.getAllTrucks(req.user);
     res.status(200).json(trucks);
   } catch (error) {
     next(error);

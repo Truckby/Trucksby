@@ -13,6 +13,7 @@ const registerSchema = yup.object().shape({
   gender: yup.string().trim().optional(),
   image: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
+  userId: yup.string().trim().required('User information required'),
 });
 
 const loginSchema = yup.object().shape({

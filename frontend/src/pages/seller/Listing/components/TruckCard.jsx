@@ -4,7 +4,7 @@ import image from '../../../../assets/images/card.svg'
 import { IoSpeedometer } from "react-icons/io5";
 
 
-export default function TruckCard() {
+export default function TruckCard({ data }) {
   return (
     <div className="flex md:flex-row flex-col bg-white shadow rounded-lg overflow-hidden">
       <img
@@ -15,7 +15,7 @@ export default function TruckCard() {
 
       <div className="p-3 sm:p-[26px] flex flex-col w-full">
         <div className="flex md:flex-row flex-col md:items-center md:justify-between">
-          <h2 className="text-2xl font-bold">2024 ISUZU</h2>
+          <h2 className="text-2xl font-bold">{data?.modelYear} {data?.vehicleName}</h2>
 
 
           <div className="flex mt-4 md:mt-0 items-center text-[12px]">
@@ -31,9 +31,9 @@ export default function TruckCard() {
 
         <div className="flex items-center  text-sm mt-4">
           <FaMapMarkerAlt className="mr-1" />
-          <span>Pocatello, Idaho</span>
+          <span>{data?.location}</span>
           <span className="ml-[30px] mr-1"><IoSpeedometer /> </span>
-          <span>120,000 Miles</span>
+          <span>{data?.mileage} Miles</span>
         </div>
 
 

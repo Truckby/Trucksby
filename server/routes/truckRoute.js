@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const truckController = require('../controllers/truckController');
+const authMiddleware = require('../middleware/authMiddleware')
 
-router.get('/', truckController.fetchAllTrucks);
+router.get('/', authMiddleware.authenticateRequest, truckController.fetchAllTrucks);
 
-router.get('/:id', truckController.fetchTruckById);
+router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
 
-router.post('/', truckController.addTruck);
+router.post('/', authMiddleware.authenticateRequest, truckController.addTruck);
 
-router.put('/:id', truckController.updateTruck);
+router.put('/:id', authMiddleware.authenticateRequest, truckController.updateTruck);
 
-router.delete('/:id', truckController.deleteTruck);
+router.delete('/:id', authMiddleware.authenticateRequest, truckController.deleteTruck);
 
 module.exports = router;

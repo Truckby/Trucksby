@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const truckSchema = new mongoose.Schema(
     {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+        },
+
         // Basic Truck Info
         vehicleName: { type: String, trim: true },
         vehiclePrice: { type: String, trim: true },

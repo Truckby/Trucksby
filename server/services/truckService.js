@@ -1,6 +1,6 @@
 const Truck = require("../models/truckModel");
 
-const getAllTrucks = async () => {
+const getAllTrucks = async (userId) => {
   return await Truck.find();
 };
 

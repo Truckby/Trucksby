@@ -5,7 +5,7 @@ const stripeService = require('./stripeService');
 const subscriptionService = require('./subscriptionService');
 
 const createUser = async (userData, role) => {
-  const { name, email, userName, image, gender, city, country, password,userId } = userData;
+  const { name, email, userName, image, gender, city, country, password, userId } = userData;
   let existingUser = await User.findOne({ email });
   if (existingUser) {
     const error = new Error('A user with that email has already been registered!');
@@ -137,6 +137,7 @@ const fetchUser = async (userId) => {
     userName: 1,
     gender: 1,
     city: 1,
+    image: 1,
     country: 1,
     role: 1,
     _id: 0

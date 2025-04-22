@@ -80,6 +80,7 @@ const Plans = () => {
                             ))}
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr>
                             <td className="text-left px-4 py-3 border border-[#E6E9F5] font-medium">Plan</td>
@@ -106,12 +107,11 @@ const Plans = () => {
                         ))}
                     </tbody>
                 </table>
-
             </div>
 
             <div className='mt-6'>
                 <Link
-                    to="/sell"
+                    to="/plans"
                     className="w-[200px] flex justify-center items-center ml-auto  px-4 py-2 mt-8 text-center bg-[#DF0805] text-white font-medium rounded-lg"
                 >
                     Proceed

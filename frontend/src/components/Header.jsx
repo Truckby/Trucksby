@@ -2,15 +2,43 @@ import React, { useState } from "react";
 import logo from "../assets/images/logo.svg";
 import { Link, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import profile from '../assets/images/profile.svg'
+import { useDispatch, useSelector } from "react-redux";
+import { FaAngleDown } from "react-icons/fa6";
+import { HideLoading, ShowLoading } from "../redux/loaderSlice";
+import userService from "../services/userService";
+import { clearUser } from "../redux/userSlice";
+import { setLoggedOut } from "../redux/logoutSlice";
+import Cookies from 'js-cookie';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const user = useSelector((state) => state.user.user);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const toggleProfileDropdown = () => {
+    setIsProfileOpen((prev) => !prev);
+  };
 
   const navLinks = [
     { name: "Home", to: "/home" },
     { name: "Privacy", to: "/PrivacyPage" },
     { name: "Contact", to: "/contact" },
   ];
+
+  const handleLogout = async () => {
+    dispatch(ShowLoading());
+    try {
+        await userService.logoutUser({});
+        Cookies.remove('parlor-jwt-token');
+        dispatch(setLoggedOut());
+        dispatch(clearUser());
+    } catch (error) {
+        message.error(error.response.data);
+    }
+    dispatch(HideLoading());
+};
 
   return (
     <header className="bg-white px-4 shadow-sm">
@@ -41,13 +69,40 @@ export default function Header() {
         </div>
 
         {/* Desktop Buttons */}
-        <div className="hidden md:flex space-x-4">
-          <Link
+        <div className="hidden md:flex items-center space-x-4">
+          {!user?.email && <Link
             to="/login"
             className="px-6 py-2 text-black font-medium rounded-lg border-[1.4px] border-black transition duration-200 hover:bg-[#DF0805] hover:text-white hover:border-[#DF0805]"
           >
             Sign In
           </Link>
+          }
+
+          {user?.email && <div onClick={toggleProfileDropdown} className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center">
+            <img src={profile} alt="profile" className="w-[33px] h-[33px] ml-2.5" />
+            <span className="ml-2.5">
+              {user?.email ? user.email.split('@')[0].slice(0, 10) : 'Guest'}
+            </span>
+
+            <div className="ml-auto">
+              <FaAngleDown />
+            </div>
+
+            {isProfileOpen && (
+              <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
+                <ul>
+                  <li className="py-1 text-sm cursor-pointer flex items-center">Profile</li>
+                  <li className="py-1 text-sm cursor-pointer flex items-center">Billing</li>
+                  <li className="py-1 text-sm cursor-pointer flex items-center">Settings</li>
+                  <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500">
+                    Log out
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+          }
+
           <Link
             to="/sell"
             className="px-4 py-2 bg-[#DF0805] text-white font-medium rounded-lg"

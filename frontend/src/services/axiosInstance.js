@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     if (!config.skipAuthRefresh) {
-      const token = Cookies.get('parlor-jwt-token');
+      const token = Cookies.get('truck-jwt-token');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -52,13 +52,13 @@ axiosInstance.interceptors.response.use(
           console.log('Refreshing token...');
           const response = await userService.refreshToken();
           const { token } = response;
-          Cookies.set('parlor-jwt-token', token);
+          Cookies.set('truck-jwt-token', token);
           console.log('Refresh token done!');
           onRefreshed(token);
           return axiosInstance(originalRequest);
         } catch (err) {
           console.log('Error in refreshing token: ', err);
-          Cookies.remove('parlor-jwt-token');
+          Cookies.remove('truck-jwt-token');
           const redirectTo = '/login';
           window.location.href = redirectTo;
           return Promise.reject(err);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/images/logo.svg";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import profile from '../assets/images/profile.svg'
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ export default function Header() {
   const user = useSelector((state) => state.user.user);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate()
   const toggleProfileDropdown = () => {
     setIsProfileOpen((prev) => !prev);
   };
@@ -30,15 +30,15 @@ export default function Header() {
   const handleLogout = async () => {
     dispatch(ShowLoading());
     try {
-        await userService.logoutUser({});
-        Cookies.remove('parlor-jwt-token');
-        dispatch(setLoggedOut());
-        dispatch(clearUser());
+      await userService.logoutUser({});
+      Cookies.remove('truck-jwt-token');
+      dispatch(setLoggedOut());
+      dispatch(clearUser());
     } catch (error) {
-        message.error(error.response.data);
+      message.error(error.response.data);
     }
     dispatch(HideLoading());
-};
+  };
 
   return (
     <header className="bg-white px-4 shadow-sm">
@@ -91,10 +91,10 @@ export default function Header() {
             {isProfileOpen && (
               <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
                 <ul>
-                  <li className="py-1 text-sm cursor-pointer flex items-center">Profile</li>
-                  <li className="py-1 text-sm cursor-pointer flex items-center">Billing</li>
-                  <li className="py-1 text-sm cursor-pointer flex items-center">Settings</li>
-                  <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500">
+                  <li onClick={() => navigate(`/${user.role}/profile`)} className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Profile</li>
+                  <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Billing</li>
+                  <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Settings</li>
+                  <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200">
                     Log out
                   </li>
                 </ul>
@@ -120,6 +120,26 @@ export default function Header() {
         </button>
       </div>
 
+      {user?.email && (
+        <div className="md:hidden relative pr-4 flex items-center gap-2" onClick={toggleProfileDropdown}>
+          <img src={profile} alt="profile" className="w-[33px] h-[33px] ml-2.5" />
+          <span className="text-sm">{user?.email.split('@')[0].slice(0, 10) || 'Guest'}</span>
+          <FaAngleDown />
+          {isProfileOpen && (
+            <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
+              <ul>
+                <li onClick={() => navigate(`/${user.role}/profile`)} className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Profile</li>
+                <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Billing</li>
+                <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Settings</li>
+                <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200">
+                  Log out
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white px-4 pb-4 transition-all duration-500 delay-100 ease-in-out">
@@ -141,12 +161,14 @@ export default function Header() {
             ))}
           </nav>
           <div className="mt-4 flex flex-col space-y-2">
-            <Link
-              to="/login"
-              className="w-full px-4 py-2 text-center text-black font-medium rounded-lg border border-black transition duration-200 hover:bg-[#DF0805] hover:text-white hover:border-[#DF0805]"
-            >
-              Sign In
-            </Link>
+            {!user?.email && (
+              <Link
+                to="/login"
+                className="w-full px-4 py-2 text-center text-black font-medium rounded-lg border border-black transition duration-200 hover:bg-[#DF0805] hover:text-white hover:border-[#DF0805]"
+              >
+                Sign In
+              </Link>
+            )}
             <Link
               to="/sell"
               className="w-full px-4 py-2 text-center bg-[#DF0805] text-white font-medium rounded-lg"

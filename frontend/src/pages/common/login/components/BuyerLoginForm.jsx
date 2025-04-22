@@ -32,7 +32,7 @@ const BuyerLoginForm = () => {
     try {
       const response = await userService.loginUser(values);
       if (response.token) {
-        Cookies.set('parlor-jwt-token', response.token, {
+        Cookies.set('truck-jwt-token', response.token, {
           secure: true,
           sameSite: 'Lax'
         });

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import './style.css'
+import { useSelector } from "react-redux";
 
-const Profile = () => {
+const UserProfile = () => {
+  const user = useSelector((state) => state.user.user);
+
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -9,7 +12,7 @@ const Profile = () => {
     gender: "",
     country: "",
     city: "",
-    profileImage: null,
+    profileImage: user?.image,
   });
 
   const handleChange = (e) => {
@@ -154,4 +157,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UserProfile;

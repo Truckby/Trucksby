@@ -82,42 +82,38 @@ const SellerProfile = () => {
                 value={formData.gender}
               >
                 <option value="">Select your gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
             {/* Country */}
             <div>
               <label className="label">Country</label>
-              <select
+
+              <input
+                type="text"
                 name="country"
+                placeholder="Enter your full name"
                 className="input"
                 onChange={handleChange}
                 value={formData.country}
-              >
-                <option value="">Select Country</option>
-                <option value="USA">USA</option>
-                <option value="UK">UK</option>
-                <option value="Canada">Canada</option>
-              </select>
+              />
             </div>
 
             {/* City */}
             <div>
-              <label className="label">Select City</label>
-              <select
+              <label className="label">City</label>
+            
+              <input
+                type="text"
                 name="city"
+                placeholder="Enter your username"
                 className="input"
                 onChange={handleChange}
-                value={formData.city || ""}
-              >
-                <option value="">Select City</option>
-                <option value="New York">New York</option>
-                <option value="London">London</option>
-                <option value="Toronto">Toronto</option>
-              </select>
+                value={formData.city}
+              />
             </div>
 
             {/* Username */}

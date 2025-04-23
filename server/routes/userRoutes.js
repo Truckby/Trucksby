@@ -54,6 +54,12 @@ router.patch(
 );
 
 router.patch(
+  "/update-user-profile/:id",
+  validationMiddleware.validateRequest(userSchemas.updateUserSchema),
+  controller.UpdateUserInfo
+);
+
+router.patch(
   "/change-user-password",
   authMiddleware.authenticateRequest,
   validationMiddleware.validateRequest(userSchemas.changeUserPasswordSchema),

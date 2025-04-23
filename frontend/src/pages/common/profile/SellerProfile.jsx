@@ -1,18 +1,26 @@
 import React, { useState } from "react";
-import './style.css'
-import { useSelector } from "react-redux";
+import './style.css';
+import { useDispatch, useSelector } from "react-redux";
+import userService from "../../../services/userService";
+import toast from "react-hot-toast";
+import { fetchUserInfo } from "../../../redux/userSlice";
+import { uploadImg } from "../../../services/image";
 
 const SellerProfile = () => {
   const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+  const [error, setError] = useState({});
+  const [image, setImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(user?.image || null);
 
   const [formData, setFormData] = useState({
-    fullName: user?.name,
-    username: user?.userName,
-    email: user?.email,
-    gender: user?.gender,
-    country: user?.country,
-    city: user?.city,
-    profileImage: user?.image,
+    name: user?.name || "",
+    userName: user?.userName || "",
+    email: user?.email || "",
+    gender: user?.gender || "",
+    country: user?.country || "",
+    city: user?.city || "",
+    image: user?.image || "",
   });
 
   const handleChange = (e) => {
@@ -23,19 +31,56 @@ const SellerProfile = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
     if (file) {
-      setFormData((prevData) => ({
-        ...prevData,
-        profileImage: URL.createObjectURL(file),
-      }));
+      setImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+    
+    let finalFormData = { ...formData };
+    
+    // Handle image upload if there's a new image
+    if (image) {
+      try {
+        const imgForm = new FormData();
+        imgForm.append("images", image);
+        const res = await uploadImg(imgForm);
+        
+        if (res?.success && res?.urls?.length > 0) {
+          // Add the image URL to the form data
+          finalFormData = {
+            ...finalFormData,
+            image: res.urls[0]
+          };
+        } else {
+          toast.error("Image upload failed");
+          return;
+        }
+      } catch (error) {
+        toast.error("Error uploading image");
+        return;
+      }
+    }
+    
+    try {
+      // Using updateUserInfo instead of updateUserProfile
+      const response = await userService.updateUserInfo(finalFormData);
+      
+      if (!response) {
+        setError({ form: "Update failed" });
+        return;
+      }
+      
+      toast.success('Profile updated successfully');
+      dispatch(fetchUserInfo());
+    } catch (error) {
+      toast.error(error?.response?.data?.error || 'Registration failed');
+    }
   };
 
   return (
@@ -45,30 +90,29 @@ const SellerProfile = () => {
 
         <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
           <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">
-            {formData.profileImage ? (
-              <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
+            {previewUrl ? (
+              <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
                 No Image
               </div>
             )}
           </div>
-          <input type="file" onChange={handleImageChange} className="mt-4 sm:mt-0" />
+          <input type="file" accept="image/*" onChange={handleImageUpload} className="mt-4 sm:mt-0" />
         </div>
 
-        <form onSubmit={handleSubmit} >
-
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {/* Full Name */}
             <div>
               <label className="label">Full Name</label>
               <input
                 type="text"
-                name="fullName"
+                name="name"
                 placeholder="Enter your full name"
                 className="input"
                 onChange={handleChange}
-                value={formData.fullName}
+                value={formData.name}
               />
             </div>
 
@@ -91,11 +135,10 @@ const SellerProfile = () => {
             {/* Country */}
             <div>
               <label className="label">Country</label>
-
               <input
                 type="text"
                 name="country"
-                placeholder="Enter your full name"
+                placeholder="Enter your country"
                 className="input"
                 onChange={handleChange}
                 value={formData.country}
@@ -105,11 +148,10 @@ const SellerProfile = () => {
             {/* City */}
             <div>
               <label className="label">City</label>
-            
               <input
                 type="text"
                 name="city"
-                placeholder="Enter your username"
+                placeholder="Enter your city"
                 className="input"
                 onChange={handleChange}
                 value={formData.city}
@@ -121,11 +163,11 @@ const SellerProfile = () => {
               <label className="label">Username</label>
               <input
                 type="text"
-                name="username"
-                placeholder="Enter your username"
+                name="userName"
+                placeholder="Enter your userName"
                 className="input"
                 onChange={handleChange}
-                value={formData.username}
+                value={formData.userName}
               />
             </div>
 
@@ -141,8 +183,8 @@ const SellerProfile = () => {
                 value={formData.email}
               />
             </div>
-
           </div>
+          
           {/* Save Button */}
           <div className="col-span-2 flex justify-end">
             <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto">Save Changes</button>

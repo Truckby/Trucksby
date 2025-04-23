@@ -2,8 +2,8 @@ const truckService = require('../services/truckService');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
-    console.log(req.user,'req.user')
-    const trucks = await truckService.getAllTrucks(req.user);
+    const userId = req.user?.id
+    const trucks = await truckService.getAllTrucks(userId);
     res.status(200).json(trucks);
   } catch (error) {
     next(error);
@@ -22,7 +22,12 @@ const fetchTruckById = async (req, res, next) => {
 
 const addTruck = async (req, res, next) => {
   try {
-    const newTruck = await truckService.createTruck(req.body);
+    const userId = req.user?.id
+    const data = {
+      ...req.body,
+      userId
+    }; 
+    const newTruck = await truckService.createTruck(data);
     res.status(201).json({ message: 'Truck added successfully', truck: newTruck });
   } catch (error) {
     next(error);

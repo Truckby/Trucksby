@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaChevronUp } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { CountryDropdown } from "react-country-region-selector";
 
 const FilterComponent = () => {
   const [openSections, setOpenSections] = useState({});
@@ -47,7 +48,7 @@ const FilterComponent = () => {
                   className="ml-2"
                   onClick={() => removeFilter(filter)}
                 >
-                  <IoMdClose  className="text-black p-[1px] bg-white rounded-full" />
+                  <IoMdClose className="text-black p-[1px] bg-white rounded-full" />
                 </button>
               </div>
             ))}
@@ -65,30 +66,23 @@ const FilterComponent = () => {
 
         {/* Category */}
         <FilterSection title="Category" isOpen={openSections.category} toggle={() => toggleSection("category")}>
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="For Sale1" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="For Lease1" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="For Auction1" />
+          <SelectBox
+            options={["Flatbed", "Refrigerated", "Dry Van", 'Tanker', 'Lowboy', 'Box Truck']}
+            onChange={handleCheckboxChange}
+          />
         </FilterSection>
 
         {/* Manufacturer */}
         <FilterSection title="Manufacturer" isOpen={openSections.manufacturer} toggle={() => toggleSection("manufacturer")}>
-          <SearchInput placeholder="Search Manufacturer" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Hyundia" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="KIA" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Isuzu" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Mitsubishi" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Hino" />
+          <SelectBox
+            options={["Hyundia", "KIA", "Isuzu", 'Mitsubishi', 'Hino']}
+            onChange={handleCheckboxChange}
+          />
         </FilterSection>
 
         {/* Year Range */}
         <FilterSection title="Year" isOpen={openSections.year} toggle={() => toggleSection("year")}>
           <RangeInput />
-        </FilterSection>
-
-        <FilterSection title="Gross Vehicle Weight" isOpen={openSections.vehicle} toggle={() => toggleSection("vehicle")}>
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Heavy Weight" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Class 7" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Class 8" />
         </FilterSection>
 
         {/* Mileage */}
@@ -97,12 +91,8 @@ const FilterComponent = () => {
         </FilterSection>
 
         {/* Engine Manufacturer */}
-        <FilterSection title="Manufacturer" isOpen={openSections.engine} toggle={() => toggleSection("engine")}>
+        <FilterSection title="Engine Manufacturer" isOpen={openSections.engine} toggle={() => toggleSection("engine")}>
           <SearchInput placeholder="Search Engine Manufacturer" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Hyundia" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="KIA" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Isuzu" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Mitsubishi" />
         </FilterSection>
 
         {/* Horsepower */}
@@ -116,8 +106,6 @@ const FilterComponent = () => {
 
         <FilterSection title="Suspension" isOpen={openSections.suspension} toggle={() => toggleSection("suspension")}>
           <SearchInput placeholder="Search Suspension" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Air Ride" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Flex Air" />
         </FilterSection>
 
         <FilterSection title="Suspension" isOpen={openSections.suspension} toggle={() => toggleSection("suspension")}>
@@ -140,10 +128,6 @@ const FilterComponent = () => {
           <RangeInput />
         </FilterSection>
 
-        <FilterSection title="Gross Vehicle Weight" isOpen={openSections.GrossVehicleWeight} toggle={() => toggleSection("GrossVehicleWeight")}>
-          <RangeInput />
-        </FilterSection>
-
         {/* Transmission */}
         <FilterSection title="Transmission" isOpen={openSections.transmission} toggle={() => toggleSection("transmission")}>
           <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Automatic" />
@@ -153,8 +137,6 @@ const FilterComponent = () => {
 
         <FilterSection title="Number of Speeds" isOpen={openSections.NumberofSpeeds} toggle={() => toggleSection("NumberofSpeeds")}>
           <SearchInput placeholder="Search Speed" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="7 spd" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="8 spd" />
         </FilterSection>
 
         <FilterSection title="Condition" isOpen={openSections.condition} toggle={() => toggleSection("condition")}>
@@ -163,15 +145,37 @@ const FilterComponent = () => {
           <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Salvaged" />
         </FilterSection>
 
-        <FilterSection title="State" isOpen={openSections.State} toggle={() => toggleSection("State")}>
-          <SearchInput placeholder="Search State" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Alabama" />
-          <Checkbox onChange={handleCheckboxChange} selected={selectedFilters} label="Arizona" />
+        <FilterSection title="Country" isOpen={openSections.Country} toggle={() => toggleSection("Country")}>
+          <CountryDropdown
+            value={''}
+            onChange={handleCheckboxChange}
+            className='input'
+          />
         </FilterSection>
       </div>
     </div>
   );
 };
+
+const SelectBox = ({ options, onChange }) => (
+  <select
+    className="w-full h-[45px] p-2 text-sm border-none outline-none shadow mb-6 rounded-[4px] mt-2"
+    onChange={(e) => {
+      if (e.target.value) {
+        onChange(e.target.value);
+      }
+    }}
+    defaultValue=""
+  >
+    <option value="" disabled>Select an option</option>
+    {options.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </select>
+);
+
 
 const FilterSection = ({ title, isOpen, toggle, children }) => {
   return (

@@ -14,35 +14,39 @@ const AddTruckPage = () => {
 
   const formik = useFormik({
     initialValues: {
-      user: user._id,
       vehicleName: "",
       vehiclePrice: "",
       truckCategory: "",
+      listingType: "",
       name: "",
       phone: "",
       email: "",
+      companyName: '',
+      address:'',
       modelYear: "",
       mileage: "",
       VehicleManufacturer: "",
       hours: "",
       vin: "",
       condition: "",
-      payload: "",
-      gwr: "",
       wheelbase: "",
       steering: "",
       color: "",
       suspension: "",
+      engineManufacturer:"",
+      engineModel:'',
       grossVehicleWeight: "",
+      hoursPower:'',
+      description:'',
       transmissionType: "",
       noofSpeeds: "",
+      transmissionManufacturer:'',
       typeofRearAxles: "",
       frontAxleWeight: "",
       backAxleWeight: "",
-      engineManufacturer: '',
       country: '',
       state: '',
-      companyName: '',
+      
     },
     // validationSchema: Yup.object({
     //   vehicleName: Yup.string().required("Vehicle name is required"),
@@ -509,7 +513,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="suspension">Engine Manufacturer</label>
+                <label className="label" htmlFor="engineManufacturer">Engine Manufacturer</label>
                 <input
                   type="text"
                   name='engineManufacturer'
@@ -524,7 +528,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="suspension">Engine Model</label>
+                <label className="label" htmlFor="engineModel">Engine Model</label>
                 <input
                   type="text"
                   name='engineModel'
@@ -540,7 +544,7 @@ const AddTruckPage = () => {
 
 
               <div className='mb-9'>
-                <label className="label" htmlFor="suspension">Hours Power</label>
+                <label className="label" htmlFor="hoursPower">Hours Power</label>
                 <input
                   type="number"
                   name='hoursPower'

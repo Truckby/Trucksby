@@ -5,10 +5,13 @@ import { useDispatch } from 'react-redux';
 import truckService from '../../../services/truckService';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import ExpirePlan from './components/expirePlan';
+import DeleteConfirmationModal from '../../../components/Delete/DeleteConfirmationModal';
 
 const Listing = () => {
   const dispatch = useDispatch();
   const [listData, setListData] = useState([])
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [deleteTruckId, setDeleteTruckId] = useState(null)
 
   const fetchAllTrucks = async () => {
     dispatch(ShowLoading());
@@ -27,6 +30,28 @@ const Listing = () => {
     fetchAllTrucks()
   }, [])
 
+  const handleDeleteClick = (id) => {
+    setDeleteTruckId(id)
+    setDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTruckId) return;
+    dispatch(ShowLoading());
+    try {
+      await truckService.deleteTruck(deleteTruckId);
+      setListData((listData) => listData.filter(list => list._id !== deleteTruckId));
+      toast.success("Service deleted successfully");
+      onLoad()
+    } catch (error) {
+      console.error("Error deleting service:", error);
+      toast.error("Failed to delete service");
+    } finally {
+      dispatch(HideLoading());
+      setDeleteOpen(false);
+    }
+  };
+
   return (
     <div className='max-w-[993px] mx-auto md:pt-10 '>
 
@@ -44,7 +69,7 @@ const Listing = () => {
 
       {listData.map((data, index) => (
         <div key={index}>
-          <TruckCard data={data} />
+          <TruckCard data={data} handleDeleteClick={handleDeleteClick} />
         </div>
       ))}
 
@@ -52,6 +77,11 @@ const Listing = () => {
         <ExpirePlan />
       </div>
 
+      <DeleteConfirmationModal
+        isOpen={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={() => handleConfirmDelete()}
+      />
     </div>
   )
 }

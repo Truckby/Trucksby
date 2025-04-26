@@ -4,7 +4,7 @@ import image from '../../../../assets/images/card.svg'
 import { IoSpeedometer } from "react-icons/io5";
 
 
-export default function TruckCard({ data }) {
+export default function TruckCard({ data,handleDeleteClick }) {
   return (
     <div className="flex md:flex-row flex-col bg-white shadow rounded-lg overflow-hidden">
       <img
@@ -39,7 +39,7 @@ export default function TruckCard({ data }) {
 
         <div className="flex mt-4">
           <button className="bg-black text-white w-[162px] h-[39px] flex justify-center items-center rounded-md mr-3">Edit</button>
-          <button className="border w-[162px] h-[39px] rounded-md border-black">Delete</button>
+          <button onClick={()=>handleDeleteClick(data._id)} className="border w-[162px] h-[39px] rounded-md border-black">Delete</button>
         </div>
       </div>
     </div>

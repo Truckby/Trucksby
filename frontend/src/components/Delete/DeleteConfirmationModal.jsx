@@ -12,10 +12,10 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
                     <p className="">Are you sure you want to <span className='text-red-600'>delete</span> this item?</p>
                 </div>
                 <div className='mb-8'>
-                    <button onClick={onClose} className="cursor-pointer px-4 py-2 bg-gray-500 w-[131px] h-[48px] text-white rounded-full rounded-tr-none mr-[12px]">
+                    <button onClick={onClose} className="cursor-pointer px-4 py-2 bg-gray-500 w-[131px] h-[48px] text-white rounded-[10px] mr-[12px]">
                         Cancel
                     </button>
-                    <button onClick={onConfirm} className="cursor-pointer px-4 py-2 bg-[#D74042] w-[131px] h-[48px] text-white rounded-full rounded-tl-none">
+                    <button onClick={onConfirm} className="cursor-pointer px-4 py-2 bg-[#D74042] w-[131px] h-[48px] text-white rounded-[10px]">
                         Delete
                     </button>
                 </div>

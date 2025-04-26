@@ -6,6 +6,7 @@ import truckService from '../../../services/truckService';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
+import { IoImage } from 'react-icons/io5';
 
 const AddTruckPage = () => {
   const [image, setImage] = useState(null);
@@ -22,7 +23,7 @@ const AddTruckPage = () => {
       phone: "",
       email: "",
       companyName: '',
-      address:'',
+      address: '',
       modelYear: "",
       mileage: "",
       VehicleManufacturer: "",
@@ -33,20 +34,20 @@ const AddTruckPage = () => {
       steering: "",
       color: "",
       suspension: "",
-      engineManufacturer:"",
-      engineModel:'',
+      engineManufacturer: "",
+      engineModel: '',
       grossVehicleWeight: "",
-      hoursPower:'',
-      description:'',
+      hoursPower: '',
+      description: '',
       transmissionType: "",
       noofSpeeds: "",
-      transmissionManufacturer:'',
+      transmissionManufacturer: '',
       typeofRearAxles: "",
       frontAxleWeight: "",
       backAxleWeight: "",
       country: '',
       state: '',
-      
+
     },
     // validationSchema: Yup.object({
     //   vehicleName: Yup.string().required("Vehicle name is required"),
@@ -62,8 +63,6 @@ const AddTruckPage = () => {
     //   hours: Yup.string().required("hours are required"),
     //   vin: Yup.string().required("vin is required"),
     //   condition: Yup.string().required("condition is required"),
-    //   payload: Yup.string().required("payload is required"),
-    //   gwr: Yup.string().required("gwr is required"),
     //   wheelbase: Yup.string().required("wheelbase is required"),
     //   steering: Yup.string().required("steering is required"),
     //   color: Yup.string().required("color is required"),
@@ -229,7 +228,9 @@ const AddTruckPage = () => {
                     <div className="text-red-500 text-sm">{formik.errors.state}</div>
                   )}
                 </div>
-              ) : <div></div>}
+              )
+                : <div></div>
+              }
 
               <div >
                 <label
@@ -239,11 +240,7 @@ const AddTruckPage = () => {
                     }`}
                 >
                   <div className="flex flex-col items-center text-center">
-                    <img
-                      src="https://www.svgrepo.com/show/474865/image-upload.svg"
-                      alt="upload icon"
-                      className="w-12 h-12 opacity-50"
-                    />
+                    <IoImage color='text-gray-500 ' fontSize={20} />
                     <p className="text-gray-500 mt-2 font-medium">
                       Drag or Click to upload media
                     </p>
@@ -284,7 +281,7 @@ const AddTruckPage = () => {
             <div className='mb-9'>
               <label className="label" htmlFor="phone">phone</label>
               <input
-                type="text"
+                type="number"
                 name='phone'
                 placeholder="Enter Phone Number"
                 className="input"
@@ -299,7 +296,7 @@ const AddTruckPage = () => {
 
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="email">email</label>
+              <label className="label" htmlFor="email">Email</label>
               <input
                 type="email"
                 name='email'
@@ -318,7 +315,7 @@ const AddTruckPage = () => {
               <input
                 type="text"
                 name='companyName'
-                placeholder="Enter your Email"
+                placeholder="Enter your Company Name"
                 className="input"
                 onChange={formik.handleChange}
                 value={formik.values.companyName}
@@ -330,7 +327,7 @@ const AddTruckPage = () => {
               <input
                 type="text"
                 name='address'
-                placeholder="Enter your Email"
+                placeholder="Enter your Address"
                 className="input"
                 onChange={formik.handleChange}
                 value={formik.values.address}
@@ -358,7 +355,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="mileage">mileage</label>
+                <label className="label" htmlFor="mileage">Mileage</label>
                 <input
                   type="text"
                   name='mileage'
@@ -412,7 +409,7 @@ const AddTruckPage = () => {
 
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vin">vin</label>
+                <label className="label" htmlFor="vin">VIN</label>
                 <input
                   type="text"
                   name='vin'
@@ -466,7 +463,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="steering">steering</label>
+                <label className="label" htmlFor="steering">Steering</label>
                 <input
                   type="text"
                   name='steering'
@@ -483,7 +480,7 @@ const AddTruckPage = () => {
 
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="color">color</label>
+                <label className="label" htmlFor="color">Color</label>
                 <input
                   type="text"
                   name='color'
@@ -498,7 +495,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="suspension">suspension</label>
+                <label className="label" htmlFor="suspension">Suspension</label>
                 <input
                   type="text"
                   name='suspension'
@@ -621,7 +618,7 @@ const AddTruckPage = () => {
                 onChange={formik.handleChange}
                 value={formik.values.transmissionManufacturer}
               />
-             
+
             </div>
           </div>
 

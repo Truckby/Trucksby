@@ -27,11 +27,11 @@ export default function TruckCard({ data,handleDeleteClick }) {
           </div>
         </div>
 
-        <p className="text-[#DF0805] text-lg font-semibold mt-4">50,000 $</p>
+        <p className="text-[#DF0805] text-lg font-semibold mt-4">{data?.vehiclePrice} $</p>
 
         <div className="flex items-center  text-sm mt-4">
           <FaMapMarkerAlt className="mr-1" />
-          <span>{data?.location}</span>
+          <span>{data?.country}</span>
           <span className="ml-[30px] mr-1"><IoSpeedometer /> </span>
           <span>{data?.mileage} Miles</span>
         </div>

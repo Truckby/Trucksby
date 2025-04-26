@@ -7,13 +7,13 @@ const validationMiddleware = require('../middleware/validationMiddleware');
 router.post(
     "/create-checkout-session",
     authMiddleware.authenticateRequest,
-    authMiddleware.verifyRole(['user']),
+    authMiddleware.verifyRole(['seller']),
     validationMiddleware.validateRequest(stripeSchemas.createCheckoutSchema),
     controller.CreateCheckoutSession
 );
 
 router.post(
-    "/webhooks/:tenantId",
+    "/webhooks",
     controller.StripeHooks
 );
 

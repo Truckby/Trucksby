@@ -208,7 +208,7 @@ const searchUsers = async (pageIndex, limit, searchQuery, role) => {
   };
 };
 
-const updateUser = async (userId, updateData, role = null) => {
+const updateUser = async (userId, updateData) => {
   const userToUpdate = await User.findById(userId);
 
   if (!userToUpdate) {
@@ -216,14 +216,11 @@ const updateUser = async (userId, updateData, role = null) => {
     error.code = 404;
     throw error;
   }
-  if (role && userToUpdate.role !== role) {
-    const error = new Error('Cannot update other type of user via this endpoint!');
-    error.code = 405;
-    throw error;
-  }
+
   if (updateData.password) {
     updateData.password = await authUtils.hashPassword(updateData.password);
   }
+
   let existingUser;
   if (updateData.email && updateData.email !== userToUpdate.email) {
     existingUser = await User.findOne({ email: updateData.email });
@@ -233,14 +230,7 @@ const updateUser = async (userId, updateData, role = null) => {
       throw error;
     }
   }
-  if (updateData.number && updateData.number !== userToUpdate.number) {
-    existingUser = await User.findOne({ number: updateData.number });
-    if (existingUser) {
-      const error = new Error('A user with that number has already been registered!');
-      error.code = 409;
-      throw error;
-    }
-  }
+
   const updatedUser = await User.findByIdAndUpdate(
     userId,
     updateData,

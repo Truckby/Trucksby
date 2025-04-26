@@ -1,8 +1,9 @@
+const Subscription = require('../models/subscriptionModel');
 const { loadDBModel } = require('../utils/modelUtils');
 const moment = require("moment");
 
-const addSubscription = async (connectionId, data) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+const addSubscription = async ( data) => {
+    
     try {
         const { user, customerId, subscriptionInfo } = data;
         const existingUserSubscription = await Subscription.findOne({ user });
@@ -25,8 +26,8 @@ const addSubscription = async (connectionId, data) => {
     }
 };
 
-const updateSubscription = async (connectionId, data) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+const updateSubscription = async ( data) => {
+    
     try {
         const { user, customerId, subscriptionInfo } = data;
         const now = new Date();
@@ -59,8 +60,8 @@ const updateSubscription = async (connectionId, data) => {
     }
 };
 
-const getUserSubscriptionStatus = async (connectionId, userId) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+const getUserSubscriptionStatus = async ( userId) => {
+    
     const subscription = await Subscription.findOne({ user: userId });
     if (!subscription) {
         return {
@@ -104,8 +105,8 @@ const getUserSubscriptionStatus = async (connectionId, userId) => {
     };
 };
 
-const getUserSubscriptionInfo = async (connectionId, userId) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+const getUserSubscriptionInfo = async ( userId) => {
+    
     const subscription = await Subscription.findOne({ user: userId });
     if (!subscription) {
         return {
@@ -145,7 +146,7 @@ const getUserSubscriptionInfo = async (connectionId, userId) => {
 };
 
 const getActiveMembers = async (connectionId) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+    
     const now = new Date();
 
     const activeMembers = await Subscription.aggregate([
@@ -174,7 +175,7 @@ const getActiveMembersCount = async (connectionId) => {
 };
 
 const getNewMembersCount = async (connectionId) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+    
     const thirtyDaysAgo = moment().subtract(30, 'days').toDate();
     const now = new Date();
 
@@ -200,7 +201,7 @@ const getNewMembersCount = async (connectionId) => {
 };
 
 const getLostMembersCount = async (connectionId) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+    
     const now = new Date();
 
     const activeUsers = await getActiveMembers(connectionId);
@@ -227,8 +228,8 @@ const getLostMembersCount = async (connectionId) => {
     return lostMembers.length;
 };
 
-const getTurnoverData = async (connectionId, year, period) => {
-    const Subscription = loadDBModel(connectionId, 'subscription');
+const getTurnoverData = async ( year, period) => {
+    
     const startDate = new Date(year, 0, 1); // Start of the year
     const endDate = new Date(year + 1, 0, 1); // Start of next year
 
@@ -307,7 +308,7 @@ const getTurnoverData = async (connectionId, year, period) => {
 // getTurnoverData(2024, 'monthly');
 
 const getGrowthRateData = async (turnoverData) => {
-    // const Subscription = loadDBModel(connectionId, 'subscription');
+    // 
 
     // const turnoverData = await getTurnoverData();
     // console.log('TurnOver Data: ', turnoverData);

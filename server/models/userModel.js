@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema(
     resetTokenExpiry: {
       type: Date,
       default: null
+    },
+    stripeCustomerId: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }

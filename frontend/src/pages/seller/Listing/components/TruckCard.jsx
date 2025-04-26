@@ -38,8 +38,8 @@ export default function TruckCard({ data,handleDeleteClick }) {
 
 
         <div className="flex mt-4">
-          <button className="bg-black text-white w-[162px] h-[39px] flex justify-center items-center rounded-md mr-3">Edit</button>
-          <button onClick={()=>handleDeleteClick(data._id)} className="border w-[162px] h-[39px] rounded-md border-black">Delete</button>
+          <button className="bg-black text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3">Edit</button>
+          <button onClick={()=>handleDeleteClick(data._id)} className="border cursor-pointer w-[162px] h-[39px] rounded-md border-black">Delete</button>
         </div>
       </div>
     </div>

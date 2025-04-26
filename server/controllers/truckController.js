@@ -46,8 +46,8 @@ const updateTruck = async (req, res, next) => {
 
 const deleteTruck = async (req, res, next) => {
   try {
-    const deletedTruck = await truckService.deleteTruck(req.params.truckId);
-    if (!deletedTruck) return res.status(404).json({ message: 'Truck not found' });
+    const deletedTruck = await truckService.deleteTruck(req.params.id);
+    if (!deletedTruck) return res.status(500).json({ message: 'Truck not found' });
     res.status(200).json({ message: 'Truck deleted successfully' });
   } catch (error) {
     next(error);

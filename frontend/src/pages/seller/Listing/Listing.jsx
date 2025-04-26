@@ -37,6 +37,7 @@ const Listing = () => {
 
   const handleConfirmDelete = async () => {
     if (!deleteTruckId) return;
+    console.log(deleteTruckId)
     dispatch(ShowLoading());
     try {
       await truckService.deleteTruck(deleteTruckId);
@@ -68,7 +69,7 @@ const Listing = () => {
       </div>
 
       {listData.map((data, index) => (
-        <div key={index}>
+        <div key={index} className='mt-4'>
           <TruckCard data={data} handleDeleteClick={handleDeleteClick} />
         </div>
       ))}

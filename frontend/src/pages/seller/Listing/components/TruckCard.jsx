@@ -2,9 +2,12 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import image from '../../../../assets/images/card.svg'
 import { IoSpeedometer } from "react-icons/io5";
+import { useNavigate } from "react-router";
 
 
-export default function TruckCard({ data,handleDeleteClick }) {
+export default function TruckCard({ data, handleDeleteClick }) {
+  const navigate = useNavigate();
+
   return (
     <div className="flex md:flex-row flex-col bg-white shadow rounded-lg overflow-hidden">
       <img
@@ -38,8 +41,14 @@ export default function TruckCard({ data,handleDeleteClick }) {
 
 
         <div className="flex mt-4">
-          <button className="bg-black text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3">Edit</button>
-          <button onClick={()=>handleDeleteClick(data._id)} className="border cursor-pointer w-[162px] h-[39px] rounded-md border-black">Delete</button>
+          <button
+            onClick={() => navigate('/seller/add-truck', { state: data })}
+            className="bg-black text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3 hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
+            aria-label="Edit truck details"
+          >
+            Edit
+          </button>
+          <button onClick={() => handleDeleteClick(data._id)} className="border cursor-pointer w-[162px] h-[39px] rounded-md border-black">Delete</button>
         </div>
       </div>
     </div>

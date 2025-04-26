@@ -7,11 +7,16 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { IoImage } from 'react-icons/io5';
+import { useLocation } from 'react-router';
 
 const AddTruckPage = () => {
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const user = useSelector((state) => state.user.user);
+  const location = useLocation();
+  const truckData = location.state;
+
+  console.log(truckData)
 
   const formik = useFormik({
     initialValues: {

@@ -12,10 +12,11 @@ const truckSchema = new mongoose.Schema(
         vehicleName: { type: String, trim: true },
         vehiclePrice: { type: String, trim: true },
         truckCategory: { type: String, trim: true },
+        truckSubCategory: { type: String, trim: true },
         listingType: { type: String, trim: true },
         country: { type: String, trim: true },
         state: { type: String, trim: true },
-        uploadImages: {
+        images: {
             type: [String],
             default: [],
         },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -9,50 +9,58 @@ import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { IoImage } from 'react-icons/io5';
 import { useLocation } from 'react-router';
 import { uploadImg } from '../../../services/image';
+import { FaTimes } from 'react-icons/fa';
 
 const AddTruckPage = () => {
   const location = useLocation();
-  const truckData = location.state;
+  const oldTruckData = location.state;
   const [previewImages, setPreviewImages] = useState([]);
 
-  console.log(truckData, 'editData')
+  console.log(oldTruckData, 'oldTruckData')
+
+  // Add this useEffect to handle existing images
+  useEffect(() => {
+    if (oldTruckData?.images && Array.isArray(oldTruckData.images)) {
+      setPreviewImages(oldTruckData.images);
+    }
+  }, [oldTruckData]);
 
   const formik = useFormik({
     initialValues: {
-      vehicleName: "",
-      vehiclePrice: "",
-      truckCategory: "",
-      truckSubCategory: "",
-      listingType: "",
-      name: "",
-      phone: "",
-      email: "",
-      companyName: '',
-      address: '',
-      modelYear: "",
-      mileage: "",
-      VehicleManufacturer: "",
-      hours: "",
-      vin: "",
-      condition: "",
-      wheelbase: "",
-      steering: "",
-      color: "",
-      suspension: "",
-      engineManufacturer: "",
-      engineModel: '',
-      grossVehicleWeight: "",
-      hoursPower: '',
-      description: '',
-      transmissionType: "",
-      noofSpeeds: "",
-      transmissionManufacturer: '',
-      typeofRearAxles: "",
-      frontAxleWeight: "",
-      backAxleWeight: "",
-      country: '',
-      state: '',
-      images: [],
+      vehicleName: oldTruckData?.vehicleName || "",
+      vehiclePrice: oldTruckData?.vehiclePrice || "",
+      truckCategory: oldTruckData?.truckCategory || "",
+      truckSubCategory: oldTruckData?.truckSubCategory || "",
+      listingType: oldTruckData?.listingType || "",
+      name: oldTruckData?.name || "",
+      phone: oldTruckData?.phone || "",
+      email:  oldTruckData?.email || "",
+      companyName: oldTruckData?.companyName || "",
+      address: oldTruckData?.address || "",
+      modelYear: oldTruckData?.modelYear || "",
+      mileage: oldTruckData?.mileage || "",
+      vehicleManufacturer: oldTruckData?.vehicleManufacturer || "",
+      hours: oldTruckData?.hours || "",
+      vin: oldTruckData?.vin || "",
+      condition: oldTruckData?.condition || "",
+      wheelbase: oldTruckData?.wheelbase || "",
+      steering:   oldTruckData?.steering || "",
+      color: oldTruckData?.color || "",
+      suspension: oldTruckData?.suspension || "",
+      engineManufacturer: oldTruckData?.engineManufacturer || "",
+      engineModel: oldTruckData?.engineModel || "",
+      grossVehicleWeight: oldTruckData?.grossVehicleWeight || "",
+      hoursPower: oldTruckData?.hoursPower || "",
+      description: oldTruckData?.description || "",
+      transmissionType: oldTruckData?.transmissionType || "",
+      noofSpeeds: oldTruckData?.noofSpeeds || "",
+      transmissionManufacturer: oldTruckData?.transmissionManufacturer || "",
+      typeofRearAxles: oldTruckData?.typeofRearAxles || "",
+      frontAxleWeight: oldTruckData?.frontAxleWeight || "",
+      backAxleWeight: oldTruckData?.backAxleWeight || "",
+      country: oldTruckData?.country || "",
+      state: oldTruckData?.state || "",
+      images: oldTruckData?.images || [],
     },
     validationSchema: Yup.object({
       vehicleName: Yup.string().required("Vehicle name is required"),
@@ -65,46 +73,65 @@ const AddTruckPage = () => {
       truckCategory: Yup.string().required("Truck category is required"),
       truckSubCategory: Yup.string().required("Truck subcategory is required"),
       condition: Yup.string().required("Condition is required"),
-      VehicleManufacturer: Yup.string().required("Vehicle manufacturer is required"),
+      vehicleManufacturer: Yup.string().required("Vehicle manufacturer is required"),
       modelYear: Yup.string().required("Model year is required"),
       vehiclePrice: Yup.string().required("Vehicle price is required"),
       description: Yup.string().required("Description is required"),
     }),
     onSubmit: async (values) => {
-      const formData = new FormData();
-      for (let key in values) {
-        if (values[key] !== null) {
-          formData.append(key, values[key]);
-        }
-      }
-
+      // Log the images to verify
+      console.log("Submitting images:", values.images);
+    
+      const truckData = {
+        ...values,
+        images: Array.isArray(values.images) ? values.images : []
+      };
+    
+      console.log("Final truck data:", truckData);
+      
       try {
-        await truckService.createTruck(formData);
+        if (oldTruckData?._id) {
+          await truckService.updateTruck(oldTruckData._id, truckData);
+          toast.success('Truck updated successfully!');
+        } else {
+        await truckService.createTruck(truckData);
         toast.success('Truck listed successfully!');
+        
         formik.resetForm();
+        setPreviewImages([]);
+        }
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Listing failed');
         console.error('Listing error:', error);
       }
-    },
+    }
+    
   });
-
 
 
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    const uploadedUrls = [];
     const previews = files.map(file => URL.createObjectURL(file));
     setPreviewImages(prev => [...prev, ...previews]);
-
+  
+    // Keep track of all uploaded URLs in this batch
+    let allUploadedUrls = [];
+  
+    // Upload each file individually
     for (const file of files) {
       const form = new FormData();
       form.append("images", file);
-
+  
       try {
         const res = await uploadImg(form);
         if (res?.success) {
-          uploadedUrls.push(...res.urls);
+          // Add new URLs to our collection
+          if (Array.isArray(res.urls)) {
+            allUploadedUrls = [...allUploadedUrls, ...res.urls];
+          } else if (res.urls) {
+            // If it's a single URL, add it as is
+            allUploadedUrls.push(res.urls);
+          }
           toast.success('Image uploaded successfully');
         } else {
           toast.error("Failed to upload one or more images");
@@ -114,17 +141,31 @@ const AddTruckPage = () => {
         toast.error("Error uploading image");
       }
     }
+  
+    // Update Formik state once with all new URLs
+    if (allUploadedUrls.length > 0) {
+      formik.setFieldValue('images', [
+        ...(formik.values.images || []), 
+        ...allUploadedUrls
+      ]);
+      
+      // Log the updated images array to verify
+      console.log("Updated images array:", [
+        ...(formik.values.images || []),
+        ...allUploadedUrls
+      ]);
+    }
   };
+  
+
 
   const handleRemoveImage = (index) => {
     const updatedPreviews = previewImages.filter((_, i) => i !== index);
-    const updatedImageUrls = (formData.images || []).filter((_, i) => i !== index);
-
+    const updatedImageUrls = formik.values.images.filter((_, i) => i !== index);
+  
     setPreviewImages(updatedPreviews);
-    setFormData(prev => ({
-      ...prev,
-      images: updatedImageUrls,
-    }));
+    formik.setFieldValue('images', updatedImageUrls);
+    
   };
 
   const truckCategory = [
@@ -452,6 +493,7 @@ const AddTruckPage = () => {
                       ))}
                     </div>
                   )}
+
                 </label>
               </div>
             </div>
@@ -569,12 +611,12 @@ const AddTruckPage = () => {
 
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="VehicleManufacturer">Vehicle Manufacturer</label>
+                <label className="label" htmlFor="vehicleManufacturer">Vehicle Manufacturer</label>
                 <select
-                  name="VehicleManufacturer"
+                  name="vehicleManufacturer"
                   className="input"
                   onChange={formik.handleChange}
-                  value={formik.values.VehicleManufacturer}
+                  value={formik.values.vehicleManufacturer}
                 >
                   <option value="" disabled>Select Vehicle Manufacturer</option>
                   <option value="Hyundia">Hyundia</option>
@@ -583,8 +625,8 @@ const AddTruckPage = () => {
                   <option value="Mitsubishi">Mitsubishi</option>
                   <option value="Hino">Hino</option>
                 </select>
-                {formik.errors.VehicleManufacturer && formik.touched.VehicleManufacturer && (
-                  <div className="text-red-500 text-sm">{formik.errors.VehicleManufacturer}</div>
+                {formik.errors.vehicleManufacturer && formik.touched.vehicleManufacturer && (
+                  <div className="text-red-500 text-sm">{formik.errors.vehicleManufacturer}</div>
                 )}
               </div>
 

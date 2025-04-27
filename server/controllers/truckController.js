@@ -12,7 +12,7 @@ const fetchAllTrucks = async (req, res, next) => {
 
 const fetchTruckById = async (req, res, next) => {
   try {
-    const truck = await truckService.getTruckById(req.params.truckId);
+    const truck = await truckService.getTruckById(req.params.id);
     if (!truck) return res.status(404).json({ message: 'Truck not found' });
     res.status(200).json(truck);
   } catch (error) {
@@ -36,7 +36,7 @@ const addTruck = async (req, res, next) => {
 
 const updateTruck = async (req, res, next) => {
   try {
-    const updatedTruck = await truckService.updateTruck(req.params.truckId, req.body);
+    const updatedTruck = await truckService.updateTruck(req.params.id, req.body);
     if (!updatedTruck) return res.status(404).json({ message: 'Truck not found' });
     res.status(200).json({ message: 'Truck updated successfully', truck: updatedTruck });
   } catch (error) {

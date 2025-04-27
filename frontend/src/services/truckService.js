@@ -5,7 +5,11 @@ const BASE_URL = "/api/truck";
 const truckService = {
     createTruck: async (payload) => {
         try {
-            const response = await axiosInstance.post(`${BASE_URL}`, payload);
+            const response = await axiosInstance.post(`${BASE_URL}`, payload, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             return response.data;
         } catch (error) {
             throw error;
@@ -32,7 +36,11 @@ const truckService = {
 
     updateTruck: async (id, payload) => {
         try {
-            const response = await axiosInstance.put(`${BASE_URL}/${id}`, payload);
+            const response = await axiosInstance.put(`${BASE_URL}/${id}`, payload ,{
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             return response.data;
         } catch (error) {
             throw error;

@@ -79,9 +79,9 @@ export default function Header() {
           }
 
           {user?.email && <div onClick={toggleProfileDropdown} className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center">
-            <img src={profile} alt="profile" className="w-[33px] h-[33px] ml-2.5" />
+            <img src={user?.image || profile} alt="profile" className="w-[33px] h-[33px] rounded-full object-cover ml-2.5" />
             <span className="ml-2.5">
-              {user?.email ? user.email.split('@')[0].slice(0, 10) : 'Guest'}
+              {user?.userName ? user.userName.split('@')[0].slice(0, 10) : 'Guest'}
             </span>
 
             <div className="ml-auto">
@@ -103,12 +103,12 @@ export default function Header() {
           </div>
           }
 
-          <Link
-            to="/sell"
+          {user?.role === 'seller' && <Link
+            to="/seller/listing"
             className="px-4 py-2 bg-[#DF0805] text-white font-medium rounded-lg"
           >
             Sell Your Truck
-          </Link>
+          </Link>}
         </div>
 
         {/* Mobile Menu Toggle Button */}

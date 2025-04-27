@@ -8,18 +8,15 @@ import cardImage from '../../../assets/images/card.svg'
 
 const Home = () => {
   const truckTypes = [
-    'Box Trucks',
-    'Flatbed Trucks',
-    'Refrigerated Trucks',
-    'Tanker Trucks',
-    'Dump Trucks',
-    'Car Haulers',
-    'Livestock Trucks',
-    'Dry Vans',
-    'Lowboy Trailers',
-    'Container Chassis',
-    'Auto Transporters',
-    'Cement Mixers'
+    'TRUCKS',
+    'TRAILERS',
+    'CONSTRUCTION EQUIPMENT',
+    'LOGGING EQUIPMENT',
+    'FARM EQUIPMENT',
+    'AGGREGATE AND MINING EQUIPMENT',
+    'LIFTING EQUIPMENT',
+    'INDUSTRIAL EQUIPMENT',
+    'RVS',
   ];
 
   const truckData = [
@@ -86,7 +83,7 @@ const Home = () => {
     <div className='max-w-[1300px] lg:px-4 mx-auto'>
       <div className="flex flex-col lg:flex-row items-center justify-between ">
         <div className="flex lg:hidden lg:w-full">
-        <video
+          <video
             src={trick}
             className="w-full object-cover h-[350px] sm:h-[585px]"
             autoPlay
@@ -143,7 +140,7 @@ const Home = () => {
       </div>
 
       <div className='pt-[60px] pb-[70px]'>
-        <h3 className=' text-2xl sm:text-[32px] font-bold'>Browse by Type</h3>
+        <h3 className=' text-2xl sm:text-[32px] font-bold'>Feature Categories</h3>
 
         <div className='flex justify-center items-center flex-wrap'>
           {truckTypes.map((truck, index) => (
@@ -152,7 +149,10 @@ const Home = () => {
               className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
               <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
-              <span className=' text-lg sm:text-xl font-semibold pt-9'>{truck}</span>
+              <span className="text-lg sm:text-xl font-semibold pt-9 text-center">
+                {truck.charAt(0).toUpperCase() + truck.slice(1).toLowerCase()}
+              </span>
+
             </div>
           ))}
 

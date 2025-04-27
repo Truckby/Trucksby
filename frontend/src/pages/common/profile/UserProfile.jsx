@@ -1,24 +1,28 @@
 import React, { useState } from "react";
-import './style.css'
-import { useSelector } from "react-redux";
+import './style.css';
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserInfo } from "../../../redux/userSlice";
+import userService from "../../../services/userService";
+import { uploadImg } from "../../../services/image";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
   const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    username: "",
-    email: "",
-    gender: "",
-    country: "",
-    city: "",
-    profileImage: user?.image,
+    username: user?.userName || "",
+    email: user?.email || "",
+    profileImage: user?.image || "",
   });
+
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(user?.image || "");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
@@ -26,16 +30,52 @@ const UserProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prevData) => ({
-        ...prevData,
-        profileImage: URL.createObjectURL(file),
-      }));
+      setImageFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+
+    let updatedData = {
+      userName: formData.username,
+      email: formData.email,
+      image: formData.profileImage,
+    };
+
+    if (imageFile) {
+      try {
+        const imgForm = new FormData();
+        imgForm.append("images", imageFile);
+
+        const res = await uploadImg(imgForm);
+
+        if (res?.success && res?.urls?.length > 0) {
+          updatedData.image = res.urls[0];
+        } else {
+          toast.error("Image upload failed");
+          return;
+        }
+      } catch (error) {
+        toast.error("Error uploading image");
+        return;
+      }
+    }
+
+    try {
+      const response = await userService.updateUserInfo(updatedData);
+
+      if (!response) {
+        toast.error("Update failed");
+        return;
+      }
+
+      toast.success("Profile updated successfully");
+      dispatch(fetchUserInfo());
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Update failed");
+    }
   };
 
   return (
@@ -45,81 +85,19 @@ const UserProfile = () => {
 
         <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
           <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">
-            {formData.profileImage ? (
-              <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
+            {previewUrl ? (
+              <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
                 No Image
               </div>
             )}
           </div>
-          <input type="file" onChange={handleImageChange} className="mt-4 sm:mt-0" />
+          <input type="file" accept="image/*" onChange={handleImageChange} className="mt-4 sm:mt-0" />
         </div>
 
-        <form onSubmit={handleSubmit} >
-
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {/* Full Name */}
-            <div>
-              <label className="label">Full Name</label>
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Enter your full name"
-                className="input"
-                onChange={handleChange}
-                value={formData.fullName}
-              />
-            </div>
-
-            {/* Gender */}
-            <div>
-              <label className="label">Gender</label>
-              <select
-                name="gender"
-                className="input"
-                onChange={handleChange}
-                value={formData.gender}
-              >
-                <option value="">Select your gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            {/* Country */}
-            <div>
-              <label className="label">Country</label>
-              <select
-                name="country"
-                className="input"
-                onChange={handleChange}
-                value={formData.country}
-              >
-                <option value="">Select Country</option>
-                <option value="USA">USA</option>
-                <option value="UK">UK</option>
-                <option value="Canada">Canada</option>
-              </select>
-            </div>
-
-            {/* City */}
-            <div>
-              <label className="label">Select City</label>
-              <select
-                name="city"
-                className="input"
-                onChange={handleChange}
-                value={formData.city}
-              >
-                <option value="">Select City</option>
-                <option value="New York">New York</option>
-                <option value="London">London</option>
-                <option value="Toronto">Toronto</option>
-              </select>
-            </div>
-
             {/* Username */}
             <div>
               <label className="label">Username</label>
@@ -145,11 +123,13 @@ const UserProfile = () => {
                 value={formData.email}
               />
             </div>
-
           </div>
+
           {/* Save Button */}
           <div className="col-span-2 flex justify-end">
-            <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto">Save Changes</button>
+            <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto">
+              Save Changes
+            </button>
           </div>
         </form>
       </div>

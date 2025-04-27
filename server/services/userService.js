@@ -23,7 +23,8 @@ const createUser = async (userData, role) => {
       password: passwordDigest,
       image,
       role,
-      userId
+      userId,
+      userName
     });
   } else {
     user = await User.create({

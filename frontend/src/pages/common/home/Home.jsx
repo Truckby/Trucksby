@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import trick from '../../../assets/images/truck_image.png'
 import trick from '../../../assets/videos/truck.mov'
 import { FaSearch } from 'react-icons/fa';
 import TypeTruck from '../../../assets/images/type.svg'
 import TruckCard from './components/TruckCard';
 import cardImage from '../../../assets/images/card.svg'
+import { CountryDropdown } from 'react-country-region-selector';
+import { useDispatch } from 'react-redux';
+import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
+import truckService from '../../../services/truckService';
 
 const Home = () => {
+  const [listData, setListData] = React.useState([]);
+  const dispatch = useDispatch();
+
   const truckTypes = [
     'Trucks',
     'Trailers',
@@ -19,64 +26,34 @@ const Home = () => {
     'Rvs',
   ];
 
-  const truckData = [
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2024 ISUZU",
-      price: "50,000",
-      location: "Pocatello, Idaho",
-      miles: "120,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2022 Ford F-750",
-      price: "45,500",
-      location: "Dallas, Texas",
-      miles: "98,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2023 Freightliner M2",
-      price: "60,000",
-      location: "Los Angeles",
-      miles: "75,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2024 ISUZU",
-      price: "50,000",
-      location: "Pocatello, Idaho",
-      miles: "120,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2022 Ford F-750",
-      price: "45,500",
-      location: "Dallas, Texas",
-      miles: "98,000",
-    },
-  ];
+    const fetchAllTrucks = async () => {
+      dispatch(ShowLoading());
+      try {
+        const response = await truckService.getAllTrucksWithFilter();
+        setListData(response);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      } finally {
+        dispatch(HideLoading());
+      }
+    };
+    console.log(listData, 'listData')
+  
+    useEffect(() => {
+      fetchAllTrucks()
+    }, [])
 
+  const truckCategory = [
+    'Trucks',
+    'Trailers',
+    'Construction Equipment',
+    'Logging Equipment',
+    'Farm Equipment',
+    'Aggregate and Mining Equipment',
+    'Lifting Equipment',
+    'Industrial Equipment',
+    'RVs'
+  ];
 
 
   return (
@@ -109,12 +86,23 @@ const Home = () => {
 
           {/* Search Filters */}
           <div className="flex w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
-            <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" />
+            {/* <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
+            <CountryDropdown
+              value={''}
+              onChange={() => { }}
+              className='p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]'
+            />
             <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
-              <option>All Cities</option>
+              <option value={''}>Select Type</option>
+              <option value={'For Sale'}>For Sale</option>
+              <option value={'For Lease'}>For Lease</option>
+              <option value={'For Auction'}>For Auction</option>
             </select>
             <select className="p-3 w-full outline-none h-[60px]  ">
-              <option>Price Range</option>
+              <option value="" disabled>Select Truck Type</option>
+              {truckCategory.map((category, index) => (
+                <option key={index} value={category}>{category}</option>
+              ))}
             </select>
             <button className="bg-[#DF0805] text-white p-5 rounded-r-[10px] flex items-center justify-center">
               <FaSearch fontSize={20} />
@@ -142,7 +130,7 @@ const Home = () => {
       <div className='pt-[60px] pb-[70px]'>
         <h3 className=' text-2xl sm:text-[32px] font-bold'>Feature Categories</h3>
 
-        <div className='flex justify-center items-center flex-wrap'>
+        <div className='flex justify-start items-center flex-wrap'>
           {truckTypes.map((truck, index) => (
             <div
               key={index}
@@ -163,11 +151,16 @@ const Home = () => {
       <div className='pt-[60px] pb-[70px] bg-white'>
         <h3 className=' text-2xl sm:text-[32px] font-bold mb-8'>Browse by Type</h3>
 
-        <div className='flex justify-center items-center flex-wrap'>
-          {truckData.map((truck, index) => (
-            <div key={index}>
-              <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
-
+        <div className='flex justify-start items-center flex-wrap'>
+        {listData.map((truck, index) => (
+            <div className='' key={index}>
+              <TruckCard
+                images={truck?.images}
+                title={truck?.vehicleName}
+                price={truck?.vehiclePrice}
+                location={truck?.country}
+                miles={truck?.mileage}
+              />
             </div>
           ))}
 

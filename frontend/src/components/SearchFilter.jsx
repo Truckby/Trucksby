@@ -1,18 +1,45 @@
 import React from 'react'
+import { CountryDropdown } from 'react-country-region-selector';
 import { FaSearch } from 'react-icons/fa'
 
 const SearchFilter = () => {
+    const truckCategory = [
+        'Trucks',
+        'Trailers',
+        'Construction Equipment',
+        'Logging Equipment',
+        'Farm Equipment',
+        'Aggregate and Mining Equipment',
+        'Lifting Equipment',
+        'Industrial Equipment',
+        'RVs'
+    ];
+
     return (
         <div>
             <div className='flex flex-col lg:flex-row justify-between items-center mt-9 lg:mx-4 gap-4'>
                 <div className="flex sm:w-[587px]  rounded-[10px] items-center shadow">
-                    <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-full sm:min-w-[250px] md:w-auto  rounded-l-[10px]" />
+                    {/* <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-full sm:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
+
+                    <CountryDropdown
+                        value={''}
+                        onChange={() => { }}
+                        className='p-3 outline-none h-[60px] w-full sm:min-w-[250px] md:w-auto  rounded-l-[10px]'
+                    />
                     <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
-                        <option>All Cities</option>
+                        <option value={''}>Select Type</option>
+                        <option value={'For Sale'}>For Sale</option>
+                        <option value={'For Lease'}>For Lease</option>
+                        <option value={'For Auction'}>For Auction</option>
                     </select>
+
                     <select className="p-3 w-full outline-none h-[60px]  ">
-                        <option>Price Range</option>
+                        <option value="" disabled>Select Truck Type</option>
+                        {truckCategory.map((category, index) => (
+                            <option key={index} value={category}>{category}</option>
+                        ))}
                     </select>
+
                     <button className="bg-[#DF0805] text-white p-5 rounded-r-[10px] flex items-center justify-center">
                         <FaSearch fontSize={20} />
                     </button>

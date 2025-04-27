@@ -4,6 +4,10 @@ const getAllTrucks = async (userId) => {
   return await Truck.find({ userId });
 };
 
+const getAllTrucksWithFilter = async () => {
+  return await Truck.find();
+};
+
 const getTruckById = async (id) => {
   return await Truck.findById(id);
 };
@@ -22,6 +26,7 @@ const deleteTruck = async (id) => {
 };
 
 module.exports = {
+  getAllTrucksWithFilter,
   getAllTrucks,
   getTruckById,
   createTruck,

@@ -5,6 +5,8 @@ const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/', authMiddleware.authenticateRequest, truckController.fetchAllTrucks);
 
+router.get('/get-all', authMiddleware.authenticateRequest, truckController.getAllTrucks);
+
 router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
 
 router.post('/', authMiddleware.authenticateRequest, truckController.addTruck);

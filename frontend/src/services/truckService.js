@@ -25,6 +25,15 @@ const truckService = {
         }
     },
 
+    getAllTrucksWithFilter: async () => {
+        try {
+            const response = await axiosInstance.get(`${BASE_URL}/get-all`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getTruckById: async (id) => {
         try {
             const response = await axiosInstance.get(`${BASE_URL}/${id}`);

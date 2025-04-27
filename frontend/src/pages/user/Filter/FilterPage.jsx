@@ -1,65 +1,41 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import FilterComponent from './components/FilterComponent'
 import cardImage from '../../../assets/images/card.svg'
 import { IoMdClose } from 'react-icons/io'
 import TruckCard from './components/TruckCard'
 import SearchFilter from '../../../components/SearchFilter'
+import truckService from '../../../services/truckService'
+import { HideLoading, ShowLoading } from '../../../redux/loaderSlice'
+import { useDispatch } from 'react-redux'
 
 const FilterPage = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const truckData = [
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2024 ISUZU",
-      price: "50,000",
-      location: "Pocatello, Idaho",
-      miles: "120,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2022 Ford F-750",
-      price: "45,500",
-      location: "Dallas, Texas",
-      miles: "98,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2023 Freightliner M2",
-      price: "60,000",
-      location: "Los Angeles",
-      miles: "75,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2024 ISUZU",
-      price: "50,000",
-      location: "Pocatello, Idaho",
-      miles: "120,000",
-    },
-  ];
+  const [listData, setListData] = useState([])
+  const dispatch = useDispatch();
 
+
+  const fetchAllTrucks = async () => {
+    dispatch(ShowLoading());
+    try {
+      const response = await truckService.getAllTrucksWithFilter();
+      setListData(response);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      dispatch(HideLoading());
+    }
+  };
+  console.log(listData, 'listData')
+
+  useEffect(() => {
+    fetchAllTrucks()
+  }, [])
 
   return (
     <div className='pb-20 max-w-[1340px] mx-auto '>
-        <SearchFilter/>
+      <SearchFilter />
 
       <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks for sale in California</h1>
 
@@ -94,15 +70,15 @@ const FilterPage = () => {
         )}
 
         {/* Truck cards container */}
-        <div className=" flex justify-center items-center flex-wrap h-fit">
-          {truckData.map((truck, index) => (
+        <div className=" flex justify-start items-center flex-wrap h-fit">
+          {listData.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard
                 images={truck?.images}
-                title={truck?.title}
-                price={truck?.price}
-                location={truck?.location}
-                miles={truck?.miles}
+                title={truck?.vehicleName}
+                price={truck?.vehiclePrice}
+                location={truck?.country}
+                miles={truck?.mileage}
               />
             </div>
           ))}

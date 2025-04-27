@@ -10,6 +10,15 @@ const fetchAllTrucks = async (req, res, next) => {
   }
 };
 
+const getAllTrucks = async (req, res, next) => {
+  try {
+    const trucks = await truckService.getAllTrucksWithFilter();
+    res.status(200).json(trucks);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const fetchTruckById = async (req, res, next) => {
   try {
     const truck = await truckService.getTruckById(req.params.id);
@@ -56,6 +65,7 @@ const deleteTruck = async (req, res, next) => {
 
 module.exports = {
   fetchAllTrucks,
+  getAllTrucks,
   fetchTruckById,
   addTruck,
   updateTruck,

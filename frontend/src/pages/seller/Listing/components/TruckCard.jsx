@@ -18,16 +18,16 @@ export default function TruckCard({ data, handleDeleteClick }) {
 
       <div className="p-3 sm:p-[26px] flex flex-col w-full">
         <div className="flex md:flex-row flex-col md:items-center md:justify-between">
-          <h2 className="text-2xl font-bold">{data?.modelYear} {data?.vehicleName}</h2>
+          <h2 className="text-2xl font-bold">{data?.vehicleName}</h2>
 
 
-          <div className="flex mt-4 md:mt-0 items-center text-[12px]">
+          {/* <div className="flex mt-4 md:mt-0 items-center text-[12px]">
             <IoSpeedometer className="mr-1" />
             <span>200 Views</span>
 
             <IoSpeedometer className="mr-1 ml-3" />
             <span>150 Searched Views</span>
-          </div>
+          </div> */}
         </div>
 
         <p className="text-[#DF0805] text-lg font-semibold mt-4">{data?.vehiclePrice} $</p>

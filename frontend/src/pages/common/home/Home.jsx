@@ -8,15 +8,15 @@ import cardImage from '../../../assets/images/card.svg'
 
 const Home = () => {
   const truckTypes = [
-    'TRUCKS',
-    'TRAILERS',
-    'CONSTRUCTION EQUIPMENT',
-    'LOGGING EQUIPMENT',
-    'FARM EQUIPMENT',
-    'AGGREGATE AND MINING EQUIPMENT',
-    'LIFTING EQUIPMENT',
-    'INDUSTRIAL EQUIPMENT',
-    'RVS',
+    'Trucks',
+    'Trailers',
+    'Construction equipment',
+    'Logging equipment',
+    'Farm equipment',
+    'Aggregate and mining equipment',
+    'Lifting equipment',
+    'Industrial equipment',
+    'Rvs',
   ];
 
   const truckData = [
@@ -99,6 +99,14 @@ const Home = () => {
           <h1 className=" text-2xl sm:text-4xl md:text-[64px] md:leading-[61px] font-bold text-black " style={{ fontFamily: 'Oswald' }}>Drive Your <br /> Business Forward</h1>
           <h4 className=" text-lg md:text-2xl text-gray-600">Sell Trucks with Confidence!</h4>
 
+          {/* Search Input */}
+          <div className="relative mt-4 w-full xl:w-[587px]">
+            <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
+            <span className='absolute top-1.5 right-5 cursor-pointer p-3'>
+              <FaSearch fontSize={20} color='#8E8E8E' />
+            </span>
+          </div>
+
           {/* Search Filters */}
           <div className="flex w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
             <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" />
@@ -111,14 +119,6 @@ const Home = () => {
             <button className="bg-[#DF0805] text-white p-5 rounded-r-[10px] flex items-center justify-center">
               <FaSearch fontSize={20} />
             </button>
-          </div>
-
-          {/* Search Input */}
-          <div className="relative mt-4 w-full xl:w-[587px]">
-            <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
-            <span className='absolute top-5 right-5'>
-              <FaSearch fontSize={20} color='#8E8E8E' />
-            </span>
           </div>
         </div>
 
@@ -150,7 +150,7 @@ const Home = () => {
             >
               <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
               <span className="text-lg sm:text-xl font-semibold pt-9 text-center">
-                {truck.charAt(0).toUpperCase() + truck.slice(1).toLowerCase()}
+                {truck}
               </span>
 
             </div>

@@ -14,8 +14,8 @@ import FilterPage from '../pages/user/Filter/FilterPage.jsx';
 
 const routes = [
   //user
-  { path: "/user/filter", element: <FilterPage />, protected: true, authRedirect: true },
-  { path: "/user/detail", element: <DetailPage />, protected: true, authRedirect: true },
+  { path: "/user/filter", element: <FilterPage />, protected: false, authRedirect: false },
+  { path: "/user/detail", element: <DetailPage />, protected: false, authRedirect: false },
   { path: "/user/profile", element: <UserProfile />, protected: true, authRedirect: true },
 
   //service Provider

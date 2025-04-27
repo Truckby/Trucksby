@@ -8,21 +8,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { IoImage } from 'react-icons/io5';
 import { useLocation } from 'react-router';
+import { uploadImg } from '../../../services/image';
 
 const AddTruckPage = () => {
-  const [image, setImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const user = useSelector((state) => state.user.user);
   const location = useLocation();
   const truckData = location.state;
+  const [previewImages, setPreviewImages] = useState([]);
 
-  console.log(truckData)
+  console.log(truckData, 'editData')
 
   const formik = useFormik({
     initialValues: {
       vehicleName: "",
       vehiclePrice: "",
       truckCategory: "",
+      truckSubCategory: "",
       listingType: "",
       name: "",
       phone: "",
@@ -52,33 +52,24 @@ const AddTruckPage = () => {
       backAxleWeight: "",
       country: '',
       state: '',
-
+      images: [],
     },
-    // validationSchema: Yup.object({
-    //   vehicleName: Yup.string().required("Vehicle name is required"),
-    //   vehiclePrice: Yup.number().typeError("Must be a number").required("Vehicle price is required"),
-    //   truckCategory: Yup.string().required("Truck category is required"),
-    //   country: Yup.string().required("country is required"),
-    //   name: Yup.string().required("Name is required"),
-    //   phone: Yup.string().required("phone is required"),
-    //   email: Yup.string().email("Invalid email").required("email is required"),
-    //   modelYear: Yup.string().required("Model year is required"),
-    //   mileage: Yup.string().required("mileage is required"),
-    //   VehicleManufacturer: Yup.string().required("Manufacturer is required"),
-    //   hours: Yup.string().required("hours are required"),
-    //   vin: Yup.string().required("vin is required"),
-    //   condition: Yup.string().required("condition is required"),
-    //   wheelbase: Yup.string().required("wheelbase is required"),
-    //   steering: Yup.string().required("steering is required"),
-    //   color: Yup.string().required("color is required"),
-    //   suspension: Yup.string().required("suspension is required"),
-    //   grossVehicleWeight: Yup.string().required("Gross Vehicle Weight is required"),
-    //   transmissionType: Yup.string().required("Transmission Type is required"),
-    //   noofSpeeds: Yup.string().required("Number of Speeds is required"),
-    //   typeofRearAxles: Yup.string().required("Number of Rear Axles is required"),
-    //   frontAxleWeight: Yup.string().required("Front Axle Weight is required"),
-    //   backAxleWeight: Yup.string().required("Rear Axle Weight is required"),
-    // }),
+    validationSchema: Yup.object({
+      vehicleName: Yup.string().required("Vehicle name is required"),
+      name: Yup.string().required("Name is required"),
+      companyName: Yup.string().required("Company name is required"),
+      phone: Yup.string().required("Phone number is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      country: Yup.string().required("Country is required"),
+      listingType: Yup.string().required("Listing type is required"),
+      truckCategory: Yup.string().required("Truck category is required"),
+      truckSubCategory: Yup.string().required("Truck subcategory is required"),
+      condition: Yup.string().required("Condition is required"),
+      VehicleManufacturer: Yup.string().required("Vehicle manufacturer is required"),
+      modelYear: Yup.string().required("Model year is required"),
+      vehiclePrice: Yup.string().required("Vehicle price is required"),
+      description: Yup.string().required("Description is required"),
+    }),
     onSubmit: async (values) => {
       const formData = new FormData();
       for (let key in values) {
@@ -91,8 +82,6 @@ const AddTruckPage = () => {
         await truckService.createTruck(formData);
         toast.success('Truck listed successfully!');
         formik.resetForm();
-        setImage(null);
-        setPreviewUrl(null);
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Listing failed');
         console.error('Listing error:', error);
@@ -100,28 +89,163 @@ const AddTruckPage = () => {
     },
   });
 
-  const [dragActive, setDragActive] = useState(false);
 
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(e.type === "dragenter" || e.type === "dragover");
-  };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      onFilesSelected(Array.from(e.dataTransfer.files).slice(0, 5)); // limit to 5
+  const handleFileChange = async (e) => {
+    const files = Array.from(e.target.files);
+    const uploadedUrls = [];
+    const previews = files.map(file => URL.createObjectURL(file));
+    setPreviewImages(prev => [...prev, ...previews]);
+
+    for (const file of files) {
+      const form = new FormData();
+      form.append("images", file);
+
+      try {
+        const res = await uploadImg(form);
+        if (res?.success) {
+          uploadedUrls.push(...res.urls);
+          toast.success('Image uploaded successfully');
+        } else {
+          toast.error("Failed to upload one or more images");
+        }
+      } catch (error) {
+        console.error("Image upload error:", error);
+        toast.error("Error uploading image");
+      }
     }
   };
 
-  const handleChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 5);
-    onFilesSelected(files);
+  const handleRemoveImage = (index) => {
+    const updatedPreviews = previewImages.filter((_, i) => i !== index);
+    const updatedImageUrls = (formData.images || []).filter((_, i) => i !== index);
+
+    setPreviewImages(updatedPreviews);
+    setFormData(prev => ({
+      ...prev,
+      images: updatedImageUrls,
+    }));
   };
 
+  const truckCategory = [
+    'Trucks',
+    'Trailers',
+    'Construction Equipment',
+    'Logging Equipment',
+    'Farm Equipment',
+    'Aggregate and Mining Equipment',
+    'Lifting Equipment',
+    'Industrial Equipment',
+    'RVs'
+  ];
+
+
+  const truckSubCategories = {
+    "Trucks": [
+      "Ambulances", "Attenuator Trucks", "Beverage Trucks", "Boom & Bucket Trucks", "Bridge Inspection Trucks",
+      "Buses", "Cab & Chassis Trucks", "Cable Reel Loader Trucks", "Cabover Sleepers", "Cabover Trucks",
+      "Car Carrier Trucks", "Cargo Vans", "Chemical & Acid Trucks", "Chipper Trucks", "Concrete Pump Trucks",
+      "Conveyor Trucks", "Crane Trucks", "Curtain Side Trucks", "Day Cab Semi Trucks", "Delivery / Moving / Straight / Box Trucks",
+      "Digger Derrick Trucks", "Drilling Rigs", "Dump Trucks", "Emergency Vehicles", "Equipment Carrier Trucks",
+      "Expeditor / Hot Shot Trucks", "Farm & Grain Trucks", "Fire Trucks", "Flatbed Dump Trucks", "Flatbed Trucks",
+      "Food Trucks", "Forestry Bucket Trucks", "Fuel & Lube Trucks", "Garbage Trucks", "Gasoline / Fuel Trucks",
+      "Glider Kits", "Grapple Trucks", "Hauler Trucks", "Heavy Expanded Mobility Tactical Trucks (HEMTT)", "Hooklift Trucks",
+      "Hot Oil / Asphalt Distributor Trucks", "Landscape Trucks", "Lift Trucks", "Logging Trucks", "Mechanic / Utility / Service Trucks",
+      "Medium Tactical Vehicles (MTV)", "Military Trucks", "Mixer / Ready Mix / Concrete Trucks", "Oil Field Trucks", "Other Trucks",
+      "Passenger Vans", "Pickup Trucks", "Plow / Spreader Trucks", "Pole Trucks", "Propane Trucks",
+      "Railroad Trucks", "Recycling Trucks", "Refrigerated Trucks", "Roll Off Dumpsters", "Roll Off Trucks",
+      "Rollback Tow Trucks", "Salvage Trucks", "Service Vans", "Sewer / Septic Trucks", "Sleeper Semi Trucks",
+      "Stake Bed Trucks", "Step Vans", "Sweeper Trucks", "Tanker Trucks", "Transfer Trucks",
+      "Truck Bodies / Boxes / Beds", "Vacuum Trucks", "Water Trucks", "Winch Trucks", "Wrecker Tow Trucks",
+      "Yard Spotter Trucks"
+    ],
+    "Trailers": [
+      "Asphalt Tack Wagons / Distributor Trailers", "ATV Trailers", "Beavertail Trailers", "Belt Trailers", "Beverage Trailers",
+      "Blade Trailers", "Cable Reel Trailers", "Car Hauler Trailers", "Chassis Trailer", "Chip Trailers",
+      "Conestoga / Curtain Side Trailers", "Container Trailers", "Dolly Trailers", "Double Drop Trailers", "Drop Deck Trailers",
+      "Drop Frame Trailers", "Dry Van Trailers", "Dump Trailers", "Dump Trailers (Semi Truck)", "Enclosed Cargo Trailers",
+      "Equipment Transport Trailers", "Farm Trailers", "Feed Trailers", "Fiber Splicing Trailers", "Fire Trailers",
+      "Flatbed Trailers", "Flip Axles", "Fuel Trailers (Bumper-Pull)", "Gooseneck Trailers", "Header Trailers",
+      "Hopper / Grain Trailers", "Horse Trailers", "Jeeps & Boosters", "Landscape Trailers", "Live Floor Trailers",
+      "Livestock Trailers", "Log Trailers", "Lowboy Trailers", "Military Trailers", "Office Trailers",
+      "Oil Field Trailers", "Open Top Trailers", "Pintle Trailers", "Pole Trailers", "Pump Trailers",
+      "Pup Trailers", "Refrigerated Trailers", "Refuse Trailers", "Roll Off Dumpsters", "Roll Off Trailers",
+      "Shipping / Roll Off / Storage Containers", "Solar Trailers", "Specialty Trailers", "Storage Trailers", "Super B Trains",
+      "Tag Trailers", "Tank Trailers", "Asphalt / Hot Oil Tank Trailers", "Chemical & Acid Tank Trailers", "Crude Oil Tank Trailers",
+      "Dry Bulk & Pneumatic Tank Trailers", "Food Grade Tank Trailers", "Fuel Tanker Trailers", "Industrial Gas Tank Trailers", "Non Code Tank Trailers",
+      "Storage Pig Trailers", "Vacuum Tank Trailers", "Waste / Sludge Tank Trailers", "Water Tank Trailers"
+    ],
+    "Construction Equipment": [
+      "Air Compressors", "Articulated Trucks", "Asphalt / Cement / Hot Mix Silos", "Asphalt Chip Spreaders", "Asphalt Crack Sealers",
+      "Asphalt Equipment", "Asphalt Heaters", "Asphalt Patchers", "Asphalt Pavers", "Asphalt Tack Wagons / Distributor Trailers",
+      "Backhoes", "Cable Reel Trailers", "Cold Planers / Milling Machines", "Concrete / Cement / Mortar Mixers", "Concrete / Pavement Breakers",
+      "Concrete Buggies", "Concrete Equipment", "Concrete Finishers", "Concrete Grinders", "Concrete Pavers / Spreaders / Slipform Pavers",
+      "Concrete Pumps", "Concrete Saws", "Crawler Carriers", "Crawler Loaders", "Curb Machines",
+      "Demolition Equipment", "Directional Drills (HDD)", "Dismantled / Parting Out Heavy Equipment", "Dozers", "Drill Rods",
+      "Drilling Equipment", "Drilling Rigs", "Dumpers", "Dust Control Solutions", "Excavators",
+      "Generator Sets", "HDD Guidance Systems", "Light Towers", "Long Reach Excavators", "Material Transfer Vehicles",
+      "Mini Excavators", "Miscellaneous Equipment", "Motor Graders", "Mud Systems", "Off-Highway Trucks",
+      "Padfoot Rollers", "Pavement Marking / Road Striping Equipment", "Pile Drivers", "Pipelayers", "Plate Compactors",
+      "Pneumatic Tired Rollers", "Road Reclaimers & Soil Stabilizers", "Road Wideners", "Scrapers", "Skid Steers",
+      "Skip Loaders", "Smooth Drum Rollers", "Sweepers", "Telehandlers", "Towable Heaters",
+      "Traffic Control / Arrow / Message Boards", "Trench Boxes / Shields", "Trenchers / Boring Machines / Cable Plows", "Vacuum Excavators", "Walk / Tow Behind Compactors",
+      "Water Equipment", "Water Towers", "Water Trucks", "Water Wagons", "Wheel Dozers",
+      "Wheel Loaders", "Wheeled Excavators"
+    ],
+    "Logging Equipment": [
+      "Air Curtain Burners", "Assorted Forestry Equipment", "Chip Trailers", "Chipper Trucks", "Delimbers",
+      "Feller Bunchers", "Felling Heads", "Fire Trailers", "Firewood Processors", "Forestry Brush Cutters",
+      "Forestry Bucket Trucks", "Forestry Dozers", "Forestry Harvesting Heads", "Forestry Mulchers", "Forwarders",
+      "Grapple Trucks", "Harvesters", "Horizontal Grinders", "Knuckleboom Loaders", "Live Floor Trailers",
+      "Log Forks", "Log Grapples", "Log Loaders", "Log Splitters", "Log Trailers",
+      "Logging Trucks", "Motorized Carriages", "Mulcher Attachments", "Portable Debarkers", "Processor Machines",
+      "Road Builders (Excavators)", "Skidders", "Slasher Saws", "Stump Grinders", "Tree Jacks",
+      "Tree Shears", "Tree Spades", "Tree Trimming Machines", "Tub Grinders", "Winch Assist Systems",
+      "Wood Chippers", "Yarders"
+    ],
+    "Farm Equipment": [
+      "Applicators / Sprayers / Spreaders", "Assorted Ag Equipment", "Bale Grabbers", "Bale Spears", "Box Blades & Scrapers",
+      "Chemical Applicators", "Combine Attachments", "Combine Headers", "Combines", "Cotton Pickers",
+      "Drones", "Farm & Garden Fencing", "Farm & Grain Trucks", "Farm Trailers", "Feed Trailers",
+      "Forage Harvesters", "Grain Handling / Storage Equipment", "Harvesting Equipment", "Hay & Forage Equipment", "Header Trailers",
+      "Hitches", "Irrigation Equipment", "Land Levelers", "Livestock & Manure Equipment", "Nut And Tree Equipment",
+      "Planting Equipment", "Precision Ag Equipment", "Skid Steers", "Skip Loaders", "Tillage Equipment",
+      "Tractors", "Tree Trimming Machines", "Vineyard Equipment"
+    ],
+    "Aggregate and Mining Equipment": [
+      "Asphalt / Cement / Hot Mix Silos", "Asphalt Plants", "Assorted Aggregate & Mining Equipment", "Bag Houses", "Ball Mills",
+      "Bark & Mulch Blowers", "Blasthole Drills", "Cold Feeders", "Concrete Batch Plants", "Conveyors",
+      "Crushing Plants", "Dust Collectors", "Dust Control Solutions", "Feeders", "Grizzly Screens",
+      "Hoppers", "Hydrocyclones", "Loadout Bunkers", "Log Washers", "Metal Melting Furnaces",
+      "Mineral Jigs", "Mud Systems", "Off-Highway Trucks", "Pugmill Systems", "Rip Rap Plants",
+      "Sandscrews", "Screening Plants", "Separators", "Slurry Pumps", "Trommel Screens",
+      "Truck Unloaders", "Underground Equipment", "Underground Mining Loaders", "Underground Mining Trucks", "Wash Plants"
+    ],
+    "Lifting Equipment": [
+      "All Terrain Cranes", "Boom & Bucket Trucks", "Boom Lifts", "Bridge Cranes", "Carry Deck Cranes",
+      "Container Handlers", "Crane Trucks", "Cranes", "Crawler Cranes / Draglines", "Forestry Bucket Trucks",
+      "Forklifts", "Gantry Cranes", "Lattice Boom Truck Cranes", "Man Lifts", "Material Lifts",
+      "Rough Terrain Cranes", "Scissor Lifts", "Telehandlers", "Telescopic Boom Truck Cranes", "Tower Cranes",
+      "Towable Boom Lifts"
+    ],
+    "Industrial Equipment": [
+      "Above Ground Storage Tanks", "Aircrafts", "Assorted Industrial Equipment", "Barges", "Commercial Trash Compactors",
+      "Crawler Carriers", "Dust Control Solutions", "Electrical Distribution Equipment", "Floor Scrubbers", "Floor Strippers",
+      "Floor Sweepers", "Fusion Machines", "Generator Sets", "Golf / Utility Carts", "Helicopters",
+      "Hydraulic Power Units", "Industrial Blowers", "Industrial Heaters", "Industrial Ovens", "Industrial Paper Shredders",
+      "Industrial Power Units", "Industrial Spray Painting Equipment", "Landfill Compactors", "Light Towers", "Locomotives",
+      "Machine Presses", "Manufacturing Equipment", "Pavement Marking / Road Striping Equipment", "Plasma Cutting Machines", "Pumps",
+      "Rail / Ballast Equipment", "Roll Off Dumpsters", "Shipping / Roll Off / Storage Containers", "Snow Removal Equipment", "Solar Trailers",
+      "Sweepers", "Tanks", "Tire / Wheel Balancer Machines", "Tow Tractors / Tow Tugs", "Towable Heaters",
+      "Traffic Control / Arrow / Message Boards", "Tree Trimming Machines", "Truck Scales", "Vacuum Excavators", "Vehicle Lift Systems",
+      "Vertical Milling Machines", "Wastewater Treatment Equipment", "Water Equipment", "Water Towers", "Welding Machines",
+      "Well Service Pumps"
+    ],
+    "RVs": [
+      "Motorhomes", "Towables Rv's", "Travel Trailers", "Trailer Bodies", "Transfer Trailers",
+      "Utility Trailers", "Wellsite Trailers", "Toy Haulers"
+    ]
+  }
 
 
   return (
@@ -164,7 +288,7 @@ const AddTruckPage = () => {
               </div>
             </div>
 
-            <div className='grid md:grid-cols-2 md:space-x-[31px]'>
+            <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
                 <label className="label" htmlFor="truckCategory">Truck Category</label>
                 <select
@@ -174,17 +298,60 @@ const AddTruckPage = () => {
                   value={formik.values.truckCategory}
                 >
                   <option value="" disabled>Select Truck Type</option>
-                  <option value="Flatbed">Flatbed</option>
-                  <option value="Refrigerated">Refrigerated</option>
-                  <option value="Dry Van">Dry Van</option>
-                  <option value="Tanker">Tanker</option>
-                  <option value="Lowboy">Lowboy</option>
-                  <option value="Box Truck">Box Truck</option>
+                  {truckCategory.map((category, index) => (
+                    <option key={index} value={category}>{category}</option>
+                  ))}
                 </select>
                 {formik.errors.truckCategory && formik.touched.truckCategory && (
                   <div className="text-red-500 text-sm">{formik.errors.truckCategory}</div>
                 )}
               </div>
+
+              <div>
+                {formik.values.truckCategory ? (
+                  <div className="mb-6">
+                    <label htmlFor="truckSubCategory" className="block font-medium mb-2">Subcategory</label>
+                    <select
+                      id="truckSubCategory"
+                      name="truckSubCategory"
+                      onChange={formik.handleChange}
+                      value={formik.values.truckSubCategory}
+                      className="input"
+                    >
+                      <option value="">Select a Subcategory</option>
+                      {truckSubCategories[formik.values.truckCategory]?.map((sub) => (
+                        <option key={sub} value={sub}>{sub}</option>
+                      ))}
+                    </select>
+                    {formik.errors.truckSubCategory && formik.touched.truckSubCategory && (
+                      <div className="text-red-500 text-sm">{formik.errors.truckSubCategory}</div>
+                    )}
+                  </div>
+                ) :
+                  (
+                    <div className="mb-6 opacity-50">
+                      <label htmlFor="truckSubCategory" className="block font-medium mb-2">Subcategory</label>
+                      <select
+                        disabled
+                        id="truckSubCategory"
+                        name="truckSubCategory"
+                        onChange={formik.handleChange}
+                        value={formik.values.truckSubCategory}
+                        className="input"
+                      >
+                        <option value="">Select a Subcategory</option>
+                        {truckSubCategories[formik.values.truckCategory]?.map((sub) => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                      </select>
+                      {formik.errors.truckSubCategory && formik.touched.truckSubCategory && (
+                        <div className="text-red-500 text-sm">First select the Category</div>
+                      )}
+                    </div>
+                  )}
+              </div>
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-[31px]'>
 
               <div className='mb-9'>
                 <label className="label" htmlFor="listingType">Listing Type</label>
@@ -219,6 +386,8 @@ const AddTruckPage = () => {
                   <div className="text-red-500 text-sm">{formik.errors.country}</div>
                 )}
               </div>
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-[31px]'>
 
               {formik.values.country === 'United States' ? (
                 <div className='mb-9'>
@@ -229,21 +398,32 @@ const AddTruckPage = () => {
                     onChange={(val) => formik.setFieldValue('state', val)}
                     className='input'
                   />
-                  {formik.errors.state && formik.touched.state && (
-                    <div className="text-red-500 text-sm">{formik.errors.state}</div>
-                  )}
                 </div>
               )
-                : <div></div>
+                : <div className='mb-9 opacity-50'>
+                  <label className="label">State/Region</label>
+                  <RegionDropdown
+                    disabled
+                    country={formik.values.country}
+                    value={formik.values.state}
+                    onChange={(val) => formik.setFieldValue('state', val)}
+                    className='input'
+                  />
+                </div>
               }
 
-              <div >
+              <div className="col-span-2">
                 <label
                   htmlFor="upload"
-                  onDragEnter={handleDrag}
-                  className={`border-dashed border-2 rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-                    }`}
+                  className="border-dashed border-2 rounded p-6 cursor-pointer flex flex-col items-center justify-center"
                 >
+                  <input
+                    type="file"
+                    id="upload"
+                    hidden
+                    multiple
+                    onChange={handleFileChange}
+                  />
                   <div className="flex flex-col items-center text-center">
                     <IoImage color='text-gray-500 ' fontSize={20} />
                     <p className="text-gray-500 mt-2 font-medium">
@@ -251,16 +431,28 @@ const AddTruckPage = () => {
                     </p>
                     <p className="text-sm text-gray-400">(Upload only 5 images)</p>
                   </div>
-                  <input
-                    type="file"
-                    id="upload"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={handleChange}
-                  />
+                  {/* Show image previews */}
+                  {previewImages.length > 0 && (
+                    <div className="flex flex-wrap gap-4 mt-4">
+                      {previewImages.map((image, index) => (
+                        <div key={index} className="relative w-24 h-24">
+                          <img
+                            src={image}
+                            alt={`preview-${index}`}
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                          <button
+                            type="button"
+                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                            onClick={() => handleRemoveImage(index)}
+                          >
+                            <FaTimes size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </label>
-
               </div>
             </div>
           </div>
@@ -325,6 +517,9 @@ const AddTruckPage = () => {
                 onChange={formik.handleChange}
                 value={formik.values.companyName}
               />
+              {formik.errors.companyName && formik.touched.companyName && (
+                <div className="text-red-500 text-sm">{formik.errors.companyName}</div>
+              )}
             </div>
 
             <div className='mb-9'>
@@ -369,9 +564,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.mileage}
                 />
-                {formik.errors.mileage && formik.touched.mileage && (
-                  <div className="text-red-500 text-sm">{formik.errors.mileage}</div>
-                )}
               </div>
             </div>
 
@@ -406,9 +598,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.hours}
                 />
-                {formik.errors.hours && formik.touched.hours && (
-                  <div className="text-red-500 text-sm">{formik.errors.hours}</div>
-                )}
               </div>
             </div>
 
@@ -423,9 +612,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.vin}
                 />
-                {formik.errors.vin && formik.touched.vin && (
-                  <div className="text-red-500 text-sm">{formik.errors.vin}</div>
-                )}
               </div>
 
               <div className='mb-9'>
@@ -462,9 +648,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.wheelbase}
                 />
-                {formik.errors.wheelbase && formik.touched.wheelbase && (
-                  <div className="text-red-500 text-sm">{formik.errors.wheelbase}</div>
-                )}
               </div>
 
               <div className='mb-9'>
@@ -477,9 +660,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.steering}
                 />
-                {formik.errors.steering && formik.touched.steering && (
-                  <div className="text-red-500 text-sm">{formik.errors.steering}</div>
-                )}
               </div>
             </div>
 
@@ -494,9 +674,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.color}
                 />
-                {formik.errors.color && formik.touched.color && (
-                  <div className="text-red-500 text-sm">{formik.errors.color}</div>
-                )}
               </div>
 
               <div className='mb-9'>
@@ -509,9 +686,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.suspension}
                 />
-                {formik.errors.suspension && formik.touched.suspension && (
-                  <div className="text-red-500 text-sm">{formik.errors.suspension}</div>
-                )}
               </div>
 
               <div className='mb-9'>
@@ -524,9 +698,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.engineManufacturer}
                 />
-                {formik.errors.engineManufacturer && formik.touched.engineManufacturer && (
-                  <div className="text-red-500 text-sm">{formik.errors.engineManufacturer}</div>
-                )}
               </div>
 
               <div className='mb-9'>
@@ -539,9 +710,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.engineModel}
                 />
-                {formik.errors.engineModel && formik.touched.engineModel && (
-                  <div className="text-red-500 text-sm">{formik.errors.engineModel}</div>
-                )}
               </div>
 
 
@@ -555,9 +723,6 @@ const AddTruckPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.hoursPower}
                 />
-                {formik.errors.hoursPower && formik.touched.hoursPower && (
-                  <div className="text-red-500 text-sm">{formik.errors.hoursPower}</div>
-                )}
               </div>
             </div>
 
@@ -572,6 +737,9 @@ const AddTruckPage = () => {
                 onChange={formik.handleChange}
                 value={formik.values.description}
               />
+              {formik.errors.description && formik.touched.description && (
+                <div className="text-red-500 text-sm">{formik.errors.description}</div>
+              )}
             </div>
 
 
@@ -593,9 +761,6 @@ const AddTruckPage = () => {
                 <option value="Manual">Manual</option>
                 <option value="Semi Auto">Semi Auto</option>
               </select>
-              {formik.errors.transmissionType && formik.touched.transmissionType && (
-                <div className="text-red-500 text-sm">{formik.errors.transmissionType}</div>
-              )}
             </div>
 
             <div className='mb-9'>
@@ -608,9 +773,6 @@ const AddTruckPage = () => {
                 onChange={formik.handleChange}
                 value={formik.values.noofSpeeds}
               />
-              {formik.errors.noofSpeeds && formik.touched.noofSpeeds && (
-                <div className="text-red-500 text-sm">{formik.errors.noofSpeeds}</div>
-              )}
             </div>
 
             <div className='mb-9'>
@@ -639,12 +801,12 @@ const AddTruckPage = () => {
                 value={formik.values.typeofRearAxles}
               >
                 <option value="" disabled>Select axle type</option>
-                <option value="Hyundia">Hyundia</option>
-                <option value="KIA">KIA</option>
+                <option value="Single Axle">Single Axle</option>
+                <option value="Regular Tandem">Regular Tandem</option>
+                <option value="Tri Axle">Tri Axle</option>
+                <option value="Quad Axle">Quad Axle</option>
+                <option value="Other">Other</option>
               </select>
-              {formik.errors.typeofRearAxles && formik.touched.typeofRearAxles && (
-                <div className="text-red-500 text-sm">{formik.errors.typeofRearAxles}</div>
-              )}
             </div>
 
             <div className='mb-9'>

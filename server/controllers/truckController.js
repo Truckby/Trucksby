@@ -40,6 +40,8 @@ const getAllTrucks = async (req, res, next) => {
       condition
     } = req.query;
 
+    console.log(req.query, 'query')
+
     const parsedPageIndex = parseInt(pageIndex) || 1;
     const parsedLimit = parseInt(limit) || 10;
 

@@ -4,7 +4,7 @@ import { FaChevronUp } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { CountryDropdown } from "react-country-region-selector";
 
-const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
+const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [openSections, setOpenSections] = useState({
     listingType: false, // Open the first section by default
     category: false,
@@ -35,12 +35,12 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
   const handleCheckboxChange = (category, value) => {
     // Create a label for the filter display
     const filterLabel = `${category}: ${value}`;
-    
+
     // Update the selected filters for UI display
     setSelectedFilters(prev => {
       // Check if we already have a filter from this category
       const existingCategoryFilterIndex = prev.findIndex(f => f.startsWith(`${category}:`));
-      
+
       if (existingCategoryFilterIndex !== -1) {
         // Replace the existing category filter
         const newFilters = [...prev];
@@ -51,7 +51,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         return [...prev, filterLabel];
       }
     });
-    
+
     // Update the actual filter value
     setFilters(prev => ({
       ...prev,
@@ -65,7 +65,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
     const minValue = min || "Any";
     const maxValue = max || "Any";
     const filterLabel = `${category}: ${minValue}-${maxValue}`;
-    
+
     // Update selected filters for UI
     setSelectedFilters(prev => {
       const existingFilterIndex = prev.findIndex(f => f.startsWith(`${category}:`));
@@ -77,11 +77,11 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         return [...prev, filterLabel];
       }
     });
-    
+
     // Update the actual filter values
     const minKey = `min${category.charAt(0).toUpperCase() + category.slice(1)}`;
     const maxKey = `max${category.charAt(0).toUpperCase() + category.slice(1)}`;
-    
+
     setFilters(prev => ({
       ...prev,
       [minKey]: min,
@@ -94,7 +94,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
     if (!value) {
       // Remove from selected filters if empty
       setSelectedFilters(prev => prev.filter(f => !f.startsWith(`${category}:`)));
-      
+
       // Update the filter state
       setFilters(prev => ({
         ...prev,
@@ -102,10 +102,10 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
       }));
       return;
     }
-    
+
     // Create label for display
     const filterLabel = `${category}: ${value}`;
-    
+
     // Update selected filters for UI
     setSelectedFilters(prev => {
       const existingFilterIndex = prev.findIndex(f => f.startsWith(`${category}:`));
@@ -117,7 +117,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         return [...prev, filterLabel];
       }
     });
-    
+
     // Update the filter state
     setFilters(prev => ({
       ...prev,
@@ -128,17 +128,17 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
   const removeFilter = (filterLabel) => {
     // Extract category from the filter label (format: "category: value")
     const category = filterLabel.split(':')[0].trim();
-    
+
     // Remove from selected filters
     setSelectedFilters(prev => prev.filter(f => f !== filterLabel));
-    
+
     // Reset the corresponding filter value
-    if (category === 'Year' || category === 'Mileage' || category === 'Horsepower' || 
-        category === 'Wheelbase' || category === 'Front Axle Weight' || category === 'Back Axle Weight') {
+    if (category === 'Year' || category === 'Mileage' || category === 'Horsepower' ||
+      category === 'Wheelbase' || category === 'Front Axle Weight' || category === 'Back Axle Weight') {
       // Handle range inputs
       const minKey = `min${category.replace(/\s+/g, '')}`;
       const maxKey = `max${category.replace(/\s+/g, '')}`;
-      
+
       setFilters(prev => ({
         ...prev,
         [minKey]: '',
@@ -147,7 +147,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
     } else {
       // Handle single value inputs
       const filterKey = category.toLowerCase().replace(/\s+/g, '');
-      
+
       setFilters(prev => ({
         ...prev,
         [filterKey]: ''
@@ -223,20 +223,20 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         {/* Listing Type */}
         <FilterSection title="Listing Type" isOpen={openSections.listingType} toggle={() => toggleSection("listingType")}>
           <div>
-            <Checkbox 
-              label="For Sale" 
+            <Checkbox
+              label="For Sale"
               checked={filters.listingType === "For Sale"}
-              onChange={() => handleCheckboxChange("listingType", "For Sale")} 
+              onChange={() => handleCheckboxChange("listingType", "For Sale")}
             />
-            <Checkbox 
-              label="For Lease" 
+            <Checkbox
+              label="For Lease"
               checked={filters.listingType === "For Lease"}
-              onChange={() => handleCheckboxChange("listingType", "For Lease")} 
+              onChange={() => handleCheckboxChange("listingType", "For Lease")}
             />
-            <Checkbox 
-              label="For Auction" 
+            <Checkbox
+              label="For Auction"
               checked={filters.listingType === "For Auction"}
-              onChange={() => handleCheckboxChange("listingType", "For Auction")} 
+              onChange={() => handleCheckboxChange("listingType", "For Auction")}
             />
           </div>
         </FilterSection>
@@ -261,7 +261,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
 
         {/* Year Range */}
         <FilterSection title="Year" isOpen={openSections.year} toggle={() => toggleSection("year")}>
-          <RangeInput 
+          <RangeInput
             minValue={filters.minYear}
             maxValue={filters.maxYear}
             onSearch={(min, max) => handleRangeChange("Year", min, max)}
@@ -270,7 +270,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
 
         {/* Mileage */}
         <FilterSection title="Mileage" isOpen={openSections.mileage} toggle={() => toggleSection("mileage")}>
-          <RangeInput 
+          <RangeInput
             minValue={filters.minMileage}
             maxValue={filters.maxMileage}
             onSearch={(min, max) => handleRangeChange("Mileage", min, max)}
@@ -279,8 +279,8 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
 
         {/* Engine Manufacturer */}
         <FilterSection title="Engine Manufacturer" isOpen={openSections.engine} toggle={() => toggleSection("engine")}>
-          <SearchInput 
-            placeholder="Search Engine Manufacturer" 
+          <SearchInput
+            placeholder="Search Engine Manufacturer"
             value={filters.engineManufacturer}
             onChange={(value) => handleTextInputChange("engineManufacturer", value)}
           />
@@ -288,7 +288,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
 
         {/* Horsepower */}
         <FilterSection title="Horsepower" isOpen={openSections.horsepower} toggle={() => toggleSection("horsepower")}>
-          <RangeInput 
+          <RangeInput
             minValue={filters.minHorsepower}
             maxValue={filters.maxHorsepower}
             onSearch={(min, max) => handleRangeChange("Horsepower", min, max)}
@@ -296,7 +296,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         </FilterSection>
 
         <FilterSection title="Wheelbase" isOpen={openSections.wheelbase} toggle={() => toggleSection("wheelbase")}>
-          <RangeInput 
+          <RangeInput
             minValue={filters.minWheelbase}
             maxValue={filters.maxWheelbase}
             onSearch={(min, max) => handleRangeChange("Wheelbase", min, max)}
@@ -304,35 +304,23 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         </FilterSection>
 
         <FilterSection title="Suspension" isOpen={openSections.suspension} toggle={() => toggleSection("suspension")}>
-          <SearchInput 
-            placeholder="Search Suspension" 
+          <SearchInput
+            placeholder="Search Suspension"
             value={filters.suspension}
             onChange={(value) => handleTextInputChange("suspension", value)}
           />
-          <div className="mt-2">
-            <Checkbox 
-              label="Air Ride" 
-              checked={filters.suspension === "Air Ride"}
-              onChange={() => handleCheckboxChange("suspension", "Air Ride")} 
-            />
-            <Checkbox 
-              label="Flex Air" 
-              checked={filters.suspension === "Flex Air"}
-              onChange={() => handleCheckboxChange("suspension", "Flex Air")} 
-            />
-          </div>
         </FilterSection>
 
         <FilterSection title="Number of Rear Axles" isOpen={openSections.axel} toggle={() => toggleSection("axel")}>
-          <SelectBox
-            options={["1", "2", "3", "4", "5+"]}
+          <SearchInput
+            placeholder="Rear Axles"
             value={filters.rearAxles}
             onChange={(value) => handleCheckboxChange("rearAxles", value)}
           />
         </FilterSection>
 
         <FilterSection title="Front Axle Weight" isOpen={openSections.FrontAxleWeight} toggle={() => toggleSection("FrontAxleWeight")}>
-          <RangeInput 
+          <RangeInput
             minValue={filters.minFrontAxleWeight}
             maxValue={filters.maxFrontAxleWeight}
             onSearch={(min, max) => handleRangeChange("Front Axle Weight", min, max)}
@@ -340,7 +328,7 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         </FilterSection>
 
         <FilterSection title="Back Axle Weight" isOpen={openSections.BackAxleWeight} toggle={() => toggleSection("BackAxleWeight")}>
-          <RangeInput 
+          <RangeInput
             minValue={filters.minBackAxleWeight}
             maxValue={filters.maxBackAxleWeight}
             onSearch={(min, max) => handleRangeChange("Back Axle Weight", min, max)}
@@ -350,27 +338,27 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
         {/* Transmission */}
         <FilterSection title="Transmission" isOpen={openSections.transmission} toggle={() => toggleSection("transmission")}>
           <div>
-            <Checkbox 
-              label="Automatic" 
+            <Checkbox
+              label="Automatic"
               checked={filters.transmission === "Automatic"}
-              onChange={() => handleCheckboxChange("transmission", "Automatic")} 
+              onChange={() => handleCheckboxChange("transmission", "Automatic")}
             />
-            <Checkbox 
-              label="Manual" 
+            <Checkbox
+              label="Manual"
               checked={filters.transmission === "Manual"}
-              onChange={() => handleCheckboxChange("transmission", "Manual")} 
+              onChange={() => handleCheckboxChange("transmission", "Manual")}
             />
-            <Checkbox 
-              label="Semi Auto" 
+            <Checkbox
+              label="Semi Auto"
               checked={filters.transmission === "Semi Auto"}
-              onChange={() => handleCheckboxChange("transmission", "Semi Auto")} 
+              onChange={() => handleCheckboxChange("transmission", "Semi Auto")}
             />
           </div>
         </FilterSection>
 
         <FilterSection title="Number of Speeds" isOpen={openSections.NumberofSpeeds} toggle={() => toggleSection("NumberofSpeeds")}>
-          <SearchInput 
-            placeholder="Search Speed" 
+          <SearchInput
+            placeholder="Search Speed"
             value={filters.speeds}
             onChange={(value) => handleTextInputChange("speeds", value)}
           />
@@ -378,20 +366,20 @@ const FilterComponent = ({ onFilterChange,filters,setFilters }) => {
 
         <FilterSection title="Condition" isOpen={openSections.condition} toggle={() => toggleSection("condition")}>
           <div>
-            <Checkbox 
-              label="New" 
+            <Checkbox
+              label="New"
               checked={filters.condition === "New"}
-              onChange={() => handleCheckboxChange("condition", "New")} 
+              onChange={() => handleCheckboxChange("condition", "New")}
             />
-            <Checkbox 
-              label="Used" 
+            <Checkbox
+              label="Used"
               checked={filters.condition === "Used"}
-              onChange={() => handleCheckboxChange("condition", "Used")} 
+              onChange={() => handleCheckboxChange("condition", "Used")}
             />
-            <Checkbox 
-              label="Salvaged" 
+            <Checkbox
+              label="Salvaged"
               checked={filters.condition === "Salvaged"}
-              onChange={() => handleCheckboxChange("condition", "Salvaged")} 
+              onChange={() => handleCheckboxChange("condition", "Salvaged")}
             />
           </div>
         </FilterSection>
@@ -472,21 +460,21 @@ const RangeInput = ({ minValue, maxValue, onSearch }) => {
 
   return (
     <div className="flex gap-3 text-sm mt-2">
-      <input 
-        type="number" 
-        placeholder="Min" 
+      <input
+        type="number"
+        placeholder="Min"
         value={min}
         onChange={(e) => setMin(e.target.value)}
-        className="w-[63px] h-[45px] p-2 shadow border-none outline-none rounded-md" 
+        className="w-[63px] h-[45px] p-2 shadow border-none outline-none rounded-md"
       />
-      <input 
-        type="number" 
-        placeholder="Max" 
+      <input
+        type="number"
+        placeholder="Max"
         value={max}
         onChange={(e) => setMax(e.target.value)}
-        className="w-[63px] h-[45px] p-2 shadow border-none outline-none rounded-md" 
+        className="w-[63px] h-[45px] p-2 shadow border-none outline-none rounded-md"
       />
-      <button 
+      <button
         className="bg-black h-[45px] w-[75px] text-white p-2 rounded-md"
         onClick={() => onSearch(min, max)}
       >

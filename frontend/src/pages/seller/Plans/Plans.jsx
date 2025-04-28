@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import tick from '../../../assets/images/tick.svg'
 import { Link } from 'react-router';
+import subscriptionService from '../../../services/subscriptionService';
+import productService from '../../../services/productService';
+import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
+import { useDispatch } from 'react-redux';
 
 const plansData = [
     {
@@ -50,6 +54,52 @@ const allFeatures = [
 ];
 
 const Plans = () => {
+    const [products, setProducts] = useState([]);
+    const [info, setInfo] = useState({
+        status: false,
+        planName: '',
+        productId: '',
+        subscriptionId: '',
+        amount: null
+    });
+    const [oldProductId, setOldProductId] = useState(null);
+    const dispatch = useDispatch();
+
+    const getSubscriptionInfo = async () => {
+        console.log('Old ID: ', oldProductId);
+        try {
+            const response = await subscriptionService.getUserSubscriptionInfo();
+            if (response.info) {
+                console.log('Info: ', response.info);
+                setInfo(response.info);
+                if (oldProductId && oldProductId === response.info.productId) {
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await getSubscriptionInfo();
+                }
+            }
+        } catch (error) {
+            message.error(error.response.data.error);
+        }
+    };
+
+    const fetchProducts = async () => {
+        dispatch(ShowLoading());
+        try {
+            const response = await productService.fetchAllProducts();
+            if (response.products) {
+                setProducts(response.products);
+                await getSubscriptionInfo();
+            }
+        } catch (error) {
+            message.error(error.response.data.error);
+        } finally {
+            dispatch(HideLoading());
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
     return (
         <div className='my-16 p-8 sm:p-16 max-w-[1147px] mx-auto shadow rounded-[20px] bg-white'>
             <h3 className='text-[24px] sm:text-[32px] font-bold pb-10'>Your plan has expired</h3>

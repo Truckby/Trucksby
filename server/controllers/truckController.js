@@ -12,8 +12,66 @@ const fetchAllTrucks = async (req, res, next) => {
 
 const getAllTrucks = async (req, res, next) => {
   try {
-    const trucks = await truckService.getAllTrucksWithFilter();
-    res.status(200).json(trucks);
+    const {
+      pageIndex,
+      limit,
+      searchText,
+      country,
+      listingType,
+      truckCategory,
+      manufacturer,
+      minYear,
+      maxYear,
+      minMileage,
+      maxMileage,
+      engineManufacturer,
+      minHorsepower,
+      maxHorsepower,
+      minWheelbase,
+      maxWheelbase,
+      suspension,
+      rearAxles,
+      minFrontAxleWeight,
+      maxFrontAxleWeight,
+      minBackAxleWeight,
+      maxBackAxleWeight,
+      transmission,
+      speeds,
+      condition
+    } = req.query;
+
+    const parsedPageIndex = parseInt(pageIndex) || 1;
+    const parsedLimit = parseInt(limit) || 10;
+
+    const result = await truckService.getAllTrucksWithFilter({
+      pageIndex: parsedPageIndex,
+      limit: parsedLimit,
+      searchText,
+      country,
+      listingType,
+      truckCategory,
+      manufacturer,
+      minYear,
+      maxYear,
+      minMileage,
+      maxMileage,
+      engineManufacturer,
+      minHorsepower,
+      maxHorsepower,
+      minWheelbase,
+      maxWheelbase,
+      suspension,
+      rearAxles,
+      minFrontAxleWeight,
+      maxFrontAxleWeight,
+      minBackAxleWeight,
+      maxBackAxleWeight,
+      transmission,
+      speeds,
+      condition
+    });
+
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

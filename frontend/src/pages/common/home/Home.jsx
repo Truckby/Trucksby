@@ -9,10 +9,18 @@ import { CountryDropdown } from 'react-country-region-selector';
 import { useDispatch } from 'react-redux';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import truckService from '../../../services/truckService';
+import { useNavigate } from 'react-router';
 
 const Home = () => {
   const [listData, setListData] = React.useState([]);
   const dispatch = useDispatch();
+  const [searchText, setSearchText] = React.useState('');
+
+  const [searchCountry, setSearchCountry] = React.useState('');
+  const [listingType, setListingType] = React.useState('');
+  const [truckType, setTruckType] = React.useState('');
+  const navigate = useNavigate();
+
 
   const truckTypes = [
     'Trucks',
@@ -26,22 +34,22 @@ const Home = () => {
     'Rvs',
   ];
 
-    const fetchAllTrucks = async () => {
-      dispatch(ShowLoading());
-      try {
-        const response = await truckService.getAllTrucksWithFilter();
-        setListData(response);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      } finally {
-        dispatch(HideLoading());
-      }
-    };
-    console.log(listData, 'listData')
-  
-    useEffect(() => {
-      fetchAllTrucks()
-    }, [])
+  const fetchAllTrucks = async () => {
+    dispatch(ShowLoading());
+    try {
+      const response = await truckService.getAllTrucksWithFilter();
+      setListData(response);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      dispatch(HideLoading());
+    }
+  };
+  console.log(listData, 'listData')
+
+  useEffect(() => {
+    fetchAllTrucks()
+  }, [])
 
   const truckCategory = [
     'Trucks',
@@ -78,8 +86,21 @@ const Home = () => {
 
           {/* Search Input */}
           <div className="relative mt-4 w-full xl:w-[587px]">
-            <input type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
-            <span className='absolute top-1.5 right-5 cursor-pointer p-3'>
+            <input
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
+            <span onClick={() => {
+              navigate('/user/filter', {
+                state: {
+                  searchText: searchText,
+                  country: searchCountry,
+                  listingType: listingType,
+                  truckType: truckType,
+                },
+              });
+            }}
+              className='absolute top-1.5 right-5 cursor-pointer p-3'>
               <FaSearch fontSize={20} color='#8E8E8E' />
             </span>
           </div>
@@ -88,25 +109,49 @@ const Home = () => {
           <div className="flex w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
             {/* <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
             <CountryDropdown
-              value={''}
-              onChange={() => { }}
+              value={searchCountry}
+              onChange={(val) => setSearchCountry(val)}
               className='p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]'
             />
-            <select className="p-3 w-full border-r h-[60px] outline-none border-l ">
+
+            <select
+              className="p-3 w-full border-r h-[60px] outline-none border-l"
+              value={listingType}
+              onChange={(e) => setListingType(e.target.value)}
+            >
               <option value={''}>Select Type</option>
               <option value={'For Sale'}>For Sale</option>
               <option value={'For Lease'}>For Lease</option>
               <option value={'For Auction'}>For Auction</option>
             </select>
-            <select className="p-3 w-full outline-none h-[60px]  ">
+
+            <select
+              className="p-3 w-full outline-none h-[60px]"
+              value={truckType}
+              onChange={(e) => setTruckType(e.target.value)}
+            >
               <option value="" disabled>Select Truck Type</option>
               {truckCategory.map((category, index) => (
                 <option key={index} value={category}>{category}</option>
               ))}
             </select>
-            <button className="bg-[#DF0805] text-white p-5 rounded-r-[10px] flex items-center justify-center">
+
+            <button
+              className="bg-[#DF0805] cursor-pointer text-white p-5 rounded-r-[10px] flex items-center justify-center"
+              onClick={() => {
+                navigate('/user/filter', {
+                  state: {
+                    searchText: searchText,
+                    country: searchCountry,
+                    listingType: listingType,
+                    truckType: truckType,
+                  },
+                });
+              }}
+            >
               <FaSearch fontSize={20} />
             </button>
+
           </div>
         </div>
 
@@ -152,7 +197,7 @@ const Home = () => {
         <h3 className=' text-2xl sm:text-[32px] font-bold mb-8'>Browse by Type</h3>
 
         <div className='flex justify-start items-center flex-wrap'>
-        {listData.map((truck, index) => (
+          {listData.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard
                 images={truck?.images}

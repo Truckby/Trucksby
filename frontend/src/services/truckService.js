@@ -25,9 +25,11 @@ const truckService = {
         }
     },
 
-    getAllTrucksWithFilter: async () => {
+    getAllTrucksWithFilter: async (combinedFilters) => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/get-all`);
+            const response = await axiosInstance.get(`${BASE_URL}/get-all`, {
+                params: combinedFilters,
+            });
             return response.data;
         } catch (error) {
             throw error;
@@ -45,7 +47,7 @@ const truckService = {
 
     updateTruck: async (id, payload) => {
         try {
-            const response = await axiosInstance.put(`${BASE_URL}/${id}`, payload ,{
+            const response = await axiosInstance.put(`${BASE_URL}/${id}`, payload, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

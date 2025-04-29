@@ -143,7 +143,7 @@ const FilterPage = () => {
 
         {/* Truck cards container */}
         <div className=" flex justify-start items-center flex-wrap h-fit">
-          {listData.map((truck, index) => (
+          {listData?.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard
                 images={truck?.images}

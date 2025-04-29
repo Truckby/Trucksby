@@ -21,24 +21,11 @@ const Home = () => {
   const [truckType, setTruckType] = React.useState('');
   const navigate = useNavigate();
 
-
-  const truckTypes = [
-    'Trucks',
-    'Trailers',
-    'Construction equipment',
-    'Logging equipment',
-    'Farm equipment',
-    'Aggregate and mining equipment',
-    'Lifting equipment',
-    'Industrial equipment',
-    'Rvs',
-  ];
-
   const fetchAllTrucks = async () => {
     dispatch(ShowLoading());
     try {
-      const response = await truckService.getAllTrucksWithFilter();
-      setListData(response);
+      const response = await truckService.getAllTrucksWithFilter({});
+      setListData(response.trucks);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -176,8 +163,18 @@ const Home = () => {
         <h3 className=' text-2xl sm:text-[32px] font-bold'>Feature Categories</h3>
 
         <div className='flex justify-start items-center flex-wrap'>
-          {truckTypes.map((truck, index) => (
+          {truckCategory.map((truck, index) => (
             <div
+            onClick={() => {
+              navigate('/user/filter', {
+                state: {
+                  searchText: searchText,
+                  country: searchCountry,
+                  listingType: listingType,
+                  truckType: truck,
+                },
+              });
+            }}
               key={index}
               className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
@@ -197,7 +194,7 @@ const Home = () => {
         <h3 className=' text-2xl sm:text-[32px] font-bold mb-8'>Browse by Type</h3>
 
         <div className='flex justify-start items-center flex-wrap'>
-          {listData.map((truck, index) => (
+          {listData?.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard
                 images={truck?.images}

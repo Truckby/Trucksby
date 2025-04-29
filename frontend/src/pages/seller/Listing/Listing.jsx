@@ -68,7 +68,7 @@ const Listing = () => {
 
       </div>
 
-      {listData.map((data, index) => (
+      {listData?.map((data, index) => (
         <div key={index} className='mt-4'>
           <TruckCard data={data} handleDeleteClick={handleDeleteClick} />
         </div>

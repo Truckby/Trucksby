@@ -4,8 +4,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 router.get(
     "/fetch-all-products",
-    authMiddleware.authenticateRequest,
-    authMiddleware.verifyRole(['seller']),
+     authMiddleware.authenticateRequest,
     controller.FetchAllProducts
 );
 

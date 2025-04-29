@@ -11,7 +11,7 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   if (filters.searchText) {
     query.$or = [
       { vehicleName: { $regex: filters.searchText, $options: "i" } },
-      { description: { $regex: filters.searchText, $options: "i" } }
+      { name: { $regex: filters.searchText, $options: "i" } }
     ];
   }
 
@@ -109,7 +109,7 @@ const getAllTrucksWithFilter = async (filters = {}) => {
 
   // Apply pagination
   const pageIndex = filters.pageIndex || 1;
-  const limit = filters.limit || 10;
+  const limit = filters.limit || 12;
   const skip = (pageIndex - 1) * limit;
 
   // Get total count for pagination

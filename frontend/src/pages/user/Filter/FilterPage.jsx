@@ -62,7 +62,7 @@ const FilterPage = () => {
         };
     
         const response = await truckService.getAllTrucksWithFilter(combinedFilters);
-        setListData(response.trucks || []);
+        setListData(response?.trucks || []);
         setPagination({
           totalPages: response.totalPages || 0,
           totalCount: response.totalCount || 0,

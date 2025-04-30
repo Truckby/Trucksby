@@ -110,7 +110,6 @@ const getAllTrucksWithFilter = async (filters = {}) => {
     query.condition = filters.condition;
   }
 
-  console.log(query, 'query1222')
 
   // Apply pagination
   const pageIndex = filters.pageIndex || 1;

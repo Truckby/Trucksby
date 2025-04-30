@@ -6,6 +6,7 @@ const CreateCheckoutSession = async (req, res, next) => {
     try {
         const CLIENT_URL = req.get('origin');
         const { priceId } = req.body;
+        console.log(priceId, 'priceId')
         const userId = req.user?.id;
         let stripeCustomerId = await userService.fetchUserStripeCustomerId(userId);
         if (!stripeCustomerId) {
@@ -16,6 +17,7 @@ const CreateCheckoutSession = async (req, res, next) => {
         const sessionURL = await stripeService.createCheckoutSession(priceId, stripeCustomerId, CLIENT_URL);
         res.status(200).json({ url: sessionURL });
     } catch (error) {
+        console.log(error, 'CreateCheckoutSession')
         next(error);
     }
 };

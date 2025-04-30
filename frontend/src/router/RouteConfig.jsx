@@ -9,6 +9,7 @@ import SignUp from '../pages/common/signup/SignUp.jsx';
 import AddTruckPage from '../pages/seller/AddTruck/AddTruckPage.jsx';
 import Listing from '../pages/seller/Listing/Listing.jsx';
 import Plans from '../pages/seller/Plans/Plans.jsx';
+import SuccessPage from '../pages/seller/Plans/components/ConfirmModal.jsx';
 import DetailPage from '../pages/user/Detail/DetailPage.jsx';
 import FilterPage from '../pages/user/Filter/FilterPage.jsx';
 
@@ -31,6 +32,7 @@ const routes = [
   { path: "/home", element: <Home />, protected: false, authRedirect: false },
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true },
   { path: "/PrivacyPage", element: <PrivacyPage />, protected: false, authRedirect: false },
+  { path: "/success", element: <SuccessPage />, protected: false, authRedirect: false },
   { path: "*", element: <NotFound />, protected: false },
 ];
 

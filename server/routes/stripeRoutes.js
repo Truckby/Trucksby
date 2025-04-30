@@ -7,7 +7,7 @@ const validationMiddleware = require('../middleware/validationMiddleware');
 router.post(
     "/create-checkout-session",
     authMiddleware.authenticateRequest,
-    authMiddleware.verifyRole(['seller']),
+    // authMiddleware.verifyRole(['seller']),
     validationMiddleware.validateRequest(stripeSchemas.createCheckoutSchema),
     controller.CreateCheckoutSession
 );

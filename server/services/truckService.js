@@ -31,8 +31,8 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   }
 
   // Apply manufacturer filter
-  if (filters.manufacturer) {
-    query.manufacturer = filters.manufacturer;
+  if (filters.vehicleManufacturer) {
+    query.vehicleManufacturer = filters.vehicleManufacturer;
   }
 
   // Apply year range filter
@@ -70,13 +70,15 @@ const getAllTrucksWithFilter = async (filters = {}) => {
 
   // Apply suspension filter
   if (filters.suspension) {
-    query.suspension = filters.suspension;
+    query.suspension = { $regex: filters.suspension, $options: "i" };
   }
+  
 
   // Apply number of rear axles filter
   if (filters.rearAxles) {
-    query.rearAxles = parseInt(filters.rearAxles);
+    query.rearAxles = { $regex: filters.rearAxles, $options: "i" };
   }
+  
 
   // Apply front axle weight range filter
   if (filters.minFrontAxleWeight || filters.maxFrontAxleWeight) {
@@ -106,6 +108,8 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   if (filters.condition) {
     query.condition = filters.condition;
   }
+
+  console.log(query, 'query1222')
 
   // Apply pagination
   const pageIndex = filters.pageIndex || 1;

@@ -11,7 +11,6 @@ export const menuItems = {
     ],
     user: [
         { path: '/PrivacyPage', label: 'PrivacyPage', disabled: false },
-        { path: '/PrivacyPage', label: 'PrivacyPage', disabled: false },
         { path: '/home', label: 'Home', disabled: false },
         { path: '/user/filter', label: 'Home', disabled: false },
         { path: '/user/detail', label: 'Bookings', disabled: false },

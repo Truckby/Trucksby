@@ -79,32 +79,48 @@ const AddTruckPage = () => {
       description: Yup.string().required("Description is required"),
     }),
     onSubmit: async (values) => {
-      // Log the images to verify
-      console.log("Submitting images:", values.images);
+      const numericFields = [
+        "vehiclePrice",
+        "modelYear",
+        "mileage",
+        "wheelbase",
+        "hoursPower",
+        "frontAxleWeight",
+        "backAxleWeight",
+        "grossVehicleWeight",
+        "phone"
+      ];
     
       const truckData = {
         ...values,
         images: Array.isArray(values.images) ? values.images : []
       };
     
-      console.log("Final truck data:", truckData);
-      
+      // Convert numeric fields to numbers if present
+      numericFields.forEach((field) => {
+        if (truckData[field] !== "") {
+          truckData[field] = Number(truckData[field]);
+        }
+      });
+    
+      console.log("Final truck data with parsed numbers:", truckData);
+    
       try {
         if (oldTruckData?._id) {
           await truckService.updateTruck(oldTruckData._id, truckData);
           toast.success('Truck updated successfully!');
         } else {
-        await truckService.createTruck(truckData);
-        toast.success('Truck listed successfully!');
-        
-        formik.resetForm();
-        setPreviewImages([]);
+          await truckService.createTruck(truckData);
+          toast.success('Truck listed successfully!');
+          formik.resetForm();
+          setPreviewImages([]);
         }
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Listing failed');
         console.error('Listing error:', error);
       }
     }
+    
     
   });
 

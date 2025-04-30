@@ -3,12 +3,15 @@ import { FaAngleDown } from "react-icons/fa6";
 import { FaChevronUp } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { CountryDropdown } from "react-country-region-selector";
+import { useSearchParams } from 'react-router-dom';
 
 const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [openSections, setOpenSections] = useState({
-    listingType: false, // Open the first section by default
+    listingType: false,
     category: false,
-    manufacturer: false,
+    vehicleManufacturer: false,
     year: false,
     mileage: false,
     engine: false,
@@ -24,143 +27,84 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     Country: false
   });
 
-  // Track which checkbox filters are selected for UI
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const displayedFilters = Object.entries(filters)
+    .filter(([_, value]) => value !== '' && value !== undefined)
+    .map(([key, value]) => {
+      if (key.startsWith("min") || key.startsWith("max")) {
+        const base = key.replace(/^min|^max/, "");
+        const min = filters[`min${base}`];
+        const max = filters[`max${base}`];
+        if (min || max) return `${base}: ${min || 'Any'}-${max || 'Any'}`;
+        return null;
+      }
+      return `${key}: ${value}`;
+    })
+    .filter(Boolean);
 
   const toggleSection = (section) => {
-    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  // Handle checkbox selection for UI display
-  const handleCheckboxChange = (category, value) => {
-    // Create a label for the filter display
-    const filterLabel = `${category}: ${value}`;
+  const updateFilterAndParams = (newValues) => {
+    const newFilters = { ...filters, ...newValues };
+    setFilters(newFilters);
 
-    // Update the selected filters for UI display
-    setSelectedFilters(prev => {
-      // Check if we already have a filter from this category
-      const existingCategoryFilterIndex = prev.findIndex(f => f.startsWith(`${category}:`));
-
-      if (existingCategoryFilterIndex !== -1) {
-        // Replace the existing category filter
-        const newFilters = [...prev];
-        newFilters[existingCategoryFilterIndex] = filterLabel;
-        return newFilters;
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    for (const key in newValues) {
+      const value = newValues[key];
+      if (value) {
+        updatedParams.set(key, value);
       } else {
-        // Add new filter
-        return [...prev, filterLabel];
+        updatedParams.delete(key);
       }
-    });
-
-    // Update the actual filter value
-    setFilters(prev => ({
-      ...prev,
-      [category]: value
-    }));
-  };
-
-  // Handle range inputs (min/max values)
-  const handleRangeChange = (category, min, max) => {
-    // Format the display label
-    const minValue = min || "Any";
-    const maxValue = max || "Any";
-    const filterLabel = `${category}: ${minValue}-${maxValue}`;
-
-    // Update selected filters for UI
-    setSelectedFilters(prev => {
-      const existingFilterIndex = prev.findIndex(f => f.startsWith(`${category}:`));
-      if (existingFilterIndex !== -1) {
-        const newFilters = [...prev];
-        newFilters[existingFilterIndex] = filterLabel;
-        return newFilters;
-      } else {
-        return [...prev, filterLabel];
-      }
-    });
-
-    // Update the actual filter values
-    const minKey = `min${category.charAt(0).toUpperCase() + category.slice(1)}`;
-    const maxKey = `max${category.charAt(0).toUpperCase() + category.slice(1)}`;
-
-    setFilters(prev => ({
-      ...prev,
-      [minKey]: min,
-      [maxKey]: max
-    }));
-  };
-
-  // Handle text input filters
-  const handleTextInputChange = (category, value) => {
-    if (!value) {
-      // Remove from selected filters if empty
-      setSelectedFilters(prev => prev.filter(f => !f.startsWith(`${category}:`)));
-
-      // Update the filter state
-      setFilters(prev => ({
-        ...prev,
-        [category]: ''
-      }));
-      return;
     }
+    setSearchParams(updatedParams, { replace: true });
+  };
 
-    // Create label for display
-    const filterLabel = `${category}: ${value}`;
+  const handleCheckboxChange = (category, value) => {
+    updateFilterAndParams({ [category]: value });
+  };
 
-    // Update selected filters for UI
-    setSelectedFilters(prev => {
-      const existingFilterIndex = prev.findIndex(f => f.startsWith(`${category}:`));
-      if (existingFilterIndex !== -1) {
-        const newFilters = [...prev];
-        newFilters[existingFilterIndex] = filterLabel;
-        return newFilters;
-      } else {
-        return [...prev, filterLabel];
-      }
-    });
+  const handleRangeChange = (category, min, max) => {
+    const capitalized = category.charAt(0).toUpperCase() + category.slice(1).replace(/\s/g, '');
+    const minKey = `min${capitalized}`;
+    const maxKey = `max${capitalized}`;
+    updateFilterAndParams({ [minKey]: min || '', [maxKey]: max || '' });
+  };
 
-    // Update the filter state
-    setFilters(prev => ({
-      ...prev,
-      [category]: value
-    }));
+  const handleTextInputChange = (category, value) => {
+    updateFilterAndParams({ [category]: value || '' });
   };
 
   const removeFilter = (filterLabel) => {
-    // Extract category from the filter label (format: "category: value")
-    const category = filterLabel.split(':')[0].trim();
+    const [rawKey] = filterLabel.split(':').map(str => str.trim());
+    const baseKey = rawKey.replace(/\s+/g, '');
+    const minKey = `min${baseKey}`;
+    const maxKey = `max${baseKey}`;
 
-    // Remove from selected filters
-    setSelectedFilters(prev => prev.filter(f => f !== filterLabel));
+    const updatedFilters = { ...filters };
+    const updatedParams = new URLSearchParams(searchParams.toString());
 
-    // Reset the corresponding filter value
-    if (category === 'Year' || category === 'Mileage' || category === 'Horsepower' ||
-      category === 'Wheelbase' || category === 'Front Axle Weight' || category === 'Back Axle Weight') {
-      // Handle range inputs
-      const minKey = `min${category.replace(/\s+/g, '')}`;
-      const maxKey = `max${category.replace(/\s+/g, '')}`;
-
-      setFilters(prev => ({
-        ...prev,
-        [minKey]: '',
-        [maxKey]: ''
-      }));
+    if (minKey in filters || maxKey in filters) {
+      delete updatedFilters[minKey];
+      delete updatedFilters[maxKey];
+      updatedParams.delete(minKey);
+      updatedParams.delete(maxKey);
     } else {
-      // Handle single value inputs
-      const filterKey = category.toLowerCase().replace(/\s+/g, '');
-
-      setFilters(prev => ({
-        ...prev,
-        [filterKey]: ''
-      }));
+      const formattedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1).replace(/\s+/g, '');
+      delete updatedFilters[formattedKey];
+      updatedParams.delete(formattedKey);
     }
+
+    setFilters(updatedFilters);
+    setSearchParams(updatedParams, { replace: true });
   };
 
   const clearAllFilters = () => {
-    setSelectedFilters([]);
-    setFilters({
+    const cleared = {
       listingType: '',
       truckCategory: '',
-      manufacturer: '',
+      vehicleManufacturer: '',
       minYear: '',
       maxYear: '',
       minMileage: '',
@@ -180,19 +124,30 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
       speeds: '',
       condition: '',
       country: ''
-    });
+    };
+    setFilters(cleared);
+    setSearchParams(new URLSearchParams(), { replace: true });
   };
 
-  // Notify parent component when filters change
   useEffect(() => {
-    if (onFilterChange) {
-      onFilterChange(filters);
-    }
+    if (onFilterChange) onFilterChange(filters);
   }, [filters, onFilterChange]);
+
+  const truckCategory = [
+    'Trucks',
+    'Trailers',
+    'Construction Equipment',
+    'Logging Equipment',
+    'Farm Equipment',
+    'Aggregate and Mining Equipment',
+    'Lifting Equipment',
+    'Industrial Equipment',
+    'RVs'
+  ];
 
   return (
     <div className="">
-      {selectedFilters.length > 0 && (
+      {displayedFilters.length > 0 && (
         <div className="mb-4 p-3 py-4 md:w-[274px] bg-white shadow rounded-[11px]">
           <div className="flex justify-between items-center mb-2">
             <span className="font-semibold">Applied Filters</span>
@@ -201,7 +156,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {selectedFilters.map((filter, index) => (
+            {displayedFilters.map((filter, index) => (
               <div
                 key={index}
                 className="flex items-center bg-[#333333] text-white px-2 py-1 rounded-[5px] text-[13px]"
@@ -244,18 +199,18 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
         {/* Category */}
         <FilterSection title="Category" isOpen={openSections.category} toggle={() => toggleSection("category")}>
           <SelectBox
-            options={["Flatbed", "Refrigerated", "Dry Van", 'Tanker', 'Lowboy', 'Box Truck']}
+            options={truckCategory}
             value={filters.truckCategory}
             onChange={(value) => handleCheckboxChange("truckCategory", value)}
           />
         </FilterSection>
 
         {/* Manufacturer */}
-        <FilterSection title="Manufacturer" isOpen={openSections.manufacturer} toggle={() => toggleSection("manufacturer")}>
+        <FilterSection title="Vehicle Manufacturer" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
           <SelectBox
             options={["Hyundai", "KIA", "Isuzu", 'Mitsubishi', 'Hino']}
-            value={filters.manufacturer}
-            onChange={(value) => handleCheckboxChange("manufacturer", value)}
+            value={filters.vehicleManufacturer}
+            onChange={(value) => handleCheckboxChange("vehicleManufacturer", value)}
           />
         </FilterSection>
 

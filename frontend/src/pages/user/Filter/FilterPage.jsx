@@ -1,4 +1,3 @@
-'use client'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import FilterComponent from './components/FilterComponent'
@@ -9,93 +8,106 @@ import SearchFilter from '../../../components/SearchFilter'
 import truckService from '../../../services/truckService'
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice'
 import { useDispatch } from 'react-redux'
-import { useLocation } from 'react-router'
+import { useSearchParams } from 'react-router-dom';
+
 
 const FilterPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [listData, setListData] = useState([])
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { searchText, country, listingType, truckType } = location.state || {};
-    const [searchTextFilter, setSearchText] = React.useState(searchText || '');
-  
-  const [searchCountry, setSearchCountry] = React.useState(country || '');
-  const [listingTypeFilter, setListingType] = React.useState(listingType || '');
-  const [truckTypeFilter, setTruckType] = React.useState(truckType || '');
   const [pagination, setPagination] = useState({ totalPages: 0, totalCount: 0, currentPage: 1 });
 
-    const [filters, setFilters] = useState({
-      listingType: '',
-      truckCategory: '',
-      manufacturer: '',
-      minYear: '',
-      maxYear: '',
-      minMileage: '',
-      maxMileage: '',
-      engineManufacturer: '',
-      minHorsepower: '',
-      maxHorsepower: '',
-      minWheelbase: '',
-      maxWheelbase: '',
-      suspension: '',
-      rearAxles: '',
-      minFrontAxleWeight: '',
-      maxFrontAxleWeight: '',
-      minBackAxleWeight: '',
-      maxBackAxleWeight: '',
-      transmission: '',
-      speeds: '',
-      condition: '',
-      country: ''
-    });
 
-    const fetchTrucks = useCallback(async (pageIndex = 1) => {
-      dispatch(ShowLoading());
-      try {
-        const combinedFilters = {
+
+  const [filters, setFilters] = useState(() => {
+    const params = Object.fromEntries([...searchParams]);
+    return {
+      listingType: params.listingType || '',
+      truckCategory: params.truckCategory || '',
+      country: params.country || '',
+      searchText: params.searchText || '',
+      transmissionManufacturer: params.transmissionManufacturer || '',
+      minYear: params.minYear || '',
+      maxYear: params.maxYear || '',
+      minMileage: params.minMileage || '',
+      maxMileage: params.maxMileage || '',
+      engineManufacturer: params.engineManufacturer || '',
+      minHorsepower: params.minHorsepower || '',
+      maxHorsepower: params.maxHorsepower || '',
+      minWheelbase: params.minWheelbase || '',
+      maxWheelbase: params.maxWheelbase || '',
+      suspension: params.suspension || '',
+      rearAxles: params.rearAxles || '',
+      minFrontAxleWeight: params.minFrontAxleWeight || '',
+      maxFrontAxleWeight: params.maxFrontAxleWeight || '',
+      minBackAxleWeight: params.minBackAxleWeight || '',
+      maxBackAxleWeight: params.maxBackAxleWeight || '',
+      transmission: params.transmission || '',
+      speeds: params.speeds || '',
+      condition: params.condition || '',
+      vehicleManufacturer: params.vehicleManufacturer || '',
+    };
+  });
+  
+
+  const fetchTrucks = useCallback(async (pageIndex = 1) => {
+    dispatch(ShowLoading());
+    try {
+      const combinedFilters = {
+        ...filters,
+        pageIndex,
+      };
+      const filteredParams = Object.fromEntries(
+        Object.entries({
           ...filters,
-          searchText: searchTextFilter,
-          country: searchCountry,
-          listingType: listingTypeFilter,
-          truckCategory: truckTypeFilter,
           pageIndex,
-        };
-    
-        const response = await truckService.getAllTrucksWithFilter(combinedFilters);
-        setListData(response?.trucks || []);
-        setPagination({
-          totalPages: response.totalPages || 0,
-          totalCount: response.totalCount || 0,
-          currentPage: pageIndex
-        });
-      } catch (error) {
-        console.error("Error fetching trucks:", error);
-      } finally {
-        dispatch(HideLoading());
-      }
-    }, [filters, searchTextFilter, searchCountry, listingTypeFilter, truckTypeFilter, dispatch]);
-    
-    // Initial data fetch
-    useEffect(() => {
-      fetchTrucks();
-    }, [fetchTrucks]);
-    
-    // Handle filter changes from the filter component
-    const handleFilterChange = useCallback((newFilters) => {
-      setFilters(newFilters);
-    }, []);
-    
-    // Handle search form submission
-    const handleSearchSubmit = useCallback(() => {
-      fetchTrucks(1);
-    }, [fetchTrucks]);
-    
-    // Handle pagination
-    const handlePageChange = useCallback((newPage) => {
-      if (newPage >= 1 && newPage <= pagination.totalPages) {
-        fetchTrucks(newPage);
-      }
-    }, [fetchTrucks, pagination.totalPages]);
+        }).filter(([_, value]) => value !== '' && value !== null && value !== undefined)
+      );
+  
+      // Set only filtered search params
+      setSearchParams(filteredParams, { replace: true });
+      console.log(combinedFilters, 'combinedFilters')
+  
+      const response = await truckService.getAllTrucksWithFilter(combinedFilters);
+      setListData(response?.trucks || []);
+      setPagination({
+        totalPages: response.totalPages || 0,
+        totalCount: response.totalCount || 0,
+        currentPage: pageIndex
+      });
+    } catch (error) {
+      console.error("Error fetching trucks:", error);
+    } finally {
+      dispatch(HideLoading());
+    }
+  }, [filters, dispatch]);
+  
+
+  useEffect(() => {
+    fetchTrucks(1);
+  }, [fetchTrucks]);
+  
+
+
+
+  // Handle filter changes from the filter component
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters(newFilters);
+  }, []);
+
+  // Handle search form submission
+  const handleSearchSubmit = useCallback(() => {
+    fetchTrucks(1);
+  }, [fetchTrucks]);
+
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchTrucks(newPage);
+    }
+  }, [fetchTrucks, pagination.totalPages]);
+
+
 
   // Get location name for title
   const getLocationName = () => {
@@ -105,15 +117,24 @@ const FilterPage = () => {
     return "California"; // Default location or get from somewhere else
   };
 
+  const updateSearchParams = (newFilters) => {
+    const updated = { ...filters, ...newFilters };
+    const filteredParams = Object.fromEntries(
+      Object.entries(updated).filter(([_, val]) => val !== '' && val !== undefined)
+    );
+    setSearchParams(filteredParams, { replace: true });
+    setFilters(updated);
+  };
+
   return (
     <div className='pb-20 max-w-[1340px] mx-auto '>
-      <SearchFilter searchCountry={searchCountry} setSearchCountry={setSearchCountry} listingType={listingTypeFilter} setListingType={setListingType} truckType={truckTypeFilter} setTruckType={setTruckType} searchText={searchTextFilter} setSearchText={setSearchText} />
+   <SearchFilter filters={filters} setFilters={setFilters} />
 
       <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks for sale in California</h1>
 
       <div className="flex flex-col md:flex-row lg:mx-4">
         <div className="hidden md:block">
-          <FilterComponent  onFilterChange={handleFilterChange} filters={filters} setFilters={setFilters} />
+          <FilterComponent onFilterChange={handleFilterChange} filters={filters} setFilters={setFilters} />
         </div>
 
         <div className="md:hidden pb-4">
@@ -137,7 +158,7 @@ const FilterPage = () => {
                 <IoMdClose />
               </button>
             </div>
-            <FilterComponent  onFilterChange={handleFilterChange} filters={filters} setFilters={setFilters} />
+            <FilterComponent onFilterChange={handleFilterChange} filters={filters} setFilters={setFilters} />
           </div>
         )}
 

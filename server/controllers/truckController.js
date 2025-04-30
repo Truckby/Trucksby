@@ -37,7 +37,8 @@ const getAllTrucks = async (req, res, next) => {
       maxBackAxleWeight,
       transmission,
       speeds,
-      condition
+      condition,
+      vehicleManufacturer
     } = req.query;
 
     console.log(req.query, 'query')
@@ -70,11 +71,13 @@ const getAllTrucks = async (req, res, next) => {
       maxBackAxleWeight,
       transmission,
       speeds,
-      condition
+      condition,
+      vehicleManufacturer
     });
 
     res.status(200).json(result);
   } catch (error) {
+    console.log(error, 'error')
     next(error);
   }
 };

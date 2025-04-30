@@ -37,9 +37,9 @@ const getAllTrucksWithFilter = async (filters = {}) => {
 
   // Apply year range filter
   if (filters.minYear || filters.maxYear) {
-    query.year = {};
-    if (filters.minYear) query.year.$gte = parseInt(filters.minYear);
-    if (filters.maxYear) query.year.$lte = parseInt(filters.maxYear);
+    query.modelYear = {};
+    if (filters.minYear) query.modelYear.$gte = parseInt(filters.minYear);
+    if (filters.maxYear) query.modelYear.$lte = parseInt(filters.maxYear);
   }
 
   // Apply mileage range filter
@@ -56,9 +56,9 @@ const getAllTrucksWithFilter = async (filters = {}) => {
 
   // Apply horsepower range filter
   if (filters.minHorsepower || filters.maxHorsepower) {
-    query.horsepower = {};
-    if (filters.minHorsepower) query.horsepower.$gte = parseInt(filters.minHorsepower);
-    if (filters.maxHorsepower) query.horsepower.$lte = parseInt(filters.maxHorsepower);
+    query.hoursPower = {};
+    if (filters.minHorsepower) query.hoursPower.$gte = parseInt(filters.minHorsepower);
+    if (filters.maxHorsepower) query.hoursPower.$lte = parseInt(filters.maxHorsepower);
   }
 
   // Apply wheelbase range filter
@@ -95,14 +95,15 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   }
 
   // Apply transmission filter
-  if (filters.transmission) {
-    query.transmission = filters.transmission;
+  if (filters.transmissionType) {
+    query.transmissionType = filters.transmissionType;
   }
 
-  // Apply number of speeds filter
-  if (filters.speeds) {
-    query.speeds = parseInt(filters.speeds);
+  // Apply number of noofSpeeds filter
+  if (filters.noofSpeeds) {
+    query.noofSpeeds = { $regex: filters.noofSpeeds, $options: "i" };
   }
+  
 
   // Apply condition filter
   if (filters.condition) {

@@ -43,8 +43,8 @@ const FilterPage = () => {
       maxFrontAxleWeight: params.maxFrontAxleWeight || '',
       minBackAxleWeight: params.minBackAxleWeight || '',
       maxBackAxleWeight: params.maxBackAxleWeight || '',
-      transmission: params.transmission || '',
-      speeds: params.speeds || '',
+      transmissionType: params.transmissionType || '',
+      noofSpeeds: params.noofSpeeds || '',
       condition: params.condition || '',
       vehicleManufacturer: params.vehicleManufacturer || '',
     };

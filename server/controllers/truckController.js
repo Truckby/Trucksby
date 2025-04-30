@@ -35,8 +35,8 @@ const getAllTrucks = async (req, res, next) => {
       maxFrontAxleWeight,
       minBackAxleWeight,
       maxBackAxleWeight,
-      transmission,
-      speeds,
+      transmissionType,
+      noofSpeeds,
       condition,
       vehicleManufacturer
     } = req.query;
@@ -69,8 +69,8 @@ const getAllTrucks = async (req, res, next) => {
       maxFrontAxleWeight,
       minBackAxleWeight,
       maxBackAxleWeight,
-      transmission,
-      speeds,
+      transmissionType,
+      noofSpeeds,
       condition,
       vehicleManufacturer
     });

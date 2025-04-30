@@ -21,25 +21,32 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     axel: false,
     FrontAxleWeight: false,
     BackAxleWeight: false,
-    transmission: false,
-    NumberofSpeeds: false,
+    transmissionType: false,
+    noofSpeeds: false,
     condition: false,
     Country: false
   });
+
+  const groupedRanges = new Set();
 
   const displayedFilters = Object.entries(filters)
     .filter(([_, value]) => value !== '' && value !== undefined)
     .map(([key, value]) => {
       if (key.startsWith("min") || key.startsWith("max")) {
         const base = key.replace(/^min|^max/, "");
+        if (groupedRanges.has(base)) return null; // skip duplicate
+        groupedRanges.add(base);
+  
         const min = filters[`min${base}`];
         const max = filters[`max${base}`];
         if (min || max) return `${base}: ${min || 'Any'}-${max || 'Any'}`;
         return null;
       }
+  
       return `${key}: ${value}`;
     })
     .filter(Boolean);
+  
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -120,8 +127,8 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
       maxFrontAxleWeight: '',
       minBackAxleWeight: '',
       maxBackAxleWeight: '',
-      transmission: '',
-      speeds: '',
+      transmissionType: '',
+      noofSpeeds: '',
       condition: '',
       country: ''
     };
@@ -291,31 +298,31 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
         </FilterSection>
 
         {/* Transmission */}
-        <FilterSection title="Transmission" isOpen={openSections.transmission} toggle={() => toggleSection("transmission")}>
+        <FilterSection title="transmissionType" isOpen={openSections.transmissionType} toggle={() => toggleSection("transmissionType")}>
           <div>
             <Checkbox
               label="Automatic"
               checked={filters.transmission === "Automatic"}
-              onChange={() => handleCheckboxChange("transmission", "Automatic")}
+              onChange={() => handleCheckboxChange("transmissionType", "Automatic")}
             />
             <Checkbox
               label="Manual"
-              checked={filters.transmission === "Manual"}
-              onChange={() => handleCheckboxChange("transmission", "Manual")}
+              checked={filters.transmissionType === "Manual"}
+              onChange={() => handleCheckboxChange("transmissionType", "Manual")}
             />
             <Checkbox
               label="Semi Auto"
-              checked={filters.transmission === "Semi Auto"}
-              onChange={() => handleCheckboxChange("transmission", "Semi Auto")}
+              checked={filters.transmissionType === "Semi Auto"}
+              onChange={() => handleCheckboxChange("transmissionType", "Semi Auto")}
             />
           </div>
         </FilterSection>
 
-        <FilterSection title="Number of Speeds" isOpen={openSections.NumberofSpeeds} toggle={() => toggleSection("NumberofSpeeds")}>
+        <FilterSection title="Number of Speeds" isOpen={openSections.noofSpeeds} toggle={() => toggleSection("noofSpeeds")}>
           <SearchInput
             placeholder="Search Speed"
-            value={filters.speeds}
-            onChange={(value) => handleTextInputChange("speeds", value)}
+            value={filters.noofSpeeds}
+            onChange={(value) => handleTextInputChange("noofSpeeds", value)}
           />
         </FilterSection>
 

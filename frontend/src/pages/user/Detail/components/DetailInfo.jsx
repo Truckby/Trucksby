@@ -26,8 +26,7 @@ const InfoRow = ({ label, value }) => (
 );
 
 // DetailInfo Component
-const DetailInfo = ({ data }) => {
-  const images = [img, img, img];
+const DetailInfo = ({ data, images = [] }) => {
 
   return (
     <div>
@@ -61,8 +60,8 @@ const DetailInfo = ({ data }) => {
       <div className="">
         {data
           ? Object.keys(data).map((section, index) => (
-              <Section key={index} title={section} data={data[section]} />
-            ))
+            <Section key={index} title={section} data={data[section]} />
+          ))
           : "No Data Available"}
       </div>
     </div>

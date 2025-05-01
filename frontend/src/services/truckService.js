@@ -24,6 +24,14 @@ const truckService = {
             throw error;
         }
     },
+    getAllTrucksByUser: async () => {
+        try {
+            const response = await axiosInstance.get(`${BASE_URL}/by-user`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 
     getAllTrucksWithFilter: async (combinedFilters) => {
         try {

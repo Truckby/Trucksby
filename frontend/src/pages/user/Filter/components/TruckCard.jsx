@@ -7,7 +7,7 @@ import { IoIosSpeedometer } from "react-icons/io";
 import { useNavigate } from "react-router";
 
 
-const TruckCard = ({ images, title, price, location, miles }) => {
+const TruckCard = ({ images, title, price, location, miles, data }) => {
   const navigate = useNavigate()
   return (
     <div className=" rounded-[10px] shadow w-[240px] m-2 mb-8 bg-white cursor-pointer">
@@ -15,7 +15,7 @@ const TruckCard = ({ images, title, price, location, miles }) => {
       <div className="relative">
         <Carousel showThumbs={false} infiniteLoop autoPlay>
           {images.map((img, index) => (
-            <div key={index} onClick={()=>navigate(`/user/detail`)} >
+            <div key={index} onClick={() =>  navigate("/user/detail", { state: data })} >
               <img
                 src={img}
                 alt={`${title} - ${index + 1}`}
@@ -24,13 +24,13 @@ const TruckCard = ({ images, title, price, location, miles }) => {
             </div>
           ))}
         </Carousel>
-        <button  className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
+        <button className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
           <FaRegHeart className="text-gray-600" size={18} />
         </button>
       </div>
 
       {/* Details Section */}
-      <div className="p-[15px] pt-[10px]" onClick={()=>navigate(`/user/detail`)} >
+      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/user/detail", { state: data })} >
         <h3 className="text-base font-medium">{title}</h3>
         <p className="text-[#DF0805] mt-[6px]">{price} $</p>
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">

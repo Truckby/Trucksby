@@ -3,9 +3,10 @@ const router = express.Router();
 const truckController = require('../controllers/truckController');
 const authMiddleware = require('../middleware/authMiddleware')
 
-router.get('/', authMiddleware.authenticateRequest, truckController.fetchAllTrucks);
+router.get('/', truckController.fetchAllTrucks);
+router.get('/by-user',authMiddleware.authenticateRequest, truckController.fetchAllTrucks);
 
-router.get('/get-all', authMiddleware.authenticateRequest, truckController.getAllTrucks);
+router.get('/get-all', truckController.getAllTrucks);
 
 router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
 

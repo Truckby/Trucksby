@@ -16,7 +16,7 @@ const Listing = () => {
   const fetchAllTrucks = async () => {
     dispatch(ShowLoading());
     try {
-      const response = await truckService.getAllTrucks();
+      const response = await truckService.getAllTrucksByUser();
       setListData(response);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -54,7 +54,7 @@ const Listing = () => {
   };
 
   return (
-    <div className='max-w-[993px] mx-auto md:pt-10 '>
+    <div className='max-w-[993px] mx-auto md:pt-10 px-4'>
 
       <div className='flex justify-between items-center'>
         <h3 className='text-[24px] sm:text-[32px] font-bold my-10'>My Listings</h3>

@@ -1,41 +1,61 @@
-import React from 'react'
-import Info from './components/Info';
-import DetailInfo from './components/DetailInfo';
-import { FaSearch } from 'react-icons/fa';
+import React, { use, useEffect, useState } from 'react';
 import TruckCard from '../../common/home/components/TruckCard';
-
-import cardImage from '../../../assets/images/card.svg'
-import SearchFilter from '../../../components/SearchFilter';
+import DetailInfo from './components/DetailInfo';
+import Info from './components/Info';
+import cardImage from '../../../assets/images/card.svg';
+import { useLocation } from 'react-router';
+import truckService from '../../../services/truckService';
+import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
+import { useDispatch } from 'react-redux';
 
 const DetailPage = () => {
 
+  const location = useLocation();
+  const data = location?.state || {};
+  console.log(data, 'data');
+  const dispatch = useDispatch();
+  const [listData, setListData] = useState([]);
+
   const sampleData = {
     General: {
-      Year: "2020",
-      Manufacturer: "VOLVO",
-      Model: "VNL64T860",
-      Mileage: "692,297 mi",
-      VIN: "4V4NC9EH0LN248969",
-      Hours: "17,061.1",
-      Condition: "Used",
+      'Truck Category': data?.truckCategory,
+      'Truck SubCategory': data?.truckSubCategory,
+      'Listing Type': data?.listingType,
+      'Country': data?.country,
+      Year: data?.modelYear,
+      'Vehicle Manufacturer': data?.vehicleManufacturer,
+      Model: data?.engineModel,
+      Mileage: data?.mileage,
+      VIN: data?.vin,
+      Condition: data?.condition,
+    },
+    "Personal Info": {
+      name: data?.name,
+      email: data?.email,
+      phone: data?.phone,
+      address: data?.address,
+      'Company Name': data?.companyName,
     },
     "Vehicle Info": {
-      Payload: "11,500 KG",
-      GWR: "11,500 KG",
-      Wheelbase: "3,700 mm",
-      Steering: "3,700 mm",
-      Color: "Blue",
-      Suspension: "Pneumatic suspension",
-      "Gross Vehicle Weight": "Heavy Weight",
+      Wheelbase: data?.wheelbase,
+      Steering: data?.steering,
+      Color: data?.color,
+      Suspension: data?.suspension,
+      "Engine Manufacturer": data?.engineManufacturer,
+      "Engine Model": data?.engineModel,
+      "Engine Horsepower": data?.hoursPower,
     },
     Powertrain: {
-      "Transmission Type": "I Shift",
-      "No of Speeds": "12 spd",
+      "Transmission Manufacturer": data?.transmissionManufacturer,
+      "Transmission Type": data?.transmissionType,
+      'no of Speeds': data?.noofSpeeds,
     },
     Chassis: {
-      "Number of Rear Axles": "Tandem",
-      "Front Axle Weight": "1000 lbs",
-      "Rear Axle Weight": "1000 lbs",
+      "Front Axle Weight": data?.frontAxleWeight,
+      "Back Axle Weight": data?.backAxleWeight,
+      'Gross Vehicle Weight': data?.grossVehicleWeight,
+      'Type of Rear Axles': data?.typeofRearAxles,
+      
     },
   };
 
@@ -87,16 +107,33 @@ const DetailPage = () => {
     },
   ];
 
+    const fetchAllTrucks = async () => {
+      dispatch(ShowLoading());
+      try {
+        const response = await truckService.getAllTrucks();
+        setListData(response);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      } finally {
+        dispatch(HideLoading());
+      }
+    };
+    console.log(listData, 'listData')
+  
+    useEffect(() => {
+      fetchAllTrucks()
+    }, [])
+
   return (
-    <div className='pb-10 max-w-[1300px] mx-auto'>
+    <div className='pb-10 max-w-[1300px] mx-auto px-4 lg:px-0'>
 
       <div className='grid lg:grid-cols-2 mt-20 lg:mx-4'>
         <div className='hidden lg:block'>
-          <DetailInfo data={sampleData} />
+          <DetailInfo data={sampleData} images={data.images} />
         </div>
 
         <div className='mb-8 lg:mb-0'>
-          <Info />
+          <Info data={data} />
         </div>
 
         <div className='block lg:hidden'>
@@ -110,7 +147,7 @@ const DetailPage = () => {
         <div className='flex justify-center items-center flex-wrap'>
           {truckData.map((truck, index) => (
             <div key={index}>
-              <TruckCard images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
+              <TruckCard data={truck} images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
 
             </div>
           ))}

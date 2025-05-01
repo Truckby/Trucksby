@@ -75,7 +75,7 @@ const Home = () => {
         </div>
 
         {/* Left Section */}
-        <div className="lg:w-1/2 space-y-4 mt-8 lg:mt-0 pr-4 lg:mr-0">
+        <div className="lg:w-1/2 space-y-4 mt-8 lg:mt-0 pr-4 px-4 lg:mr-0">
           <h1 className=" text-2xl sm:text-4xl md:text-[64px] md:leading-[61px] font-bold text-black " style={{ fontFamily: 'Oswald' }}>Drive Your <br /> Business Forward</h1>
           <h4 className=" text-lg md:text-2xl text-gray-600">Sell Trucks with Confidence!</h4>
 
@@ -172,10 +172,10 @@ const Home = () => {
 
       </div>
 
-      <div className='pt-[60px] pb-[70px]'>
+      <div className='pt-[60px] pb-[70px] px-4'>
         <h3 className=' text-2xl sm:text-[32px] font-bold'>Feature Categories</h3>
 
-        <div className='flex justify-start items-center flex-wrap'>
+        <div className='flex justify-center sm:justify-start items-center flex-wrap'>
           {truckCategoryData.map((truck, index) => (
             <div
               onClick={() => {
@@ -202,10 +202,10 @@ const Home = () => {
       </div>
 
 
-      <div className='pt-[60px] pb-[70px] bg-white'>
-        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8'>Browse by Type</h3>
+      <div className='pt-[60px] pb-[70px] bg-white px-4'>
+        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8  '>Browse by Type</h3>
 
-        <div className='flex justify-start items-center flex-wrap'>
+        <div className='flex justify-center sm:justify-start items-center flex-wrap'>
           {listData?.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard
@@ -214,6 +214,7 @@ const Home = () => {
                 price={truck?.vehiclePrice}
                 location={truck?.country}
                 miles={truck?.mileage}
+                data={truck}
               />
             </div>
           ))}

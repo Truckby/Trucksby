@@ -49,7 +49,7 @@ const FilterPage = () => {
       vehicleManufacturer: params.vehicleManufacturer || '',
     };
   });
-  
+
 
   const fetchTrucks = useCallback(async (pageIndex = 1) => {
     dispatch(ShowLoading());
@@ -64,11 +64,11 @@ const FilterPage = () => {
           pageIndex,
         }).filter(([_, value]) => value !== '' && value !== null && value !== undefined)
       );
-  
+
       // Set only filtered search params
       setSearchParams(filteredParams, { replace: true });
       console.log(combinedFilters, 'combinedFilters')
-  
+
       const response = await truckService.getAllTrucksWithFilter(combinedFilters);
       setListData(response?.trucks || []);
       setPagination({
@@ -82,12 +82,12 @@ const FilterPage = () => {
       dispatch(HideLoading());
     }
   }, [filters, dispatch]);
-  
+
 
   useEffect(() => {
     fetchTrucks(1);
   }, [fetchTrucks]);
-  
+
 
 
 
@@ -127,8 +127,8 @@ const FilterPage = () => {
   };
 
   return (
-    <div className='pb-20 max-w-[1340px] mx-auto '>
-   <SearchFilter filters={filters} setFilters={setFilters} />
+    <div className='pb-20 max-w-[1340px] mx-auto px-4 lg:px-0'>
+      <SearchFilter filters={filters} setFilters={setFilters} />
 
       <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks for sale in California</h1>
 
@@ -163,7 +163,7 @@ const FilterPage = () => {
         )}
 
         {/* Truck cards container */}
-        <div className=" flex justify-start items-center flex-wrap h-fit">
+        <div className=" flex justify-center sm:justify-start items-center flex-wrap h-fit">
           {listData?.map((truck, index) => (
             <div className='' key={index}>
               <TruckCard
@@ -172,6 +172,7 @@ const FilterPage = () => {
                 price={truck?.vehiclePrice}
                 location={truck?.country}
                 miles={truck?.mileage}
+                data={truck}
               />
             </div>
           ))}

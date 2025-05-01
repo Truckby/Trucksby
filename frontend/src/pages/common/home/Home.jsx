@@ -202,7 +202,7 @@ const Home = () => {
       </div>
 
 
-      <div className='pt-[60px] pb-[70px] bg-white px-4'>
+      <div className='pt-[60px] pb-[70px] bg-white px-4 lg:px-0'>
         <h3 className=' text-2xl sm:text-[32px] font-bold mb-8  '>Browse by Type</h3>
 
         <div className='flex justify-center sm:justify-start items-center flex-wrap'>

@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt, FaRegHeart, FaSearch, FaUser } from 'react-icons/fa'
 import { IoIosSpeedometer } from 'react-icons/io';
 import { FaWhatsapp } from "react-icons/fa";
+import { FaMessage } from 'react-icons/fa6';
 
 const Info = ({ data }) => {
+  const [showPopup, setShowPopup] = useState(false);
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSend = () => {
+    console.log('Email:', email);
+    console.log('Message:', message);
+    // Add API or email handling logic here
+    setShowPopup(false);
+  };
+
+  const handleCancel = () => {
+    setShowPopup(false);
+    setEmail('');
+    setMessage('');
+  };
+
   return (
     <div>
       <div className='lg:pl-20'>
@@ -57,17 +75,57 @@ const Info = ({ data }) => {
                 <span>{data?.email}</span>
               </div>
 
-              <button className="mt-3 gap-2 flex items-center font-medium w-[141px] h-[36px] justify-center bg-[#69E383] text-white py-2 rounded-[10px]  transition">
-                START CHAT
-
-                <FaWhatsapp />
-
+              <button
+                onClick={() => setShowPopup(true)}
+                className="mt-3 gap-2 flex items-center font-medium w-[141px] h-[36px] justify-center bg-[#69E383] text-white py-2 rounded-[10px] transition"
+              >
+                Contact Us
+                <FaMessage />
               </button>
             </div>
 
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#00000049] z-50">
+          <div className="bg-white p-6 rounded-lg w-[90%] max-w-md shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Contact Seller</h2>
+
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your Email"
+              className="w-full border border-gray-300 p-2 mb-3 rounded"
+            />
+
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Your Message"
+              className="w-full border border-gray-300 p-2 mb-4 rounded h-28"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSend}
+                className="px-4 py-2 bg-[#69E383] text-white rounded hover:bg-green-600"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

@@ -59,66 +59,18 @@ const DetailPage = () => {
     },
   };
 
-
-  const truckData = [
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2024 ISUZU",
-      price: "50,000",
-      location: "Pocatello, Idaho",
-      miles: "120,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2022 Ford F-750",
-      price: "45,500",
-      location: "Dallas, Texas",
-      miles: "98,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2023 Freightliner M2",
-      price: "60,000",
-      location: "Los Angeles",
-      miles: "75,000",
-    },
-    {
-      images: [
-        cardImage,
-        cardImage,
-        cardImage,
-      ],
-      title: "2024 ISUZU",
-      price: "50,000",
-      location: "Pocatello, Idaho",
-      miles: "120,000",
-    },
-  ];
-
     const fetchAllTrucks = async () => {
       dispatch(ShowLoading());
       try {
-        const response = await truckService.getAllTrucks();
-        setListData(response);
+        const response = await truckService.getAllTrucksWithFilter();
+        setListData(response?.trucks);
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
         dispatch(HideLoading());
       }
     };
-    console.log(listData, 'listData')
+    console.log(listData, 'listData22')
   
     useEffect(() => {
       fetchAllTrucks()
@@ -144,10 +96,10 @@ const DetailPage = () => {
       <div className='pt-[60px] pb-[70px] bg-white lg:mx-4'>
         <h3 className='text-2xl sm:text-[32px] font-bold mb-8'>More like this</h3>
 
-        <div className='flex justify-center items-center flex-wrap'>
-          {truckData.map((truck, index) => (
+        <div className='flex justify-center sm:justify-start items-center flex-wrap'>
+          {listData.map((truck, index) => (
             <div key={index}>
-              <TruckCard data={truck} images={truck?.images} title={truck?.title} price={truck?.price} location={truck?.location} miles={truck?.miles} />
+              <TruckCard data={truck} images={truck?.images} title={truck?.vehicleName} price={truck?.vehiclePrice} location={truck?.country} miles={truck?.mileage} />
 
             </div>
           ))}

@@ -1,4 +1,5 @@
 const truckService = require('../services/truckService');
+const nodemailer = require('nodemailer');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {

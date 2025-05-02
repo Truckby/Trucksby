@@ -6,6 +6,7 @@ import { FaMessage } from 'react-icons/fa6';
 import { HideLoading, ShowLoading } from '../../../../redux/loaderSlice';
 import { useDispatch } from 'react-redux';
 import truckService from '../../../../services/truckService';
+import toast from 'react-hot-toast';
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -16,19 +17,17 @@ const Info = ({ data }) => {
   const handleSend = async () => {
     console.log('Email:', email);
     console.log('Message:', message);
-
-    paylaod = {
+  
+    const payload = {
       email: email,
       message: message,
       sellerEmail: data?.email
-    }
-
-
+    };
+  
     dispatch(ShowLoading());
     try {
-      const response = await truckService.sendMessage(paylaod);
+      const response = await truckService.sendMessage(payload);
       console.log("Response from server:", response);
-      console.log(response)
       toast.success("Message sent successfully!");
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -37,7 +36,7 @@ const Info = ({ data }) => {
     }
     setShowPopup(false);
   };
-
+  
   const handleCancel = () => {
     setShowPopup(false);
     setEmail('');

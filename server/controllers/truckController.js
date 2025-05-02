@@ -82,6 +82,45 @@ const getAllTrucks = async (req, res, next) => {
   }
 };
 
+const sendMessage = async (req, res) => {
+  const { email, message, sellerEmail } = req.body;
+
+  if (!email || !message || !sellerEmail) {
+    return res.status(400).json({ success: false, message: 'Missing fields' });
+  }
+
+  try {
+    // Setup transporter
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.SENDER_EMAIL,
+        pass: process.env.SENDER_EMAIL_PASSWORD,
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: email,
+      to: sellerEmail,
+      subject: 'New Contact Message from Buyer',
+      html: `
+        <p><strong>From:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    };
+
+    // Send mail
+    await transporter.sendMail(mailOptions);
+
+    res.json({ success: true, message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ success: false, message: 'Failed to send email' });
+  }
+};
+
 const fetchTruckById = async (req, res, next) => {
   try {
     const truck = await truckService.getTruckById(req.params.id);
@@ -98,7 +137,7 @@ const addTruck = async (req, res, next) => {
     const data = {
       ...req.body,
       userId
-    }; 
+    };
     const newTruck = await truckService.createTruck(data);
     res.status(201).json({ message: 'Truck added successfully', truck: newTruck });
   } catch (error) {
@@ -127,6 +166,7 @@ const deleteTruck = async (req, res, next) => {
 };
 
 module.exports = {
+  sendMessage,
   fetchAllTrucks,
   getAllTrucks,
   fetchTruckById,

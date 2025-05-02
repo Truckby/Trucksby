@@ -16,6 +16,19 @@ const truckService = {
         }
     },
 
+    sendMessage: async (payload) => {
+        try {
+            const response = await axiosInstance.post(`${BASE_URL}/send-message`, payload, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getAllTrucks: async () => {
         try {
             const response = await axiosInstance.get(`${BASE_URL}`);

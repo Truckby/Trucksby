@@ -3,16 +3,38 @@ import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt, FaRegHeart, FaSearch, FaUser } 
 import { IoIosSpeedometer } from 'react-icons/io';
 import { FaWhatsapp } from "react-icons/fa";
 import { FaMessage } from 'react-icons/fa6';
+import { HideLoading, ShowLoading } from '../../../../redux/loaderSlice';
+import { useDispatch } from 'react-redux';
+import truckService from '../../../../services/truckService';
 
 const Info = ({ data }) => {
+  const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     console.log('Email:', email);
     console.log('Message:', message);
-    // Add API or email handling logic here
+
+    paylaod = {
+      email: email,
+      message: message,
+      sellerEmail: data?.email
+    }
+
+
+    dispatch(ShowLoading());
+    try {
+      const response = await truckService.sendMessage(paylaod);
+      console.log("Response from server:", response);
+      console.log(response)
+      toast.success("Message sent successfully!");
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      dispatch(HideLoading());
+    }
     setShowPopup(false);
   };
 

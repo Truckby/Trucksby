@@ -8,6 +8,8 @@ router.get('/by-user',authMiddleware.authenticateRequest, truckController.fetchA
 
 router.get('/get-all', truckController.getAllTrucks);
 
+router.post('/send-message' , truckController.sendMessage);
+
 router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
 
 router.post('/', authMiddleware.authenticateRequest, truckController.addTruck);

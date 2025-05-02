@@ -115,9 +115,6 @@ const Home = () => {
               <option value={'For Auction'}>For Auction</option>
             </select>
 
-
-
-
             <select
               className="p-3 w-full lg:w-[150px] outline-none h-[60px]"
               value={truckCategory}

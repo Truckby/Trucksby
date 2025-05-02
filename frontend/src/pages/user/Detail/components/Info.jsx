@@ -77,7 +77,7 @@ const Info = ({ data }) => {
 
               <button
                 onClick={() => setShowPopup(true)}
-                className="mt-3 gap-2 flex items-center font-medium w-[141px] h-[36px] justify-center bg-[#69E383] text-white py-2 rounded-[10px] transition"
+                className="mt-3 gap-2 flex items-center cursor-pointer font-medium w-[141px] h-[36px] justify-center bg-[#69E383] text-white py-2 rounded-[10px] transition"
               >
                 Contact Us
                 <FaMessage />

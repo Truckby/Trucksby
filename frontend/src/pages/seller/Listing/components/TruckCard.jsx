@@ -11,7 +11,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
   return (
     <div className="flex md:flex-row flex-col bg-white shadow rounded-lg overflow-hidden">
       <img
-        src={image}
+        src={data?.images[0] || image}
         alt="Truck"
         className=" w-full md:w-[255px] object-cover"
       />

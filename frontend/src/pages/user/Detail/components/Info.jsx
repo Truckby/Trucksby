@@ -15,8 +15,10 @@ const Info = ({ data }) => {
   const [message, setMessage] = useState('');
 
   const handleSend = async () => {
-    console.log('Email:', email);
-    console.log('Message:', message);
+    if (!email.trim() || !message.trim()) {
+      toast.error("Both Email and Message are required!");
+      return;
+    }
   
     const payload = {
       email: email,
@@ -28,6 +30,8 @@ const Info = ({ data }) => {
     try {
       const response = await truckService.sendMessage(payload);
       console.log("Response from server:", response);
+      setEmail('');
+      setMessage('');
       toast.success("Message sent successfully!");
     } catch (error) {
       console.error("Error fetching services:", error);

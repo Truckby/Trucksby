@@ -8,6 +8,7 @@ export const menuItems = {
         { path: '/seller/listing', label: 'Dashboard', disabled: false },
         { path: '/seller/add-truck', label: 'Calendar', disabled: false },
         { path: '/seller/profile', label: 'Calendar', disabled: false },
+        { path: '/success', label: 'Calendar', disabled: false },
     ],
     user: [
         { path: '/PrivacyPage', label: 'PrivacyPage', disabled: false },

@@ -23,6 +23,7 @@ const routes = [
   { path: "/seller/listing", element: <Listing />, protected: true, authRedirect: true },
   { path: "/seller/add-truck", element: <AddTruckPage />, protected: true, authRedirect: true },
   { path: "/seller/profile", element: <SellerProfile />, protected: true, authRedirect: true },
+  { path: "/success", element: <SuccessPage />, protected: false, authRedirect: false },
 
   { path: "/plans", element: <Plans />, protected: false, authRedirect: false },
 
@@ -32,7 +33,6 @@ const routes = [
   { path: "/home", element: <Home />, protected: false, authRedirect: false },
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true },
   { path: "/PrivacyPage", element: <PrivacyPage />, protected: false, authRedirect: false },
-  { path: "/success", element: <SuccessPage />, protected: false, authRedirect: false },
   { path: "*", element: <NotFound />, protected: false },
 ];
 

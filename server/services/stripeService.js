@@ -4,7 +4,7 @@ const stripe = require('../configs/stripe.config')
 
 const webHookKwy = process.env.STRIPE_WEBhOOK_KEY
 
-const fetchProductInfo = async ( productId) => {
+const fetchProductInfo = async (productId) => {
     try {
         const product = await stripe.products.retrieve(productId);
         if (!product) {
@@ -65,7 +65,7 @@ const fetchProductInfo = async ( productId) => {
     }
 };
 
-const createCustomer = async ( name, email) => {
+const createCustomer = async (name, email) => {
     const customer = await stripe.customers.create({ name, email });
     if (!customer) {
         const error = new Error('Unable to create customer!');
@@ -75,7 +75,7 @@ const createCustomer = async ( name, email) => {
     return customer.id;
 };
 
-const updateCustomerEmail = async ( stripeCustomerId, newEmail) => {
+const updateCustomerEmail = async (stripeCustomerId, newEmail) => {
     const customer = await stripe.customers.update(stripeCustomerId, {
         email: newEmail,
     });
@@ -86,7 +86,7 @@ const updateCustomerEmail = async ( stripeCustomerId, newEmail) => {
     }
 };
 
-const createCheckoutSession = async ( priceId, stripeCustomerId, CLIENT_URL) => {
+const createCheckoutSession = async (priceId, stripeCustomerId, CLIENT_URL) => {
     try {
         const session = await stripe.checkout.sessions.create(
             {
@@ -124,52 +124,62 @@ const constructEvent = async (sig, data) => {
 
 const handlePaymentSucceededEvent = async (event) => {
     console.log(event.data, 'handle event data')
-    // try {
-    //     const invoice = event.data.object;
-    //     // console.log('Invoice: ', invoice);
-    //     const customerId = invoice.customer;
+    try {
+        const invoice = event.data.object;
+        // console.log('Invoice: ', invoice);
+        const customerId = invoice.customer;
 
-    //     const userId = await commonService.fetchUserId(connectionId, { stripeCustomerId: customerId });
-    //     const chargeId = invoice.charge;
-    //     const billingReason = invoice.billing_reason;
-    //     // subscription_create
-    //     const subscriptionId = invoice.subscription;
-    //     const productId = invoice.lines.data[0].price.product;
-    //     const { name, description } = await stripe.products.retrieve(productId);
-    //     const planInfo = {
-    //         productId,
-    //         name,
-    //         description,
-    //         priceId: invoice.lines.data[0].price.id,
-    //         amount: invoice.lines.data[0].price.unit_amount / 100,
-    //         currency: invoice.currency,
-    //     };
-    //     const paidAmount = invoice.amount_paid / 100;
-    //     const startDate = new Date(invoice.lines.data[0].period.start * 1000).toISOString();
-    //     const endDate = new Date(invoice.lines.data[0].period.end * 1000).toISOString();
-    //     const data = {
-    //         user: userId,
-    //         customerId,
-    //         subscriptionInfo: {
-    //             subscriptionId,
-    //             chargeId,
-    //             planInfo,
-    //             paidAmount,
-    //             billingReason,
-    //             startDate,
-    //             endDate
-    //         }
-    //     };
-    //     return data;
-    // } catch (error) {
-    //     console.log("Success Event Error: ", error);
-    //     const newError = new Error(`Unable to fetch info from event!`);
-    //     newError.code = 400;
-    //     throw newError;
-    // }
+        const userId = await commonService.fetchUserId({ stripeCustomerId: customerId });
+        const chargeId = invoice.charge || event.data.charge || null;
+
+        const billingReason = invoice.billing_reason;
+        // subscription_create
+        const subscriptionId =
+        invoice.subscription ||
+        invoice.lines.data[0]?.parent?.subscription_item_details?.subscription ||
+        null;
+      
+        console.log(invoice.lines.data[0], 'invoice lines data')
+        const productId = invoice.lines.data[0].pricing.price_details.product;
+        const { name, description } = await stripe.products.retrieve(productId);
+
+        const lineItem = invoice.lines.data[0];
+        const priceDetails = lineItem.pricing.price_details;
+
+        const planInfo = {
+            productId,
+            name,
+            description,
+            priceId: priceDetails.price,
+            amount: parseInt(lineItem.amount) / 100,
+            currency: invoice.currency,
+        };
+        const paidAmount = invoice.amount_paid / 100;
+        const startDate = new Date(invoice.lines.data[0].period.start * 1000).toISOString();
+        const endDate = new Date(invoice.lines.data[0].period.end * 1000).toISOString();
+        const data = {
+            user: userId,
+            customerId,
+            subscriptionInfo: {
+                subscriptionId,
+                chargeId,
+                planInfo,
+                paidAmount,
+                billingReason,
+                startDate,
+                endDate
+            }
+        };
+        return data;
+    } catch (error) {
+        console.log("Success Event Error: ", error);
+        const newError = new Error(`Unable to fetch info from event!`);
+        newError.code = 400;
+        throw newError;
+    }
 };
 
-const handleSubscriptionUpdatedEvent = async (connectionId,  event) => {
+const handleSubscriptionUpdatedEvent = async (connectionId, event) => {
     const stripe = factoryUtils.createStripeClient(stripeConfig);
     try {
         const subscription = event.data.object;
@@ -206,7 +216,7 @@ const handleSubscriptionUpdatedEvent = async (connectionId,  event) => {
     }
 };
 
-const createBillingPortalSession = async ( customerId, CLIENT_URL) => {
+const createBillingPortalSession = async (customerId, CLIENT_URL) => {
     const stripe = factoryUtils.createStripeClient(stripeConfig);
     if (!customerId) {
         const newError = new Error(`Customer not found!`);
@@ -232,7 +242,7 @@ const createBillingPortalSession = async ( customerId, CLIENT_URL) => {
     }
 };
 
-const fetchSubscription = async ( subscriptionId) => {
+const fetchSubscription = async (subscriptionId) => {
     const stripe = factoryUtils.createStripeClient(stripeConfig);
     try {
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
@@ -244,7 +254,7 @@ const fetchSubscription = async ( subscriptionId) => {
     }
 };
 
-const updateSubscription = async ( subscriptionId, subscriptionItemId, newPriceId) => {
+const updateSubscription = async (subscriptionId, subscriptionItemId, newPriceId) => {
     const stripe = factoryUtils.createStripeClient(stripeConfig);
     try {
         const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {

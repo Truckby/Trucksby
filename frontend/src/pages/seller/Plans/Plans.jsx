@@ -105,7 +105,6 @@ const Plans = () => {
     const handleContinue = async (priceId) => {
         dispatch(ShowLoading());
         try {
-
             const response = await stripeService.createCheckoutSession({ priceId });
             if (response.url) {
                 console.log('URL: ', response.url);
@@ -141,7 +140,7 @@ const Plans = () => {
                                     </div>
                                     <button
                                         onClick={() => handleContinue(plan.priceId)}
-                                        className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-400'}`}
+                                        className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-900'}`}
                                     >
                                         {plan.name}
                                     </button>

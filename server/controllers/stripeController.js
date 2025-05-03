@@ -32,7 +32,7 @@ const StripeHooks = async (req, res, next) => {
         switch (event?.type) {
             case 'invoice.payment_succeeded':
                 const data = await stripeService.handlePaymentSucceededEvent(event);
-                // await subscriptionService.addSubscription( data);
+                await subscriptionService.addSubscription( data);
                 res.status(200).json({ message: 'Subscription created!' });
                 break;
             default:

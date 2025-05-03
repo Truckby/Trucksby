@@ -16,7 +16,9 @@ const FilterPage = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [listData, setListData] = useState([])
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ totalPages: 0, totalCount: 0, currentPage: 1 });
+
 
 
 
@@ -76,6 +78,7 @@ const FilterPage = () => {
         totalCount: response.totalCount || 0,
         currentPage: pageIndex
       });
+      setPage(pageIndex);
     } catch (error) {
       console.error("Error fetching trucks:", error);
     } finally {
@@ -177,7 +180,30 @@ const FilterPage = () => {
             </div>
           ))}
         </div>
+
+
       </div>
+
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Previous
+        </button>
+        <span className="font-semibold">
+          Page {page} of {pagination.totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === pagination.totalPages}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Next
+        </button>
+      </div>
+
     </div>
   )
 }

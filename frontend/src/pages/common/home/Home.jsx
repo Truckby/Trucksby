@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 // import trick from '../../../assets/images/truck_image.png'
 import trick from '../../../assets/videos/truck.mov'
 import { FaSearch } from 'react-icons/fa';
@@ -12,11 +12,11 @@ import truckService from '../../../services/truckService';
 import { useNavigate } from 'react-router';
 
 const Home = () => {
-  const [listData, setListData] = React.useState([]);
-  const [searchText, setSearchText] = React.useState('');
-  const [searchCountry, setSearchCountry] = React.useState('');
-  const [listingType, setListingType] = React.useState('');
-  const [truckCategory, settruckCategory] = React.useState('');
+  const [listData, setListData] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchCountry, setSearchCountry] = useState('');
+  const [listingType, setListingType] = useState('');
+  const [truckCategory, settruckCategory] = useState('');
   const dispatch = useDispatch();
   const params = new URLSearchParams();
 
@@ -24,16 +24,23 @@ const Home = () => {
   if (searchCountry) params.append('country', searchCountry);
   if (listingType) params.append('listingType', listingType);
   if (truckCategory) params.append('truckCategory', truckCategory);
-
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ totalPages: 0, totalCount: 0, currentPage: 1 });
 
 
   const navigate = useNavigate();
 
-  const fetchAllTrucks = async () => {
+  const fetchAllTrucks = async (pageIndex = 1) => {
     dispatch(ShowLoading());
     try {
-      const response = await truckService.getAllTrucksWithFilter({});
+      const response = await truckService.getAllTrucksWithFilter({ pageIndex, limit: 8 });
       setListData(response.trucks);
+      setPagination({
+        totalPages: response.totalPages || 0,
+        totalCount: response.totalCount || 0,
+        currentPage: pageIndex
+      });
+      setPage(pageIndex);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -45,6 +52,12 @@ const Home = () => {
   useEffect(() => {
     fetchAllTrucks()
   }, [])
+
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchAllTrucks(newPage);
+    }
+  }, [fetchAllTrucks, pagination.totalPages]);
 
   const truckCategoryData = [
     'Trucks',
@@ -216,6 +229,26 @@ const Home = () => {
             </div>
           ))}
 
+        </div>
+
+        <div className="flex justify-center items-center gap-4 mt-6">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            Previous
+          </button>
+          <span className="font-semibold">
+            Page {page} of {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === pagination.totalPages}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

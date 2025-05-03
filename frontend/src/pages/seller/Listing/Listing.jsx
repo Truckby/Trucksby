@@ -13,11 +13,17 @@ const Listing = () => {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleteTruckId, setDeleteTruckId] = useState(null)
 
-  const fetchAllTrucks = async () => {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5;
+
+
+  const fetchAllTrucks = async (currentPage = 1) => {
     dispatch(ShowLoading());
     try {
-      const response = await truckService.getAllTrucksByUser();
-      setListData(response);
+      const response = await truckService.getAllTrucksByUser(currentPage, limit);
+      setListData(response.data);
+      setTotalPages(response.totalPages || 1);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -27,8 +33,8 @@ const Listing = () => {
   console.log(listData, 'listData')
 
   useEffect(() => {
-    fetchAllTrucks()
-  }, [])
+    fetchAllTrucks(page)
+  }, [page])
 
   const handleDeleteClick = (id) => {
     setDeleteTruckId(id)
@@ -43,7 +49,7 @@ const Listing = () => {
       await truckService.deleteTruck(deleteTruckId);
       setListData((listData) => listData.filter(list => list._id !== deleteTruckId));
       toast.success("Service deleted successfully");
-      onLoad()
+      await fetchAllTrucks(page);
     } catch (error) {
       console.error("Error deleting service:", error);
       toast.error("Failed to delete service");
@@ -73,6 +79,27 @@ const Listing = () => {
           <TruckCard data={data} handleDeleteClick={handleDeleteClick} />
         </div>
       ))}
+
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Previous
+        </button>
+        <span className="font-semibold">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Next
+        </button>
+      </div>
+
 
       <div>
         <ExpirePlan />

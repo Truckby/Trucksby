@@ -3,13 +3,24 @@ const nodemailer = require('nodemailer');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
-    const userId = req.user?.id
-    const trucks = await truckService.getAllTrucks(userId);
-    res.status(200).json(trucks);
+    const userId = req.user?.id;
+    const page = parseInt(req.query.page) || 1;      // default to page 1
+    const limit = parseInt(req.query.limit) || 10;   // default to 10 items per page
+    const skip = (page - 1) * limit;
+
+    const { trucks, total } = await truckService.getAllTrucks(userId, skip, limit);
+
+    res.status(200).json({
+      data: trucks,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+    });
   } catch (error) {
     next(error);
   }
 };
+
 
 const getAllTrucks = async (req, res, next) => {
   try {
@@ -45,7 +56,7 @@ const getAllTrucks = async (req, res, next) => {
     console.log(req.query, 'query')
 
     const parsedPageIndex = parseInt(pageIndex) || 1;
-    const parsedLimit = parseInt(limit) || 10;
+    const parsedLimit = parseInt(limit) || 12;
 
     const result = await truckService.getAllTrucksWithFilter({
       pageIndex: parsedPageIndex,

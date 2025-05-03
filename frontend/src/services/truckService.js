@@ -37,9 +37,9 @@ const truckService = {
             throw error;
         }
     },
-    getAllTrucksByUser: async () => {
+    getAllTrucksByUser: async (page = 1, limit = 5) => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/by-user`);
+            const response = await axiosInstance.get(`${BASE_URL}/by-user?page=${page}&limit=${limit}`);
             return response.data;
         } catch (error) {
             throw error;

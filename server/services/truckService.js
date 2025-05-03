@@ -1,8 +1,14 @@
 const Truck = require("../models/truckModel");
 
-const getAllTrucks = async (userId) => {
-  return await Truck.find({ userId });
+const getAllTrucks = async (userId, skip, limit) => {
+  const [trucks, total] = await Promise.all([
+    Truck.find({ userId }).skip(skip).limit(limit),
+    Truck.countDocuments({ userId }),
+  ]);
+
+  return { trucks, total };
 };
+
 
 const getAllTrucksWithFilter = async (filters = {}) => {
   let query = {};
@@ -119,6 +125,8 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   // Get total count for pagination
   const totalCount = await Truck.countDocuments(query);
   const totalPages = Math.ceil(totalCount / limit);
+
+  console.log('Request Params:', query );
 
   // Fetch trucks based on query
   const trucks = await Truck.find(query)

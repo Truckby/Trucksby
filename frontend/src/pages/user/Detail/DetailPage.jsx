@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useCallback, useEffect, useState } from 'react';
 import TruckCard from '../../common/home/components/TruckCard';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
@@ -15,6 +15,8 @@ const DetailPage = () => {
   console.log(data, 'data');
   const dispatch = useDispatch();
   const [listData, setListData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ totalPages: 0, totalCount: 0, currentPage: 1 });
 
   const sampleData = {
     General: {
@@ -55,26 +57,38 @@ const DetailPage = () => {
       "Back Axle Weight": data?.backAxleWeight,
       'Gross Vehicle Weight': data?.grossVehicleWeight,
       'Type of Rear Axles': data?.typeofRearAxles,
-      
+
     },
   };
 
-    const fetchAllTrucks = async () => {
-      dispatch(ShowLoading());
-      try {
-        const response = await truckService.getAllTrucksWithFilter();
-        setListData(response?.trucks);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      } finally {
-        dispatch(HideLoading());
-      }
-    };
-    console.log(listData, 'listData22')
-  
-    useEffect(() => {
-      fetchAllTrucks()
-    }, [])
+  const fetchAllTrucks = async (pageIndex = 1) => {
+    dispatch(ShowLoading());
+    try {
+      const response = await truckService.getAllTrucksWithFilter({ pageIndex, limit: 8 });
+      setListData(response?.trucks);
+      setPagination({
+        totalPages: response.totalPages || 0,
+        totalCount: response.totalCount || 0,
+        currentPage: pageIndex
+      });
+      setPage(pageIndex);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      dispatch(HideLoading());
+    }
+  };
+  console.log(listData, 'listData22')
+
+  useEffect(() => {
+    fetchAllTrucks()
+  }, [])
+
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchAllTrucks(newPage);
+    }
+  }, [fetchAllTrucks, pagination.totalPages]);
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto px-4 lg:px-0'>
@@ -105,7 +119,28 @@ const DetailPage = () => {
           ))}
 
         </div>
+
+        <div className="flex justify-center items-center gap-4 mt-6">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            Previous
+          </button>
+          <span className="font-semibold">
+            Page {page} of {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === pagination.totalPages}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            Next
+          </button>
+        </div>
       </div>
+
     </div>
   )
 }

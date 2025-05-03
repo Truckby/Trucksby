@@ -123,15 +123,16 @@ const Plans = () => {
             <h3 className='text-[24px] sm:text-[32px] font-bold pb-10'>Your plan has expired</h3>
 
             <div className="overflow-x-auto">
-                <table className="w-full border border-[#E6E9F5] text-center table-auto">
+                <table className="w-full min-w-[600px] border border-[#E6E9F5] text-center table-auto">
                     <thead>
                         <tr className="">
-                            <th className="text-left px-4 py-3 border border-[#E6E9F5]">
-                                <div className='flex items-center'>
+                            <th className="text-left px-4 py-3 sm:px-6 sm:py-4 border border-[#E6E9F5]">
+                                <div className='flex items-center text-sm sm:text-base'>
                                     Compare plans
-                                    <span className='ml-3 py-1.5 px-4 rounded-full border text-sm'>40% Off</span>
+                                    <span className='ml-3 py-1.5 px-4 rounded-full border text-xs sm:text-sm'>40% Off</span>
                                 </div>
                             </th>
+
                             {products.map((plan, idx) => (
                                 <th key={idx} className="px-4 py-3 border border-[#E6E9F5]">
                                     <div className='flex items-center justify-center'>
@@ -139,12 +140,12 @@ const Plans = () => {
                                         <div className="text-gray-500 text-sm mt-2 ml-[5px]">{plan.billing}</div>
                                     </div>
                                     <button
-                                     onClick={() => handleContinue(plan.priceId)}
-                                        className={`mt-2 px-4 py-2 text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-400'
-                                            }`}
+                                        onClick={() => handleContinue(plan.priceId)}
+                                        className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-400'}`}
                                     >
                                         {plan.name}
                                     </button>
+
                                 </th>
                             ))}
                         </tr>

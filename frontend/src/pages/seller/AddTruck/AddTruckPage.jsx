@@ -332,7 +332,7 @@ const AddTruckPage = () => {
               <div className='mb-9'>
                 <label className="label" htmlFor="vehiclePrice">Vehicle Price</label>
                 <input
-                  type="text"
+                  type="number"
                   name='vehiclePrice'
                   placeholder="$"
                   className="input"

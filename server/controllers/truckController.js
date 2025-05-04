@@ -1,5 +1,6 @@
 const truckService = require('../services/truckService');
 const nodemailer = require('nodemailer');
+const subscriptionService = require('../services/subscriptionService');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
@@ -145,17 +146,44 @@ const fetchTruckById = async (req, res, next) => {
 
 const addTruck = async (req, res, next) => {
   try {
-    const userId = req.user?.id
+    const userId = req.user?.id;
+
+    const info = await subscriptionService.getUserSubscriptionInfo(userId);
+    console.log(info, 'info');
+
+    if (!info || !info.planName) {
+      return res.status(400).json({ message: 'Subscription information not found' });
+    }
+
+    const { planName } = info;
+
+    // Get current number of trucks for the user
+    const userTrucks = await truckService.getUserTrucks(userId);
+    const truckCount = userTrucks.length;
+
+    // Restrict based on plan
+    if (planName === 'Basic Membership' && truckCount >= 3) {
+      return res.status(403).json({ message: 'Basic Membership allows only up to 3 trucks.' });
+    }
+
+    if (planName === 'Premium Membership' && truckCount >= 5) {
+      return res.status(403).json({ message: 'Premium Membership allows only up to 5 trucks.' });
+    }
+
+    // Proceed to create new truck
     const data = {
       ...req.body,
       userId
     };
+
     const newTruck = await truckService.createTruck(data);
     res.status(201).json({ message: 'Truck added successfully', truck: newTruck });
+
   } catch (error) {
     next(error);
   }
 };
+
 
 const updateTruck = async (req, res, next) => {
   try {

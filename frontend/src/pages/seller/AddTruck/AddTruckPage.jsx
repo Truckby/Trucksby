@@ -34,7 +34,7 @@ const AddTruckPage = () => {
       listingType: oldTruckData?.listingType || "",
       name: oldTruckData?.name || "",
       phone: oldTruckData?.phone || "",
-      email:  oldTruckData?.email || "",
+      email: oldTruckData?.email || "",
       companyName: oldTruckData?.companyName || "",
       address: oldTruckData?.address || "",
       modelYear: oldTruckData?.modelYear || "",
@@ -44,7 +44,7 @@ const AddTruckPage = () => {
       vin: oldTruckData?.vin || "",
       condition: oldTruckData?.condition || "",
       wheelbase: oldTruckData?.wheelbase || null,
-      steering:   oldTruckData?.steering || "",
+      steering: oldTruckData?.steering || "",
       color: oldTruckData?.color || "",
       suspension: oldTruckData?.suspension || "",
       engineManufacturer: oldTruckData?.engineManufacturer || "",
@@ -90,21 +90,21 @@ const AddTruckPage = () => {
         "grossVehicleWeight",
         "phone"
       ];
-    
+
       const truckData = {
         ...values,
         images: Array.isArray(values.images) ? values.images : []
       };
-    
+
       // Convert numeric fields to numbers if present
       numericFields.forEach((field) => {
         if (truckData[field] !== "") {
           truckData[field] = Number(truckData[field]);
         }
       });
-    
+
       console.log("Final truck data with parsed numbers:", truckData);
-    
+
       try {
         if (oldTruckData?._id) {
           await truckService.updateTruck(oldTruckData._id, truckData);
@@ -120,8 +120,8 @@ const AddTruckPage = () => {
         console.error('Listing error:', error);
       }
     }
-    
-    
+
+
   });
 
 
@@ -129,15 +129,15 @@ const AddTruckPage = () => {
     const files = Array.from(e.target.files);
     const previews = files.map(file => URL.createObjectURL(file));
     setPreviewImages(prev => [...prev, ...previews]);
-  
+
     // Keep track of all uploaded URLs in this batch
     let allUploadedUrls = [];
-  
+
     // Upload each file individually
     for (const file of files) {
       const form = new FormData();
       form.append("images", file);
-  
+
       try {
         const res = await uploadImg(form);
         if (res?.success) {
@@ -157,14 +157,14 @@ const AddTruckPage = () => {
         toast.error("Error uploading image");
       }
     }
-  
+
     // Update Formik state once with all new URLs
     if (allUploadedUrls.length > 0) {
       formik.setFieldValue('images', [
-        ...(formik.values.images || []), 
+        ...(formik.values.images || []),
         ...allUploadedUrls
       ]);
-      
+
       // Log the updated images array to verify
       console.log("Updated images array:", [
         ...(formik.values.images || []),
@@ -172,16 +172,16 @@ const AddTruckPage = () => {
       ]);
     }
   };
-  
+
 
 
   const handleRemoveImage = (index) => {
     const updatedPreviews = previewImages.filter((_, i) => i !== index);
     const updatedImageUrls = formik.values.images.filter((_, i) => i !== index);
-  
+
     setPreviewImages(updatedPreviews);
     formik.setFieldValue('images', updatedImageUrls);
-    
+
   };
 
   const truckCategory = [

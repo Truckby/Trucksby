@@ -44,7 +44,7 @@ const subscriptionsArraySchema = new mongoose.Schema(
             required: true,
             trim: true
         },
-        chargeId: {
+        invoiceId: {
             type: String,
             required: true,
             trim: true

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './style.css';
 import { useDispatch, useSelector } from "react-redux";
 import userService from "../../../services/userService";
 import toast from "react-hot-toast";
 import { fetchUserInfo } from "../../../redux/userSlice";
 import { uploadImg } from "../../../services/image";
+import subscriptionService from "../../../services/subscriptionService";
+import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
+import './style.css';
 
 const SellerProfile = () => {
   const user = useSelector((state) => state.user.user);
@@ -22,6 +25,14 @@ const SellerProfile = () => {
     city: user?.city || "",
     image: user?.image || "",
   });
+
+  const [info, setInfo] = useState({
+    status: false,
+    planName: '',
+    productId: '',
+    subscriptionId: '',
+    amount: null
+  })
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,16 +52,16 @@ const SellerProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     let finalFormData = { ...formData };
-    
+
     // Handle image upload if there's a new image
     if (image) {
       try {
         const imgForm = new FormData();
         imgForm.append("images", image);
         const res = await uploadImg(imgForm);
-        
+
         if (res?.success && res?.urls?.length > 0) {
           // Add the image URL to the form data
           finalFormData = {
@@ -66,16 +77,16 @@ const SellerProfile = () => {
         return;
       }
     }
-    
+
     try {
       // Using updateUserInfo instead of updateUserProfile
       const response = await userService.updateUserInfo(finalFormData);
-      
+
       if (!response) {
         setError({ form: "Update failed" });
         return;
       }
-      
+
       toast.success('Profile updated successfully');
       dispatch(fetchUserInfo());
     } catch (error) {
@@ -83,22 +94,52 @@ const SellerProfile = () => {
     }
   };
 
+  useEffect(() => {
+    const getSubscriptionInfo = async () => {
+      dispatch(ShowLoading());
+      try {
+        const response = await subscriptionService.getUserSubscriptionInfo();
+        if (response.info) {
+          setInfo(response.info);
+        }
+      } catch (error) {
+        message.error(error.response.data.error);
+      } finally {
+        dispatch(HideLoading());
+      }
+    };
+
+    getSubscriptionInfo();
+  }, []);
+
   return (
     <div className='py-[65px]'>
       <div className="max-w-[1147px] mx-auto bg-white rounded-[20px] md:px-[79px] md:py-[65px] p-4 shadow">
         <h2 className="text-2xl sm:text-[32px] font-bold leading-[61px] pb-[45px]">My Profile</h2>
 
-        <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
-          <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">
-            {previewUrl ? (
-              <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
-                No Image
+        <div className="flex flex-col sm:flex-row items-center mb-6 justify-between">
+          <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
+            <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">
+              {previewUrl ? (
+                <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
+                  No Image
+                </div>
+              )}
+            </div>
+            <input type="file" accept="image/*" onChange={handleImageUpload} className="mt-4 sm:mt-0" />
+          </div>
+
+          <div>
+            {info.status && (
+              <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-sm border border-green-300 max-w-xs w-full text-center sm:text-left mt-4 sm:mt-0">
+                <p className="text-sm font-semibold">Active Plan:</p>
+                <p className="text-base font-bold">{info.planName}</p>
               </div>
             )}
+
           </div>
-          <input type="file" accept="image/*" onChange={handleImageUpload} className="mt-4 sm:mt-0" />
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -184,7 +225,7 @@ const SellerProfile = () => {
               />
             </div>
           </div>
-          
+
           {/* Save Button */}
           <div className="col-span-2 flex justify-end">
             <button type="submit" className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto">Save Changes</button>

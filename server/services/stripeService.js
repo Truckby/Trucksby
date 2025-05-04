@@ -130,7 +130,7 @@ const handlePaymentSucceededEvent = async (event) => {
         const customerId = invoice.customer;
 
         const userId = await commonService.fetchUserId({ stripeCustomerId: customerId });
-        const chargeId = invoice.charge || event.data.charge || null;
+        const invoiceId = invoice.id ;
 
         const billingReason = invoice.billing_reason;
         // subscription_create
@@ -162,7 +162,7 @@ const handlePaymentSucceededEvent = async (event) => {
             customerId,
             subscriptionInfo: {
                 subscriptionId,
-                chargeId,
+                invoiceId,
                 planInfo,
                 paidAmount,
                 billingReason,

@@ -6,16 +6,27 @@ import truckService from '../../../services/truckService';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import ExpirePlan from './components/expirePlan';
 import DeleteConfirmationModal from '../../../components/Delete/DeleteConfirmationModal';
+import subscriptionService from '../../../services/subscriptionService';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Listing = () => {
   const dispatch = useDispatch();
   const [listData, setListData] = useState([])
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleteTruckId, setDeleteTruckId] = useState(null)
+  const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 5;
+  const [info, setInfo] = useState({
+    status: false,
+    planName: '',
+    productId: '',
+    subscriptionId: '',
+    amount: null
+  })
 
 
   const fetchAllTrucks = async (currentPage = 1) => {
@@ -59,18 +70,63 @@ const Listing = () => {
     }
   };
 
+  useEffect(() => {
+    const getSubscriptionInfo = async () => {
+      dispatch(ShowLoading());
+      try {
+        const response = await subscriptionService.getUserSubscriptionInfo();
+        if (response.info) {
+          setInfo(response.info);
+        }
+
+
+      } catch (error) {
+        message.error(error.response.data.error);
+      } finally {
+        dispatch(HideLoading());
+      }
+    };
+
+    getSubscriptionInfo();
+  }, []);
+
+  const isLimitExceeded = () => {
+    if (info.planName === 'Basic Membership' && listData.length >= 3) {
+      toast.error("You can only add up to 3 trucks on Basic Membership");
+      return true;
+    }
+    if (info.planName === 'Premium Membership' && listData.length >= 5) {
+      toast.error("You can only add up to 5 trucks on Premium Membership");
+      return true;
+    }
+    return false;
+  };
+
+
   return (
     <div className='max-w-[993px] mx-auto md:pt-10 px-4'>
 
       <div className='flex justify-between items-center'>
         <h3 className='text-[24px] sm:text-[32px] font-bold my-10'>My Listings</h3>
 
-        <Link
-          to="/seller/add-truck"
-          className="px-4 py-2 h-fit bg-[#DF0805] text-white font-medium rounded-lg"
-        >
-          Add Truck
-        </Link>
+        {info.status ? (
+          <button
+            onClick={() => {
+              if (!isLimitExceeded()) navigate("/seller/add-truck");
+            }}
+            className="px-4 py-2 h-fit bg-[#DF0805] text-white font-medium rounded-lg"
+          >
+            Add Truck
+          </button>
+        ) : (
+          <Link
+            to="/plans"
+            className="px-4 py-2 h-fit bg-[#DF0805] text-white font-medium rounded-lg"
+          >
+            Add Truck
+          </Link>
+        )}
+
 
       </div>
 
@@ -80,7 +136,7 @@ const Listing = () => {
         </div>
       ))}
 
-      <div className="flex justify-center items-center gap-4 mt-6">
+      <div className="flex justify-center items-center gap-4 my-6 mb-10">
         <button
           onClick={() => setPage(prev => Math.max(prev - 1, 1))}
           disabled={page === 1}
@@ -100,10 +156,7 @@ const Listing = () => {
         </button>
       </div>
 
-
-      <div>
-        <ExpirePlan />
-      </div>
+      {info.status && info.subscriptionId ? null : <ExpirePlan />}
 
       <DeleteConfirmationModal
         isOpen={deleteOpen}

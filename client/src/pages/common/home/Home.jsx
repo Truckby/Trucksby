@@ -183,7 +183,7 @@ const Home = () => {
       </div>
 
       <div className='pt-[60px] pb-[70px] px-4'>
-        <h3 className=' text-2xl sm:text-[32px] font-bold'>Feature Categories</h3>
+        <h3 className=' text-2xl sm:text-[32px] font-bold'>Browse by Type</h3>
 
         <div className='flex justify-center sm:justify-start items-center flex-wrap'>
           {truckCategoryData.map((truck, index) => (
@@ -213,7 +213,7 @@ const Home = () => {
 
 
       <div className='pt-[60px] pb-[70px] bg-white px-4 lg:px-0'>
-        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8  '>Browse by Type</h3>
+        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8  '>Featured Trucks</h3>
 
         <div className='flex justify-center sm:justify-start items-center flex-wrap'>
           {listData?.map((truck, index) => (
@@ -235,7 +235,7 @@ const Home = () => {
           <button
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
           >
             Previous
           </button>
@@ -245,7 +245,7 @@ const Home = () => {
           <button
             onClick={() => handlePageChange(page + 1)}
             disabled={page === pagination.totalPages}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
           >
             Next
           </button>

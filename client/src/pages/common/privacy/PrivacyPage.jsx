@@ -6,7 +6,7 @@ const PrivacyPage = () => {
             <div className='p-6 md:px-[79px] md:py-[65px]'>
                 {/* Privacy Policy */}
                 <h1 className='text-[24px] sm:text-[32px] font-bold'>TRUCKBY PRIVACY POLICY</h1>
-                <p className='text-sm text-gray-500 mt-2'>Last Updated: [Insert Date]</p>
+                <p className='text-sm text-gray-500 mt-2'>Last Updated: May 5, 2025</p>
 
                 <div className='mt-8 space-y-6 text-sm md:text-base leading-relaxed text-gray-700'>
                     <section>
@@ -62,7 +62,7 @@ const PrivacyPage = () => {
 
                 {/* Return & Refund Policy */}
                 <h1 className='text-[24px] sm:text-[32px] font-bold'>TRUCKBY RETURN & REFUND POLICY</h1>
-                <p className='text-sm text-gray-500 mt-2'>Last Updated: [Insert Date]</p>
+                <p className='text-sm text-gray-500 mt-2'>Last Updated: May 5, 2025</p>
 
                 <div className='mt-8 space-y-6 text-sm md:text-base leading-relaxed text-gray-700'>
                     <p>Truckby provides an online platform for listing commercial vehicles, equipment, and trailers. All advertising and listing fees paid to Truckby are <strong>non-refundable</strong>.</p>
@@ -94,7 +94,7 @@ const PrivacyPage = () => {
 
 
                 <h1 className='text-[24px] sm:text-[32px] font-bold'>TRUCKBY TERMS OF USE</h1>
-                <p className='text-sm text-gray-500 mt-2'>Last Updated: [Insert Date]</p>
+                <p className='text-sm text-gray-500 mt-2'>Last Updated: May 5, 2025</p>
 
                 <div className='mt-8 space-y-6 text-sm md:text-base leading-relaxed text-gray-700'>
                     <section>

@@ -2,10 +2,10 @@ import Home from '../pages/common/Home/Home.jsx';
 import Login from '../pages/common/Login/Login.jsx';
 import NotFound from '../pages/common/NotFound/NotFound.jsx';
 import Redirect from '../pages/common/Redirect/Redirect.jsx';
-import PrivacyPage from '../pages/common/privacy/PrivacyPage.jsx';
-import SellerProfile from '../pages/common/profile/SellerProfile.jsx';
-import UserProfile from '../pages/common/profile/UserProfile.jsx';
-import SignUp from '../pages/common/signup/SignUp.jsx';
+import PrivacyPage from '../pages/common/Privacy/PrivacyPage.jsx';
+import SellerProfile from '../pages/common/Profile/SellerProfile.jsx';
+import UserProfile from '../pages/common/Profile/UserProfile.jsx';
+import SignUp from '../pages/common/Signup/SignUp.jsx';
 import AddTruckPage from '../pages/seller/AddTruck/AddTruckPage.jsx';
 import Listing from '../pages/seller/Listing/Listing.jsx';
 import Plans from '../pages/seller/Plans/Plans.jsx';
@@ -32,7 +32,7 @@ const routes = [
   { path: "/login", element: <Login />, protected: false, authRedirect: true },
   { path: "/home", element: <Home />, protected: false, authRedirect: false },
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true },
-  { path: "/PrivacyPage", element: <PrivacyPage />, protected: false, authRedirect: false },
+  { path: "/privacy", element: <PrivacyPage />, protected: false, authRedirect: false },
   { path: "*", element: <NotFound />, protected: false },
 ];
 

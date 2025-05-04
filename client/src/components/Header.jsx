@@ -16,15 +16,16 @@ export default function Header() {
   const user = useSelector((state) => state.user.user);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const toggleProfileDropdown = () => {
     setIsProfileOpen((prev) => !prev);
   };
 
   const navLinks = [
     { name: "Home", to: "/home" },
-    { name: "Privacy", to: "/PrivacyPage" },
-    { name: "Contact", to: "/contact" },
+    { name: "Privacy", to: "/privacy" },
+    // { name: "Contact", to: "/contact" },
   ];
 
   const handleLogout = async () => {

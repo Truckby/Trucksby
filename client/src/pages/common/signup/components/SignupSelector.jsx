@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import BuyerSignupForm from "./BuyerSignupForm";
-import SellerSignupForm from "./SellerLoginForm";
+import SellerSignupForm from "./SellerSignupForm";
 import { BsFillPersonFill } from "react-icons/bs";
 import logo from "../../../../assets/images/login_logo.svg"; // update the path as needed
 import { Link } from "react-router";
@@ -22,28 +22,26 @@ export default function SignupSelector() {
       <div className="flex flex-wrap justify-center gap-4 mb-6">
         <button
           onClick={() => setActiveForm("buyer")}
-          className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${
-            activeForm === "buyer"
+          className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${activeForm === "buyer"
               ? " border-2 border-[#DF0805] text-[#DF0805]"
               : "shadow-sm text-gray-700"
-          }`}
+            }`}
         >
           <BsFillPersonFill className="text-lg sm:text-xl" />
           <h2>Signup As Buyer</h2>
         </button>
         <button
           onClick={() => setActiveForm("seller")}
-          className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${
-            activeForm === "seller"
+          className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${activeForm === "seller"
               ? " border-2 border-[#DF0805] text-[#DF0805]"
               : "shadow-sm text-gray-700"
-          }`}
+            }`}
         >
           <BsFillPersonFill className="text-lg sm:text-xl" />
           <h2>Signup As Seller</h2>
         </button>
       </div>
-     
+
 
       {activeForm === "buyer" ? <BuyerSignupForm /> : <SellerSignupForm />}
 

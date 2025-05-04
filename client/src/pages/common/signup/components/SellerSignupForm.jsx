@@ -7,13 +7,16 @@ import { BiSolidLock } from 'react-icons/bi';
 import userService from '../../../../services/userService';
 import toast from 'react-hot-toast';
 import { uploadImg } from '../../../../services/image';
+import { useNavigate } from 'react-router';
 
-const SellerLoginForm = () => {
+const SellerSignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -24,7 +27,7 @@ const SellerLoginForm = () => {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Full Name is required'),
-    userName: Yup.string().required('userName is required'),
+    userName: Yup.string().required('Username is required'),
     gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
@@ -90,6 +93,7 @@ const SellerLoginForm = () => {
         resetForm(); // Reset the form after successful submission
         setImage(null); // Clear the image
         setPreviewUrl(null); // Clear the image preview
+        navigate('/login');
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Registration failed');
         console.error('Registration error:', error);
@@ -285,4 +289,4 @@ const SellerLoginForm = () => {
   );
 };
 
-export default SellerLoginForm;
+export default SellerSignupForm;

@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const BuyerLoginForm = () => {
+const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -94,7 +94,7 @@ const BuyerLoginForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] focus:outline-none transition-colors"
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#DF0805] focus:outline-none transition-colors cursor-pointer"
           >
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
@@ -104,4 +104,4 @@ const BuyerLoginForm = () => {
   );
 };
 
-export default BuyerLoginForm;
+export default LoginForm;

@@ -36,17 +36,17 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
         const base = key.replace(/^min|^max/, "");
         if (groupedRanges.has(base)) return null; // skip duplicate
         groupedRanges.add(base);
-  
+
         const min = filters[`min${base}`];
         const max = filters[`max${base}`];
         if (min || max) return `${base}: ${min || 'Any'}-${max || 'Any'}`;
         return null;
       }
-  
+
       return `${key}: ${value}`;
     })
     .filter(Boolean);
-  
+
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -170,7 +170,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
               >
                 {filter}
                 <button
-                  className="ml-2"
+                  className="ml-2 cursor-pointer"
                   onClick={() => removeFilter(filter)}
                 >
                   <IoMdClose className="text-black p-[1px] bg-white rounded-full" />

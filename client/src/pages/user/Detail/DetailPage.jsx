@@ -1,5 +1,5 @@
 import React, { use, useCallback, useEffect, useState } from 'react';
-import TruckCard from '../../common/home/components/TruckCard';
+import TruckCard from '../../common/Home/components/TruckCard';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
 import cardImage from '../../../assets/images/card.svg';
@@ -124,7 +124,7 @@ const DetailPage = () => {
           <button
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
           >
             Previous
           </button>
@@ -134,7 +134,7 @@ const DetailPage = () => {
           <button
             onClick={() => handlePageChange(page + 1)}
             disabled={page === pagination.totalPages}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
           >
             Next
           </button>

@@ -133,7 +133,7 @@ const FilterPage = () => {
     <div className='pb-20 max-w-[1340px] mx-auto px-4 lg:px-0'>
       <SearchFilter filters={filters} setFilters={setFilters} />
 
-      <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks for sale in California</h1>
+      <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks For Sale</h1>
 
       <div className="flex flex-col md:flex-row lg:mx-4">
         <div className="hidden md:block">
@@ -188,7 +188,7 @@ const FilterPage = () => {
         <button
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
         >
           Previous
         </button>
@@ -198,7 +198,7 @@ const FilterPage = () => {
         <button
           onClick={() => handlePageChange(page + 1)}
           disabled={page === pagination.totalPages}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
         >
           Next
         </button>

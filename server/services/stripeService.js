@@ -2,7 +2,7 @@ const factoryUtils = require('../utils/factoryUtils');
 const commonService = require('./commonService');
 const stripe = require('../configs/stripe.config')
 
-const webHookKwy = process.env.STRIPE_WEBhOOK_KEY
+const webHookKwy = process.env.STRIPE_WEBHOOK_KEY
 
 const fetchProductInfo = async (productId) => {
     try {
@@ -130,15 +130,15 @@ const handlePaymentSucceededEvent = async (event) => {
         const customerId = invoice.customer;
 
         const userId = await commonService.fetchUserId({ stripeCustomerId: customerId });
-        const invoiceId = invoice.id ;
+        const invoiceId = invoice.id;
 
         const billingReason = invoice.billing_reason;
         // subscription_create
         const subscriptionId =
-        invoice.subscription ||
-        invoice.lines.data[0]?.parent?.subscription_item_details?.subscription ||
-        null;
-      
+            invoice.subscription ||
+            invoice.lines.data[0]?.parent?.subscription_item_details?.subscription ||
+            null;
+
         console.log(invoice.lines.data[0], 'invoice lines data')
         const productId = invoice.lines.data[0].pricing.price_details.product;
         const { name, description } = await stripe.products.retrieve(productId);

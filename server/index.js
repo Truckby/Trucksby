@@ -40,7 +40,7 @@ connectDB(DB);
 
 //Server status endpoint
 app.get('/', (req, res) => {
-    res.send('Bilal Server is up!');
+    res.send('Trucksby Server is up!');
 });
 
 // Routes

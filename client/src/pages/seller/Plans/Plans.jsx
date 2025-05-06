@@ -9,8 +9,6 @@ import stripeService from '../../../services/stripeService';
 
 const plansData = [
     {
-        name: "Free",
-        price: "Free",
         billing: "/Lifetime",
         features: [
             "Advanced Analytics",
@@ -22,8 +20,6 @@ const plansData = [
         button: "Choose This Plan",
     },
     {
-        name: "$25",
-        price: "$25",
         billing: "/Month",
         features: [
             "50 Pages",
@@ -119,72 +115,56 @@ const Plans = () => {
 
     return (
         <div className='my-16 p-8 sm:p-16 max-w-[1147px] mx-auto shadow rounded-[20px] bg-white'>
-            <h3 className='text-[24px] sm:text-[32px] font-bold pb-10'>Your plan has expired</h3>
+            <h3 className='text-[24px] sm:text-[32px] font-bold pb-10'>Select a plan according to your needs</h3>
 
             <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] border border-[#E6E9F5] text-center table-auto">
-                    <thead>
-                        <tr className="">
-                            <th className="text-left px-4 py-3 sm:px-6 sm:py-4 border border-[#E6E9F5]">
-                                <div className='flex items-center text-sm sm:text-base'>
-                                    Compare plans
-                                    <span className='ml-3 py-1.5 px-4 rounded-full border text-xs sm:text-sm'>40% Off</span>
-                                </div>
-                            </th>
-
-                            {products.map((plan, idx) => (
-                                <th key={idx} className="px-4 py-3 border border-[#E6E9F5]">
-                                    <div className='flex items-center justify-center'>
-                                        <div className="text-[24px] sm:text-[32px] font-bold">${plan.price}</div>
-                                        <div className="text-gray-500 text-sm mt-2 ml-[5px]">{plan.billing}</div>
+                {products?.length > 0 &&
+                    <table className="w-full min-w-[600px] border border-[#E6E9F5] text-center table-auto">
+                        <thead>
+                            <tr className="">
+                                <th className="text-left px-4 py-3 sm:px-6 sm:py-4 border border-[#E6E9F5]">
+                                    <div className='flex items-center text-sm sm:text-base'>
+                                        Compare plans
+                                        <span className='ml-3 py-1.5 px-4 rounded-full border text-xs sm:text-sm'>40% Off</span>
                                     </div>
-                                    <button
-                                        onClick={() => handleContinue(plan.priceId)}
-                                        className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-900'}`}
-                                    >
-                                        {plan.name}
-                                    </button>
-
                                 </th>
-                            ))}
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        <tr>
-                            <td className="text-left px-4 py-3 border border-[#E6E9F5] font-medium">Plan</td>
-                            {plansData.map((plan, idx) => (
-                                <td key={idx} className="px-4 py-3 border border-[#E6E9F5] font-semibold">
-                                    {plan.name}
-                                </td>
-                            ))}
-                        </tr>
+                                {products.map((plan, idx) => (
+                                    <th key={idx} className="px-4 py-3 border border-[#E6E9F5]">
+                                        <div className='flex items-center justify-center'>
+                                            <div className="text-[24px] sm:text-[32px] font-bold">${plan.price}</div>
+                                        </div>
+                                        <button
+                                            onClick={() => handleContinue(plan.priceId)}
+                                            className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-900'}`}
+                                        >
+                                            {plan.name}
+                                        </button>
 
-                        {allFeatures.map((feature, idx) => (
-                            <tr key={idx}>
-                                <td className="text-left px-4 py-3 border border-[#E6E9F5] ">{feature}</td>
-                                {plansData.map((plan, i) => (
-                                    <td key={i} className="px-4 py-3 border border-[#E6E9F5]">
-                                        {plan.features.includes(feature) ? (
-                                            <span className="text-lg"><img src={tick} alt="tick" className='w-4 h-auto mx-auto' /></span>
-                                        ) : (
-                                            "-"
-                                        )}
-                                    </td>
+                                    </th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
 
-            <div className='mt-6'>
-                <Link
-                    to="/plans"
-                    className="w-[200px] flex justify-center items-center ml-auto  px-4 py-2 mt-8 text-center bg-[#DF0805] text-white font-medium rounded-lg"
-                >
-                    Proceed
-                </Link>
+                        <tbody>
+
+                            {allFeatures.map((feature, idx) => (
+                                <tr key={idx}>
+                                    <td className="text-left px-4 py-3 border border-[#E6E9F5] ">{feature}</td>
+                                    {plansData.map((plan, i) => (
+                                        <td key={i} className="px-4 py-3 border border-[#E6E9F5]">
+                                            {plan.features.includes(feature) ? (
+                                                <span className="text-lg"><img src={tick} alt="tick" className='w-4 h-auto mx-auto' /></span>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
     )

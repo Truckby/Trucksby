@@ -32,7 +32,7 @@ const StripeHooks = async (req, res, next) => {
         switch (event?.type) {
             case 'invoice.payment_succeeded':
                 const data = await stripeService.handlePaymentSucceededEvent(event);
-                await subscriptionService.addSubscription( data);
+                await subscriptionService.addSubscription(data);
                 res.status(200).json({ message: 'Subscription created!' });
                 break;
             default:
@@ -43,38 +43,7 @@ const StripeHooks = async (req, res, next) => {
     }
 };
 
-const CreateBillingPortalSession = async (req, res, next) => {
-    try {
-        const CLIENT_URL = req.get('origin');
-        const userId = req.user?.id;
-        const customerId = await userService.fetchUserStripeCustomerId(userId);
-        const sessionURL = await stripeService.createBillingPortalSession(customerId, CLIENT_URL);
-        res.status(200).json({ url: sessionURL });
-    } catch (error) {
-        next(error);
-    }
-};
-
-const UpdateSubscription = async (req, res, next) => {
-    try {
-        const { newPriceId } = req.body;
-        const userId = req.user?.id;
-        const { subscriptionId } = await subscriptionService.getUserSubscriptionInfo(userId);
-        if (!subscriptionId) {
-            return res.status(400).json({ error: 'No active subscription found!' });
-        }
-        const subscription = await stripeService.fetchSubscription(subscriptionId);
-        const subscriptionItemId = subscription.items.data[0].id;
-        await stripeService.updateSubscription(subscriptionId, subscriptionItemId, newPriceId);
-        res.status(200).json({ message: 'Subscription updated successfully!' });
-    } catch (error) {
-        next(error);
-    }
-};
-
 module.exports = {
     CreateCheckoutSession,
     StripeHooks,
-    CreateBillingPortalSession,
-    UpdateSubscription
 };

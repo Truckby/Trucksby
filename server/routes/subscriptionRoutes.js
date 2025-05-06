@@ -10,12 +10,5 @@ router.get(
     // authMiddleware.verifyRole(['user']),
     controller.GetUserSubscriptionInfo
 );
-router.get(
-    "/get-dashboard-data",
-    authMiddleware.authenticateRequest,
-    authMiddleware.verifyRole(['admin']),
-    validationMiddleware.validateQuery(subscriptionSchemas.dashboardDataSchema),
-    controller.GetDashboardData
-);
 
 module.exports = router;

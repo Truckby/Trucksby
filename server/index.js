@@ -8,7 +8,6 @@ const connectDB = require("./configs/db.config");
 const routes = require('./routes/index');
 const trimMiddleware = require('./middleware/trimMiddleware');
 const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware');
-const handlebarsHelpers = require('./helpers/handlebarsHelpers');
 
 //Express Server Setup
 const app = express();

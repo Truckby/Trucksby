@@ -1,8 +1,7 @@
-const factoryUtils = require('../utils/factoryUtils');
 const commonService = require('./commonService');
 const stripe = require('../configs/stripe.config')
 
-const webHookKwy = process.env.STRIPE_WEBHOOK_KEY
+const webHookKey = process.env.STRIPE_WEBHOOK_KEY
 
 const fetchProductInfo = async (productId) => {
     try {
@@ -113,7 +112,7 @@ const createCheckoutSession = async (priceId, stripeCustomerId, CLIENT_URL) => {
 
 const constructEvent = async (sig, data) => {
     try {
-        const event = stripe.webhooks.constructEvent(data, sig, webHookKwy);
+        const event = stripe.webhooks.constructEvent(data, sig, webHookKey);
         return event;
     } catch (err) {
         const newError = new Error(`Unable to construct event!`);
@@ -179,111 +178,11 @@ const handlePaymentSucceededEvent = async (event) => {
     }
 };
 
-const handleSubscriptionUpdatedEvent = async (connectionId, event) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    try {
-        const subscription = event.data.object;
-        // console.log('Subscription: ', subscription);
-        const customerId = subscription.customer;
-
-        const userId = await commonService.fetchUserId(connectionId, { stripeCustomerId: customerId });
-        const subscriptionId = subscription.id;
-        const price = subscription.items.data[0].price;
-        const productId = price.product;
-        const { name, description } = await stripe.products.retrieve(productId);
-        const planInfo = {
-            productId,
-            name,
-            description,
-            priceId: price.id,
-            amount: price.unit_amount / 100,
-            currency: price.currency,
-        }
-        const data = {
-            user: userId,
-            customerId,
-            subscriptionInfo: {
-                subscriptionId,
-                planInfo,
-            }
-        };
-        return data;
-    } catch (error) {
-        console.error('Event Error:', error);
-        const newError = new Error(`Unable to fetch info from event!`);
-        newError.code = 400;
-        throw newError;
-    }
-};
-
-const createBillingPortalSession = async (customerId, CLIENT_URL) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    if (!customerId) {
-        const newError = new Error(`Customer not found!`);
-        newError.code = 404;
-        throw newError;
-    }
-    try {
-        const session = await stripe.billingPortal.sessions.create({
-            customer: customerId,
-            return_url: `${CLIENT_URL}/billing`,
-        });
-
-        return session.url;
-    } catch (error) {
-        if (err.code && !isNaN(err.code)) {
-            throw error;
-        }
-        else {
-            const newError = new Error(`Unable to create billing portal session!`);
-            newError.code = 400;
-            throw newError;
-        }
-    }
-};
-
-const fetchSubscription = async (subscriptionId) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    try {
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        return subscription;
-    } catch (error) {
-        const newError = new Error(`Unable to fetch subscription!`);
-        newError.code = 404;
-        throw newError;
-    }
-};
-
-const updateSubscription = async (subscriptionId, subscriptionItemId, newPriceId) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    try {
-        const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
-            items: [
-                {
-                    id: subscriptionItemId,
-                    price: newPriceId,
-                },
-            ],
-            proration_behavior: 'create_prorations', // Automatically handle proration
-        });
-
-        return updatedSubscription;
-    } catch (error) {
-        const newError = new Error(`Unable to update subscription!`);
-        newError.code = 400;
-        throw newError;
-    }
-};
-
 module.exports = {
     fetchProductInfo,
     createCustomer,
     updateCustomerEmail,
     constructEvent,
     handlePaymentSucceededEvent,
-    handleSubscriptionUpdatedEvent,
-    createCheckoutSession,
-    createBillingPortalSession,
-    fetchSubscription,
-    updateSubscription
+    createCheckoutSession
 }

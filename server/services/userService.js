@@ -1,8 +1,6 @@
 const User = require('../models/userModel');
 const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
-const stripeService = require('./stripeService');
-const subscriptionService = require('./subscriptionService');
 
 const createUser = async (userData, role) => {
   const { name, email, userName, image, gender, city, country, password, userId } = userData;
@@ -152,63 +150,6 @@ const fetchUser = async (userId) => {
   return user;
 };
 
-const searchUsers = async (pageIndex, limit, searchQuery, role) => {
-  const skip = (pageIndex - 1) * limit;
-  let query = {};
-  if (searchQuery && searchQuery !== '') {
-    query = {
-      $or: [
-        { name: { $regex: searchQuery, $options: 'i' } },
-        { email: { $regex: searchQuery, $options: 'i' } },
-        { phone: { $regex: searchQuery, $options: 'i' } },
-      ]
-    };
-  }
-  if (role) {
-    query = { ...query, role };
-  }
-  const totalCount = await User.countDocuments(query);
-  const totalPages = Math.ceil(totalCount / limit);
-  const userProjection = {
-    name: 1,
-    email: 1,
-    gender: 1,
-    city: 1,
-    country: 1,
-    role: 1,
-    notes: 1,
-    createdAt: 1
-  };
-  const users = await User.find(query, userProjection)
-    .sort({ createdAt: -1 })  // Sort by createdAt descending (-1)
-    .skip(skip)
-    .limit(limit);
-
-  if (!users || users.length <= 0) {
-    const error = new Error('Users not found!');
-    error.code = 404;
-    throw error;
-  }
-
-  let usersWithSubscription = [];
-  if (role === 'user') {
-    // Create an array of promises to fetch subscription info for each user
-    const subscriptionPromises = users.map(async user => {
-      const subscriptionInfo = await subscriptionService.getUserSubscriptionStatus(user._id);
-      return { ...user.toObject(), ...subscriptionInfo };  // Merge user data with subscription info
-    });
-
-    // Await all promises and attach subscription info to users
-    usersWithSubscription = await Promise.all(subscriptionPromises);
-  }
-
-  return {
-    users: role === 'user' ? usersWithSubscription : users,
-    totalPages,
-    totalCount
-  };
-};
-
 const updateUser = async (userId, updateData) => {
   const userToUpdate = await User.findById(userId);
 
@@ -291,38 +232,6 @@ const fetchUserStripeCustomerId = async (userId) => {
   }
 };
 
-// const fetchUserId = async (filter) => {
-//   const user = await User.findOne(filter);
-//   if (!user) {
-//     const error = new Error('User not found!');
-//     error.code = 404;
-//     throw error;
-//   }
-//   return user._id.toString();
-// };
-
-const test = async () => {
-  const user = {
-    name: 'Admin Test',
-    email: 'admin1@gmail.com',
-    number: '+923047845281',
-    gender: '1990-05-16',
-    address: "Johar Town",
-    city: "Lahore",
-    country: "7600",
-    password: '12345678',
-    role: 'admin'
-  };
-  // await createUser(user);
-  // await updateUser('66bfb03e569433a1e72922d3', {});
-  // const res = await fetchUserStripeCustomerId('66bfe860c2020fb2f65bedfa');
-  const res = await fetchUserId({ stripeCustomerId: 'cus_Qi9WPilK2UqRVt' });
-  console.log('ID: ', res);
-}
-
-// test();
-
-
 module.exports = {
   createUser,
   loginUser,
@@ -331,10 +240,8 @@ module.exports = {
   refreshToken,
   logoutUser,
   fetchUser,
-  searchUsers,
   updateUser,
   deleteUser,
   changeUserPassword,
   fetchUserStripeCustomerId,
-  // fetchUserId
 };

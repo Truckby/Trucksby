@@ -1,5 +1,4 @@
 const Product = require('../models/prooductModel');
-const { loadDBModel } = require('../utils/modelUtils');
 
 const fetchAllProducts = async () => {
     const products = await Product.find();
@@ -10,8 +9,6 @@ const fetchAllProducts = async () => {
     }
     return products;
 };
-
-
 
 module.exports = {
     fetchAllProducts,

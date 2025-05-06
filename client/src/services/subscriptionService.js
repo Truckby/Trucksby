@@ -11,14 +11,6 @@ const subscriptionService = {
             throw error;
         }
     },
-    getDashboardData: async (query) => {
-        try {
-            const response = await axiosInstance.get(`${BASE_URL}/get-dashboard-data`, { params: query });
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    },
 };
 
 export default subscriptionService;

@@ -158,7 +158,8 @@ const Listing = () => {
         </div>
       }
 
-      {info.status && info.subscriptionId ? null : <ExpirePlan />}
+     {info.subscriptionId !== '' && !info.status && <ExpirePlan />}
+
 
       <DeleteConfirmationModal
         isOpen={deleteOpen}

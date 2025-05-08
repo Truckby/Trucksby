@@ -57,6 +57,7 @@ const SellerProfile = () => {
 
     // Handle image upload if there's a new image
     if (image) {
+      dispatch(ShowLoading());
       try {
         const imgForm = new FormData();
         imgForm.append("images", image);
@@ -76,10 +77,13 @@ const SellerProfile = () => {
         toast.error("Error uploading image");
         return;
       }
+      dispatch(HideLoading());
     }
 
     try {
       // Using updateUserInfo instead of updateUserProfile
+      dispatch(ShowLoading());
+
       const response = await userService.updateUserInfo(finalFormData);
 
       if (!response) {
@@ -91,6 +95,8 @@ const SellerProfile = () => {
       dispatch(fetchUserInfo());
     } catch (error) {
       toast.error(error?.response?.data?.error || 'Registration failed');
+    } finally {
+      dispatch(HideLoading());
     }
   };
 
@@ -119,7 +125,10 @@ const SellerProfile = () => {
 
         <div className="flex flex-col sm:flex-row items-center mb-6 justify-between">
           <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
-            <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">
+            <div
+              className="w-[108px] h-[108px] rounded-full overflow-hidden border cursor-pointer"
+              onClick={() => document.getElementById('hiddenImageInput').click()}
+            >
               {previewUrl ? (
                 <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
               ) : (
@@ -128,7 +137,13 @@ const SellerProfile = () => {
                 </div>
               )}
             </div>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="mt-4 sm:mt-0" />
+            <input
+              id="hiddenImageInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
           </div>
 
           <div>
@@ -138,9 +153,9 @@ const SellerProfile = () => {
                 <p className="text-base font-bold">{info.planName}</p>
               </div>
             )}
-
           </div>
         </div>
+
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -213,7 +228,7 @@ const SellerProfile = () => {
             </div>
 
             {/* Email */}
-            <div>
+            {/* <div>
               <label className="label">Email</label>
               <input
                 type="email"
@@ -223,7 +238,7 @@ const SellerProfile = () => {
                 onChange={handleChange}
                 value={formData.email}
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Save Button */}

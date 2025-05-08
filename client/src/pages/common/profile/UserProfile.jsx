@@ -5,6 +5,7 @@ import { fetchUserInfo } from "../../../redux/userSlice";
 import userService from "../../../services/userService";
 import { uploadImg } from "../../../services/image";
 import toast from "react-hot-toast";
+import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 
 const UserProfile = () => {
   const user = useSelector((state) => state.user.user);
@@ -45,6 +46,7 @@ const UserProfile = () => {
     };
 
     if (imageFile) {
+      dispatch(ShowLoading());
       try {
         const imgForm = new FormData();
         imgForm.append("images", imageFile);
@@ -60,10 +62,14 @@ const UserProfile = () => {
       } catch (error) {
         toast.error("Error uploading image");
         return;
+      } finally {
+        dispatch(HideLoading());
       }
     }
 
     try {
+      dispatch(ShowLoading());
+
       const response = await userService.updateUserInfo(updatedData);
 
       if (!response) {
@@ -75,6 +81,8 @@ const UserProfile = () => {
       dispatch(fetchUserInfo());
     } catch (error) {
       toast.error(error?.response?.data?.error || "Update failed");
+    } finally {
+      dispatch(HideLoading());
     }
   };
 
@@ -84,16 +92,26 @@ const UserProfile = () => {
         <h2 className="text-2xl sm:text-[32px] font-bold leading-[61px] pb-[45px]">My Profile</h2>
 
         <div className="flex flex-col sm:flex-row items-center space-x-[36px] mb-6">
-          <div className="w-[108px] h-[108px] rounded-full overflow-hidden border">
-            {previewUrl ? (
-              <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
-                No Image
-              </div>
-            )}
-          </div>
-          <input type="file" accept="image/*" onChange={handleImageChange} className="mt-4 sm:mt-0" />
+        <div
+  className="w-[108px] h-[108px] rounded-full overflow-hidden border cursor-pointer"
+  onClick={() => document.getElementById('hiddenImageInput').click()}
+>
+  {previewUrl ? (
+    <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
+      No Image
+    </div>
+  )}
+</div>
+<input
+  id="hiddenImageInput"
+  type="file"
+  accept="image/*"
+  onChange={handleImageChange}
+  className="hidden"
+/>
+
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -112,7 +130,7 @@ const UserProfile = () => {
             </div>
 
             {/* Email */}
-            <div>
+            {/* <div>
               <label className="label">Email</label>
               <input
                 type="email"
@@ -122,7 +140,7 @@ const UserProfile = () => {
                 onChange={handleChange}
                 value={formData.email}
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Save Button */}

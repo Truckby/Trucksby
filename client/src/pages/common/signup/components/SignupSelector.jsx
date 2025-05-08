@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BuyerSignupForm from "./BuyerSignupForm";
 import SellerSignupForm from "./SellerSignupForm";
 import { BsFillPersonFill } from "react-icons/bs";
 import logo from "../../../../assets/images/login_logo.svg"; // update the path as needed
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 export default function SignupSelector() {
   const [activeForm, setActiveForm] = useState("buyer");
+  const [searchParams] = useSearchParams();
 
+  useEffect(() => {
+    const typeParam = searchParams.get("type");
+    if (typeParam === "seller") {
+      setActiveForm("seller");
+    } else {
+      setActiveForm("buyer");
+    }
+  }, [searchParams]);
 
   return (
     <div className="w-full mx-auto my-10 sm:p-6 flex flex-col items-center justify-center">

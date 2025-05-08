@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
+import SellerHeader from "../SellerHeader";
 
 const getUserRole = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -19,7 +20,7 @@ const MainLayout = () => {
                 <Header />
             )}
             {role === "seller" && (
-                <Header />
+                <SellerHeader />
             )}
             {!role && (
                 <Header />

@@ -11,7 +11,7 @@ import { clearUser } from "../redux/userSlice";
 import { setLoggedOut } from "../redux/logoutSlice";
 import Cookies from 'js-cookie';
 
-export default function Header() {
+export default function SellerHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.user.user);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -103,13 +103,6 @@ export default function Header() {
             )}
           </div>
           }
-
-         <Link
-            to="/signup?type=seller"
-            className="px-4 py-2 bg-[#DF0805] text-white font-medium rounded-lg"
-          >
-            Sell Your Truck
-          </Link>
         </div>
 
         {/* Mobile Menu Toggle Button */}
@@ -120,7 +113,6 @@ export default function Header() {
           {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
       </div>
-
 
       {/* Mobile Menu */}
       {isMenuOpen && (
@@ -142,7 +134,6 @@ export default function Header() {
               </NavLink>
             ))}
           </nav>
-
           <div className="mt-4 flex flex-col space-y-2">
             {!user?.email && (
               <Link
@@ -152,12 +143,6 @@ export default function Header() {
                 Sign In
               </Link>
             )}
-            <Link
-              to="/signup?type=seller"
-              className="w-full px-4 py-2 text-center bg-[#DF0805] text-white font-medium rounded-lg"
-            >
-              Sell Your Truck
-            </Link>
           </div>
 
           {user?.email && <div onClick={toggleProfileDropdown} className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center">

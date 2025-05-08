@@ -21,3 +21,4 @@ router.put('/:id', authMiddleware.authenticateRequest, truckController.updateTru
 router.delete('/:id', authMiddleware.authenticateRequest, truckController.deleteTruck);
 
 module.exports = router;
+ 

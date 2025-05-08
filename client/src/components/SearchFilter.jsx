@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CountryDropdown } from 'react-country-region-selector';
 import { FaSearch } from 'react-icons/fa'
 
 const SearchFilter = ({ filters, setFilters }) => {
-
+    const [searchInput, setSearchInput] = useState(filters.searchText || '');
 
     const truckCategory = [
         'Trucks',
@@ -16,6 +16,14 @@ const SearchFilter = ({ filters, setFilters }) => {
         'Industrial Equipment',
         'RVs'
     ];
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            setFilters(prev => ({ ...prev, searchText: searchInput }));
+        }, 500); // 500ms debounce time
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchInput]);
 
     return (
         <div>
@@ -59,10 +67,13 @@ const SearchFilter = ({ filters, setFilters }) => {
 
                 {/* Search Input */}
                 <div className="relative w-full mt-4 lg:mt-0 sm:w-[587px]">
-                    <input
-                        value={filters.searchText}
-                        onChange={(e) => setFilters(prev => ({ ...prev, searchText: e.target.value }))}
-                        type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full lg:w-[587px] shadow rounded-[10px]" />
+                <input
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        type="text"
+                        placeholder="Search for Trucks"
+                        className="p-3 outline-none h-[60px] w-full lg:w-[587px] shadow rounded-[10px]"
+                    />
                     <span className='absolute top-5 right-5'>
                         <FaSearch fontSize={20} color='#8E8E8E' />
                     </span>

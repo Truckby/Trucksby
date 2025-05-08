@@ -9,6 +9,7 @@ import truckService from '../../../services/truckService'
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom';
+import useDebounce from '../../../utils/useDebounce'
 
 
 const FilterPage = () => {
@@ -52,6 +53,8 @@ const FilterPage = () => {
     };
   });
 
+  const debouncedFilters = useDebounce(filters, 500);
+
 
   const fetchTrucks = useCallback(async (pageIndex = 1) => {
     dispatch(ShowLoading());
@@ -89,7 +92,7 @@ const FilterPage = () => {
 
   useEffect(() => {
     fetchTrucks(1);
-  }, [fetchTrucks]);
+  }, [debouncedFilters]); // not filters  
 
 
 

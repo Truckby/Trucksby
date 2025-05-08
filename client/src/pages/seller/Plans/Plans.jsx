@@ -6,6 +6,7 @@ import productService from '../../../services/productService';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import { useDispatch } from 'react-redux';
 import stripeService from '../../../services/stripeService';
+import { fetchUserInfo } from '../../../redux/userSlice';
 
 const plansData = [
     {
@@ -90,6 +91,7 @@ const Plans = () => {
         } catch (error) {
             message.error(error.response.data.error);
         } finally {
+            dispatch(fetchUserInfo());
             dispatch(HideLoading());
         }
     };

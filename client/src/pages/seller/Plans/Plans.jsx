@@ -8,47 +8,14 @@ import { useDispatch } from 'react-redux';
 import stripeService from '../../../services/stripeService';
 import { fetchUserInfo } from '../../../redux/userSlice';
 
-const plansData = [
-    {
-        billing: "/Lifetime",
-        features: [
-            "Advanced Analytics",
-            "Business Branding",
-            "Highlighted Listing Badge",
-            "Chat Support",
-            "Email Support",
-        ],
-        button: "Choose This Plan",
-    },
-    {
-        billing: "/Month",
-        features: [
-            "50 Pages",
-            "Advanced Analytics",
-            "Business Branding",
-            "Highlighted Listing Badge",
-            "Top Search Visibility",
-            "Chat Support",
-            "Email Support",
-            "Financing Options",
-            "Truck Inspection Services",
-            "Warranty & Insurance",
-        ],
-        button: "Choose This Plan",
-    },
-];
 
 const allFeatures = [
-    "Unlimited Listings",
     "Advanced Analytics",
     "Business Branding",
-    "Highlighted Listing Badge",
+    "Highlited Listing Badge",
     "Top Search Visibility",
-    "Chat Support",
     "Email Support",
-    "Financing Options",
-    "Truck Inspection Services",
-    "Warranty & Insurance",
+    "Email Blast",
 ];
 
 const Plans = () => {
@@ -135,10 +102,12 @@ const Plans = () => {
                                     <th key={idx} className="px-4 py-3 border border-[#E6E9F5]">
                                         <div className='flex items-center justify-center'>
                                             <div className="text-[24px] sm:text-[32px] font-bold">${plan.price}</div>
+                                            <span className='text-xl text-gray-500'>{' '} /{plan.duration}month</span>
                                         </div>
                                         <button
+                                        disabled={info.status && plan.productId === info.productId}
                                             onClick={() => handleContinue(plan.priceId)}
-                                            className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${idx === 0 ? 'bg-gray-900' : 'bg-gray-900'}`}
+                                            className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${info.status && plan.productId === info.productId ? 'bg-gray-400' : 'bg-black'} `}
                                         >
                                             {plan.name}
                                         </button>
@@ -149,14 +118,21 @@ const Plans = () => {
                         </thead>
 
                         <tbody>
-
+                            <tr>
+                                <td className="text-left px-4 py-3 border border-[#E6E9F5]">Listings Included</td>
+                                {products.map((plan, i) => (
+                                    <td key={i} className="font-bold border border-[#E6E9F5] text-lg">{plan.listings}</td>
+                                ))}
+                            </tr>
                             {allFeatures.map((feature, idx) => (
                                 <tr key={idx}>
-                                    <td className="text-left px-4 py-3 border border-[#E6E9F5] ">{feature}</td>
-                                    {plansData.map((plan, i) => (
+                                    <td className="text-left px-4 py-3 border border-[#E6E9F5]">{feature}</td>
+                                    {products.map((plan, i) => (
                                         <td key={i} className="px-4 py-3 border border-[#E6E9F5]">
                                             {plan.features.includes(feature) ? (
-                                                <span className="text-lg"><img src={tick} alt="tick" className='w-4 h-auto mx-auto' /></span>
+                                                <span className="text-lg">
+                                                    <img src={tick} alt="tick" className="w-4 h-auto mx-auto" />
+                                                </span>
                                             ) : (
                                                 "-"
                                             )}
@@ -165,6 +141,8 @@ const Plans = () => {
                                 </tr>
                             ))}
                         </tbody>
+
+
                     </table>
                 }
             </div>

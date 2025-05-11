@@ -7,7 +7,17 @@ const productSchema = new mongoose.Schema(
             required: true,
             unique: true,
             trim: true
-        }
+        },
+        listings: {
+            type: Number,
+            trim: true
+        },
+        duration: {
+            type: Number,
+            required: true,
+            trim: true
+        },
+        features: [String],
     },
     {
         timestamps: true,

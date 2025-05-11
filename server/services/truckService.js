@@ -1,3 +1,4 @@
+const Subscription = require("../models/subscriptionModel");
 const Truck = require("../models/truckModel");
 
 const getAllTrucks = async (userId, skip, limit) => {
@@ -78,13 +79,13 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   if (filters.suspension) {
     query.suspension = { $regex: filters.suspension, $options: "i" };
   }
-  
+
 
   // Apply number of rear axles filter
   if (filters.rearAxles) {
     query.rearAxles = { $regex: filters.rearAxles, $options: "i" };
   }
-  
+
 
   // Apply front axle weight range filter
   if (filters.minFrontAxleWeight || filters.maxFrontAxleWeight) {
@@ -109,7 +110,7 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   if (filters.noofSpeeds) {
     query.noofSpeeds = { $regex: filters.noofSpeeds, $options: "i" };
   }
-  
+
 
   // Apply condition filter
   if (filters.condition) {
@@ -121,21 +122,33 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   const pageIndex = filters.pageIndex || 1;
   const limit = filters.limit || 12;
   const skip = (pageIndex - 1) * limit;
+  let trucks = await Truck.find(query).sort({ createdAt: -1 });
 
-  // Get total count for pagination
-  const totalCount = await Truck.countDocuments(query);
+  // Step 2: Filter out trucks with expired or no active subscriptions
+  const currentDate = new Date();
+
+  const filteredTrucks = [];
+
+  for (const truck of trucks) {
+    const subscriptionDoc = await Subscription.findOne({ user: truck.userId });
+
+    // If no subscription found, skip this truck
+    if (!subscriptionDoc || !subscriptionDoc.subscriptions || subscriptionDoc.subscriptions.length === 0) continue;
+
+    const latestSub = subscriptionDoc.subscriptions[subscriptionDoc.subscriptions.length - 1];
+
+    if (latestSub.status === "active" && new Date(latestSub.endDate) > currentDate) {
+      filteredTrucks.push(truck);
+    }
+  }
+
+  const totalCount = filteredTrucks.length;
   const totalPages = Math.ceil(totalCount / limit);
 
-  console.log('Request Params:', query );
-
-  // Fetch trucks based on query
-  const trucks = await Truck.find(query)
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit);
-
+  // Step 3: Apply pagination manually after filtering
+  const paginatedTrucks = filteredTrucks.slice(skip, skip + limit);
   return {
-    trucks,
+    trucks: paginatedTrucks,
     totalPages,
     totalCount,
   };

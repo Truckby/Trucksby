@@ -11,7 +11,7 @@ const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware');
 
 //Express Server Setup
 const app = express();
-const port = process.env.PORT || 5777;
+const port = process.env.PORT || 5778;
 const env = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const origins = allowedOrigins[env];
 const corsOptions = {

@@ -18,6 +18,7 @@ const Home = () => {
   const [listingType, setListingType] = useState('');
   const [truckCategory, settruckCategory] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = new URLSearchParams();
 
   if (searchText) params.append('searchText', searchText);
@@ -28,7 +29,6 @@ const Home = () => {
   const [pagination, setPagination] = useState({ totalPages: 0, totalCount: 0, currentPage: 1 });
 
 
-  const navigate = useNavigate();
 
   const fetchAllTrucks = async (pageIndex = 1) => {
     dispatch(ShowLoading());

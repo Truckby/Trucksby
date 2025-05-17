@@ -94,7 +94,7 @@ const Plans = () => {
                                 <th className="text-left px-4 py-3 sm:px-6 sm:py-4 border border-[#E6E9F5]">
                                     <div className='flex items-center text-sm sm:text-base'>
                                         Compare plans
-                                        <span className='ml-3 py-1.5 px-4 rounded-full border text-xs sm:text-sm'>40% Off</span>
+                                        {/* <span className='ml-3 py-1.5 px-4 rounded-full border text-xs sm:text-sm'>40% Off</span> */}
                                     </div>
                                 </th>
 
@@ -102,10 +102,10 @@ const Plans = () => {
                                     <th key={idx} className="px-4 py-3 border border-[#E6E9F5]">
                                         <div className='flex items-center justify-center'>
                                             <div className="text-[24px] sm:text-[32px] font-bold">${plan.price}</div>
-                                            <span className='text-xl text-gray-500'>{' '} /{plan.duration}month</span>
+                                            <span className='text-xl text-gray-500'>{' '} /{plan.duration > 1 ? plan.duration : ''}month</span>
                                         </div>
                                         <button
-                                        disabled={info.status && plan.productId === info.productId}
+                                            disabled={info.status && plan.productId === info.productId}
                                             onClick={() => handleContinue(plan.priceId)}
                                             className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${info.status && plan.productId === info.productId ? 'bg-gray-400' : 'bg-black'} `}
                                         >

@@ -308,14 +308,14 @@ const AddTruckPage = () => {
   return (
     <div className='py-[65px]'>
       <div className='max-w-[1147px] mx-auto bg-white rounded-[20px] md:px-[79px] md:py-[65px] p-4 shadow'>
-        <h2 className='text-2xl sm:text-[32px] font-bold leading-[61px] pb-[45px]'>List your vehicle</h2>
+        <h2 className='text-2xl sm:text-[32px] font-bold leading-[61px] pb-[45px]'>List Your Equipment</h2>
 
         <form onSubmit={formik.handleSubmit}>
           {/* Vehicle Details */}
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vehicleName">Vehicle Name</label>
+                <label className="label" htmlFor="vehicleName">Vehicle Name *</label>
                 <input
                   type="text"
                   name="vehicleName"
@@ -534,7 +534,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="phone">phone</label>
+              <label className="label" htmlFor="phone">Phone</label>
               <input
                 type="number"
                 name='phone'
@@ -598,11 +598,11 @@ const AddTruckPage = () => {
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="modelYear">Model Year </label>
+                <label className="label" htmlFor="modelYear">Year </label>
                 <input
                   type="number"
                   name='modelYear'
-                  placeholder="Enter Model Year"
+                  placeholder="Enter Year"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.modelYear}
@@ -647,7 +647,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="hours">hours</label>
+                <label className="label" htmlFor="hours">Hours</label>
                 <input
                   type="text"
                   name='hours'
@@ -673,7 +673,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="condition">condition</label>
+                <label className="label" htmlFor="condition">Condition</label>
                 <select
                   name="condition"
                   className="input"
@@ -772,11 +772,11 @@ const AddTruckPage = () => {
 
 
               <div className='mb-9'>
-                <label className="label" htmlFor="hoursPower">Hours Power</label>
+                <label className="label" htmlFor="hoursPower">Horse Power</label>
                 <input
                   type="number"
                   name='hoursPower'
-                  placeholder="Enter your Hours Power"
+                  placeholder="Enter your Horse Power"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.hoursPower}
@@ -838,7 +838,7 @@ const AddTruckPage = () => {
               <input
                 type="text"
                 name='transmissionManufacturer'
-                placeholder="Enter Speed"
+                placeholder="Enter Transmission Manufacturer"
                 className="input"
                 onChange={formik.handleChange}
                 value={formik.values.transmissionManufacturer}
@@ -851,7 +851,7 @@ const AddTruckPage = () => {
           <h3 className="bg-gray-800 text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="typeofRearAxles">Type of Axles</label>
+              <label className="label" htmlFor="typeofRearAxles">Type of Axle</label>
               <select
                 name="typeofRearAxles"
                 className="input"

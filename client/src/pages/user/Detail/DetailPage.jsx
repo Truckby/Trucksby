@@ -120,25 +120,27 @@ const DetailPage = () => {
 
         </div>
 
-        <div className="flex justify-center items-center gap-4 mt-6">
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-          >
-            Previous
-          </button>
-          <span className="font-semibold">
-            Page {page} of {pagination.totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === pagination.totalPages}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-          >
-            Next
-          </button>
-        </div>
+        {listData && listData.length > 0 && pagination.totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 mt-6">
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+            >
+              Previous
+            </button>
+            <span className="font-semibold">
+              Page {page} of {pagination.totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === pagination.totalPages}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
     </div>

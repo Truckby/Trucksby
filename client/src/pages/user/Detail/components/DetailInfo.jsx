@@ -6,7 +6,7 @@ import img from "../../../../assets/images/card.svg";
 // Section Component
 const Section = ({ title, data }) => (
   <div className="mb-4">
-    <div className="bg-gray-800 text-white text-lg sm:text-2xl mt-5 sm:mt-10 h-[40px] sm:h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">
+    <div className="bg-[#DF0805] text-white text-lg sm:text-2xl mt-5 sm:mt-10 h-[40px] sm:h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">
       {title}
     </div>
     <div className="">
@@ -20,8 +20,8 @@ const Section = ({ title, data }) => (
 // Info Row Component
 const InfoRow = ({ label, value }) => (
   <div className="flex justify-between text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
-    <span className="font-medium">{label}</span>
-    <span>{value}</span>
+    <span className="font-medium capitalize">{label}</span>
+    <span>{value === 0 ? '' : value}</span>
   </div>
 );
 
@@ -44,7 +44,7 @@ const DetailInfo = ({ data, images = [] }) => {
       </Carousel>
 
       {/* Thumbnail Images */}
-      <div className="flex flex-wrap gap-3 mt-8">
+      {/* <div className="flex flex-wrap gap-3 mt-8">
         {images.map((img, index) => (
           <div key={index}>
             <img
@@ -54,7 +54,7 @@ const DetailInfo = ({ data, images = [] }) => {
             />
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Vehicle Details Section */}
       <div className="">

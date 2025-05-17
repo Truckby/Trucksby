@@ -57,7 +57,7 @@ const LoginForm = () => {
       onSubmit={handleSubmit}
     >
       {({ isSubmitting }) => (
-        <Form className="space-y-4 w-full lg:px-[15%] mt-5">
+        <Form className="space-y-4 w-full sm:px-[15%] mt-5">
           <div className="relative">
             <div className="relative">
               <IoIosMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />

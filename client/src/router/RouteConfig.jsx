@@ -22,6 +22,7 @@ const routes = [
   //service Provider
   { path: "/seller/listing", element: <Listing />, protected: true, authRedirect: true },
   { path: "/seller/add-truck", element: <AddTruckPage />, protected: true, authRedirect: true },
+  { path: "/seller/edit-truck", element: <AddTruckPage />, protected: true, authRedirect: true },
   { path: "/seller/profile", element: <SellerProfile />, protected: true, authRedirect: true },
   { path: "/success", element: <SuccessPage />, protected: false, authRedirect: false },
 

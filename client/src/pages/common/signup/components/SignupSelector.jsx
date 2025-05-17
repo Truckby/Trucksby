@@ -28,7 +28,7 @@ export default function SignupSelector() {
         className="mb-5"
       />
 
-      <div className="flex flex-wrap justify-center gap-4 mb-6">
+      {/* <div className="flex flex-wrap justify-center gap-4 mb-6">
         <button
           onClick={() => setActiveForm("buyer")}
           className={`w-full sm:w-auto px-4 py-3 sm:p-5 rounded-xl transition-colors flex items-center justify-center gap-3 cursor-pointer text-sm sm:text-base ${activeForm === "buyer"
@@ -49,10 +49,12 @@ export default function SignupSelector() {
           <BsFillPersonFill className="text-lg sm:text-xl" />
           <h2>Signup As Seller</h2>
         </button>
-      </div>
+      </div> */}
 
 
-      {activeForm === "buyer" ? <BuyerSignupForm /> : <SellerSignupForm />}
+      {/* {activeForm === "buyer" ? <BuyerSignupForm /> : <SellerSignupForm />} */}
+
+      <SellerSignupForm />
 
       <div className="mt-4 text-center">
         <p className="text-sm text-gray-600">

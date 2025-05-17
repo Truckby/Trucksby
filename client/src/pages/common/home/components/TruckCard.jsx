@@ -24,9 +24,9 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
             </div>
           ))}
         </Carousel>
-        <button className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
+        {/* <button className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
           <FaRegHeart className="text-gray-600" size={18} />
-        </button>
+        </button> */}
       </div>
 
       {/* Details Section */}

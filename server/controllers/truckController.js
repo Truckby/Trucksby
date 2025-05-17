@@ -118,7 +118,6 @@ const sendMessage = async (req, res) => {
       to: sellerEmail,
       subject: 'New Contact Message from Buyer',
       html: `
-        <p><strong>From:</strong> ${email}</p>
         <p><strong>Message:</strong></p>
         <p>${message}</p>
       `,

@@ -7,6 +7,7 @@ import { HideLoading, ShowLoading } from '../../../../redux/loaderSlice';
 import { useDispatch } from 'react-redux';
 import truckService from '../../../../services/truckService';
 import toast from 'react-hot-toast';
+import { PiAddressBookTabsFill } from "react-icons/pi";
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -47,15 +48,17 @@ const Info = ({ data }) => {
     setMessage('');
   };
 
+  console.log(data, 'data in info')
+
   return (
     <div>
       <div className='lg:pl-20'>
         <div className='flex justify-between'>
           <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'>{data?.vehicleName}</h2>
 
-          <button className="bg-white p-4 rounded-[10px] h-fit w-fit shadow">
+          {/* <button className="bg-white p-4 rounded-[10px] h-fit w-fit shadow">
             <FaRegHeart className="#1E1E1E" size={25} />
-          </button>
+          </button> */}
         </div>
 
         <p className='text-lg'>{data?.description}</p>
@@ -87,22 +90,24 @@ const Info = ({ data }) => {
             <div className="flex items-center gap-2 text-gray-700">
               <FaUser />
               <span>{data?.name}</span>
-            </div>
+            </div> 
 
-            <div className="flex items-center gap-2 text-gray-700 mt-2">
-              <FaPhoneAlt />
-              <span>{data?.phone}</span>
-            </div>
+           { data?.address && <div className="flex items-center gap-2 text-gray-700 mt-2">
+              <PiAddressBookTabsFill   />
+              <span>{data?.address}</span>
+            </div>}
 
             <div className='flex flex-col sm:flex-row justify-between'>
-              <div className="flex items-center gap-2 text-gray-700 mt-2">
+              {/* <div className="flex items-center gap-2 text-gray-700 mt-2">
                 <FaEnvelope />
                 <span>{data?.email}</span>
-              </div>
+              </div> */}
+
+              <div></div>
 
               <button
                 onClick={() => setShowPopup(true)}
-                className="mt-3 gap-2 flex items-center cursor-pointer font-medium w-[141px] h-[36px] justify-center bg-[#69E383] text-white py-2 rounded-[10px] transition"
+                className="mt-3 gap-2 flex items-center cursor-pointer font-medium w-[141px] h-[36px] justify-center bg-[#DF0805]  text-white py-2 rounded-[10px] transition"
               >
                 Contact Us
                 <FaMessage />
@@ -136,13 +141,13 @@ const Info = ({ data }) => {
             <div className="flex justify-end gap-2">
               <button
                 onClick={handleCancel}
-                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSend}
-                className="px-4 py-2 bg-[#69E383] text-white rounded hover:bg-green-600"
+                className="px-4 py-2 bg-[#DF0805] text-white rounded hover:bg-[#BF0605] cursor-pointer"
               >
                 Send
               </button>

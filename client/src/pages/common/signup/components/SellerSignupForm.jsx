@@ -119,7 +119,7 @@ const SellerSignupForm = () => {
         </label>
       </div>
 
-      <form onSubmit={formik.handleSubmit} className="space-y-4 w-full lg:px-[15%] mt-5">
+      <form onSubmit={formik.handleSubmit} className="space-y-4 w-full sm:px-[15%] mt-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <input

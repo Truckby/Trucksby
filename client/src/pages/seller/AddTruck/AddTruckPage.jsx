@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { IoImage } from 'react-icons/io5';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { uploadImg } from '../../../services/image';
 import { FaTimes } from 'react-icons/fa';
 
@@ -15,9 +15,7 @@ const AddTruckPage = () => {
   const location = useLocation();
   const oldTruckData = location.state;
   const [previewImages, setPreviewImages] = useState([]);
-
-  console.log(oldTruckData, 'oldTruckData')
-
+  const navigate = useNavigate();
   // Add this useEffect to handle existing images
   useEffect(() => {
     if (oldTruckData?.images && Array.isArray(oldTruckData.images)) {
@@ -55,7 +53,7 @@ const AddTruckPage = () => {
       transmissionType: oldTruckData?.transmissionType || "",
       noofSpeeds: oldTruckData?.noofSpeeds || "",
       transmissionManufacturer: oldTruckData?.transmissionManufacturer || "",
-      typeofRearAxles: oldTruckData?.typeofRearAxles || null,
+      typeofRearAxles: oldTruckData?.typeofRearAxles || '',
       frontAxleWeight: oldTruckData?.frontAxleWeight || null,
       backAxleWeight: oldTruckData?.backAxleWeight || "",
       country: oldTruckData?.country || "",
@@ -77,6 +75,8 @@ const AddTruckPage = () => {
       modelYear: Yup.string().required("Model year is required"),
       vehiclePrice: Yup.string().required("Vehicle price is required"),
       description: Yup.string().required("Description is required"),
+      images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
+
     }),
     onSubmit: async (values) => {
       const numericFields = [
@@ -115,6 +115,7 @@ const AddTruckPage = () => {
           formik.resetForm();
           setPreviewImages([]);
         }
+        navigate('/seller/listing');
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Listing failed');
         console.error('Listing error:', error);
@@ -330,7 +331,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="vehiclePrice">Vehicle Price</label>
+                <label className="label" htmlFor="vehiclePrice">Vehicle Price *</label>
                 <input
                   type="number"
                   name='vehiclePrice'
@@ -347,7 +348,7 @@ const AddTruckPage = () => {
 
             <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="truckCategory">Truck Category</label>
+                <label className="label" htmlFor="truckCategory">Truck Category *</label>
                 <select
                   name="truckCategory"
                   className="input"
@@ -367,7 +368,7 @@ const AddTruckPage = () => {
               <div>
                 {formik.values.truckCategory ? (
                   <div className="mb-6">
-                    <label htmlFor="truckSubCategory" className="block font-medium mb-2">Subcategory</label>
+                    <label htmlFor="truckSubCategory" className="block font-medium mb-2">Subcategory *</label>
                     <select
                       id="truckSubCategory"
                       name="truckSubCategory"
@@ -387,7 +388,7 @@ const AddTruckPage = () => {
                 ) :
                   (
                     <div className="mb-6 opacity-50">
-                      <label htmlFor="truckSubCategory" className="block font-medium mb-2">Subcategory</label>
+                      <label htmlFor="truckSubCategory" className="block font-medium mb-2">Subcategory *</label>
                       <select
                         disabled
                         id="truckSubCategory"
@@ -411,7 +412,7 @@ const AddTruckPage = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-[31px]'>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="listingType">Listing Type</label>
+                <label className="label" htmlFor="listingType">Listing Type *</label>
                 <select
                   name="listingType"
                   className="input"
@@ -430,7 +431,7 @@ const AddTruckPage = () => {
 
 
               <div className='mb-9'>
-                <label className="label">Country</label>
+                <label className="label">Country *</label>
                 <CountryDropdown
                   value={formik.values.country}
                   onChange={(val) => {
@@ -486,7 +487,7 @@ const AddTruckPage = () => {
                     <p className="text-gray-500 mt-2 font-medium">
                       Drag or Click to upload media
                     </p>
-                    <p className="text-sm text-gray-400">(Upload only 5 images)</p>
+                    <p className="text-sm text-gray-400">(Upload images)</p>
                   </div>
                   {/* Show image previews */}
                   {previewImages.length > 0 && (
@@ -511,15 +512,18 @@ const AddTruckPage = () => {
                   )}
 
                 </label>
+                {formik.errors.images && formik.touched.images && (
+                  <div className="text-red-500 text-sm mt-2">{formik.errors.images}</div>
+                )}
               </div>
             </div>
           </div>
 
           {/* Personal Info */}
-          <h3 className="mt-9 bg-gray-800 text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Personal Info</h3>
+          <h3 className="mt-9 bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Personal Info</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="name">Name</label>
+              <label className="label" htmlFor="name">Name *</label>
               <input
                 type="text"
                 name='name'
@@ -534,7 +538,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="phone">Phone</label>
+              <label className="label" htmlFor="phone">Phone *</label>
               <input
                 type="number"
                 name='phone'
@@ -551,7 +555,7 @@ const AddTruckPage = () => {
 
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="email">Email</label>
+              <label className="label" htmlFor="email">Email *</label>
               <input
                 type="email"
                 name='email'
@@ -566,7 +570,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="companyName">Company Name</label>
+              <label className="label" htmlFor="companyName">Company Name *</label>
               <input
                 type="text"
                 name='companyName'
@@ -594,11 +598,11 @@ const AddTruckPage = () => {
           </div>
 
           {/* General Info */}
-          <h3 className="bg-gray-800 text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">General</h3>
+          <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">General</h3>
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="modelYear">Year </label>
+                <label className="label" htmlFor="modelYear">Year *</label>
                 <input
                   type="number"
                   name='modelYear'
@@ -627,20 +631,15 @@ const AddTruckPage = () => {
 
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vehicleManufacturer">Vehicle Manufacturer</label>
-                <select
-                  name="vehicleManufacturer"
+                <label className="label" htmlFor="vehicleManufacturer">Vehicle Manufacturer *</label>
+                <input
+                  type="text"
+                  name='vehicleManufacturer'
+                  placeholder="Enter Vehicle Manufacturer"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vehicleManufacturer}
-                >
-                  <option value="" disabled>Select Vehicle Manufacturer</option>
-                  <option value="Hyundia">Hyundia</option>
-                  <option value="KIA">KIA</option>
-                  <option value="Isuzu">Isuzu</option>
-                  <option value="Mitsubishi">Mitsubishi</option>
-                  <option value="Hino">Hino</option>
-                </select>
+                />
                 {formik.errors.vehicleManufacturer && formik.touched.vehicleManufacturer && (
                   <div className="text-red-500 text-sm">{formik.errors.vehicleManufacturer}</div>
                 )}
@@ -673,7 +672,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="condition">Condition</label>
+                <label className="label" htmlFor="condition">Condition *</label>
                 <select
                   name="condition"
                   className="input"
@@ -693,7 +692,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Vehicle Info */}
-          <h3 className="bg-gray-800 text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Vehicle Info</h3>
+          <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Vehicle Info</h3>
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
@@ -785,7 +784,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className="mb-9">
-              <label className="label" htmlFor="description">Description</label>
+              <label className="label" htmlFor="description">Description *</label>
               <textarea
                 id="description"
                 name="description"
@@ -804,7 +803,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Powertrain */}
-          <h3 className="bg-gray-800 text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Powertrain</h3>
+          <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Powertrain</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
               <label className="label" htmlFor="transmissionType">Transmission Type</label>
@@ -848,7 +847,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Chassis */}
-          <h3 className="bg-gray-800 text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
+          <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
               <label className="label" htmlFor="typeofRearAxles">Type of Axle</label>
@@ -920,7 +919,7 @@ const AddTruckPage = () => {
             className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? 'Listing...' : 'List Truck'}
+            {formik.isSubmitting ? 'Listing...' : oldTruckData ? 'Update Truck' : 'List Truck'}
           </button>
         </form>
       </div>

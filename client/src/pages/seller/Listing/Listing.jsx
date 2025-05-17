@@ -114,14 +114,14 @@ const Listing = () => {
             onClick={() => {
               if (!isLimitExceeded()) navigate("/seller/add-truck");
             }}
-            className="px-4 py-2 h-fit bg-[#DF0805] text-white font-medium rounded-lg"
+            className="px-4 py-2 h-fit cursor-pointer bg-[#DF0805] text-white font-medium rounded-lg"
           >
             Add Truck
           </button>
         ) : (
           <Link
             to="/seller/plans"
-            className="px-4 py-2 h-fit bg-[#DF0805] text-white font-medium rounded-lg"
+            className="px-4 py-2 h-fit cursor-pointer bg-[#DF0805] text-white font-medium rounded-lg"
           >
             Add Truck
           </Link>

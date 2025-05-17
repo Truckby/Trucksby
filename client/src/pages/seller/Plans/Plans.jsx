@@ -7,6 +7,7 @@ import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import { useDispatch } from 'react-redux';
 import stripeService from '../../../services/stripeService';
 import { fetchUserInfo } from '../../../redux/userSlice';
+import toast from 'react-hot-toast';
 
 
 const allFeatures = [
@@ -105,8 +106,14 @@ const Plans = () => {
                                             <span className='text-xl text-gray-500'>{' '} /{plan.duration > 1 ? plan.duration : ''}month</span>
                                         </div>
                                         <button
-                                            disabled={info.status && plan.productId === info.productId}
-                                            onClick={() => handleContinue(plan.priceId)}
+                                            disabled={info.status}
+                                            onClick={() => {
+                                                if (info.status) {
+                                                    toast.error("You already have a subscription");
+                                                    return;
+                                                }
+                                                handleContinue(plan.priceId);
+                                            }}
                                             className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${info.status && plan.productId === info.productId ? 'bg-gray-400' : 'bg-black'} `}
                                         >
                                             {plan.name}

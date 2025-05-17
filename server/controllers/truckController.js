@@ -52,7 +52,8 @@ const getAllTrucks = async (req, res, next) => {
       transmissionType,
       noofSpeeds,
       condition,
-      vehicleManufacturer
+      vehicleManufacturer,
+      Featured
     } = req.query;
 
     console.log(req.query, 'query')
@@ -86,7 +87,8 @@ const getAllTrucks = async (req, res, next) => {
       transmissionType,
       noofSpeeds,
       condition,
-      vehicleManufacturer
+      vehicleManufacturer,
+      Featured
     });
 
     res.status(200).json(result);

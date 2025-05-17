@@ -33,7 +33,7 @@ const Home = () => {
   const fetchAllTrucks = async (pageIndex = 1) => {
     dispatch(ShowLoading());
     try {
-      const response = await truckService.getAllTrucksWithFilter({ pageIndex, limit: 8 });
+      const response = await truckService.getAllTrucksWithFilter({ pageIndex, limit: 8, Featured: true, searchText, country: searchCountry, listingType, truckCategory });
       setListData(response.trucks);
       setPagination({
         totalPages: response.totalPages || 0,

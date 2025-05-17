@@ -23,6 +23,12 @@ const getUserTrucks = async (userId) => {
 const getAllTrucksWithFilter = async (filters = {}) => {
   let query = {};
 
+  // Step 1: Apply filters to the query
+  // Apply featured filter
+  if (filters.Featured) {
+    query.Featured = filters.Featured;
+  }
+
   // Apply search query (name)
   if (filters.searchText) {
     query.$or = [

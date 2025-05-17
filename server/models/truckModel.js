@@ -62,6 +62,10 @@ const truckSchema = new mongoose.Schema(
         frontAxleWeight: { type: Number, trim: true },
         backAxleWeight: { type: Number, trim: true },
         grossVehicleWeight: { type: Number, trim: true },
+        Featured: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );

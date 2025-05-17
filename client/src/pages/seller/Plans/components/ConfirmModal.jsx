@@ -1,9 +1,17 @@
 import React from "react";
 import "./ConfirmationModal.css"; // You can reuse the same styles
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchUserInfo } from "../../../../redux/userSlice";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, []);
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">

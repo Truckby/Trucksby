@@ -15,6 +15,7 @@ const AddTruckPage = () => {
   const location = useLocation();
   const oldTruckData = location.state;
   const [previewImages, setPreviewImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const navigate = useNavigate();
   // Add this useEffect to handle existing images
   useEffect(() => {
@@ -78,7 +79,8 @@ const AddTruckPage = () => {
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
 
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      setSubmitting(true);
       const numericFields = [
         "vehiclePrice",
         "modelYear",
@@ -91,9 +93,35 @@ const AddTruckPage = () => {
         "phone"
       ];
 
+      let imageUrls = [];
+
+      // Upload new images if any
+      if (selectedFiles.length > 0) {
+        const form = new FormData();
+        selectedFiles.forEach(file => {
+          form.append("images", file);
+        });
+
+        const res = await uploadImg(form);
+        if (res?.success) {
+          if (Array.isArray(res.urls)) {
+            imageUrls = res.urls;
+          } else if (res.urls) {
+            imageUrls = [res.urls];
+          }
+        } else {
+          toast.error("Failed to upload images");
+          setSubmitting(false);
+          return;
+        }
+      } else if (values.images && values.images.length > 0) {
+        // If editing and there are already image URLs
+        imageUrls = values.images.filter(img => typeof img === "string");
+      }
+
       const truckData = {
         ...values,
-        images: Array.isArray(values.images) ? values.images : []
+        images: imageUrls // Only URLs, no File objects!
       };
 
       // Convert numeric fields to numbers if present
@@ -103,8 +131,6 @@ const AddTruckPage = () => {
         }
       });
 
-      console.log("Final truck data with parsed numbers:", truckData);
-
       try {
         if (oldTruckData?._id) {
           await truckService.updateTruck(oldTruckData._id, truckData);
@@ -112,66 +138,30 @@ const AddTruckPage = () => {
         } else {
           await truckService.createTruck(truckData);
           toast.success('Truck listed successfully!');
-          formik.resetForm();
+          resetForm();
           setPreviewImages([]);
+          setSelectedFiles([]);
         }
         navigate('/seller/listing');
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Listing failed');
         console.error('Listing error:', error);
       }
+      setSubmitting(false);
     }
 
 
   });
 
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    setSelectedFiles(files);
     const previews = files.map(file => URL.createObjectURL(file));
-    setPreviewImages(prev => [...prev, ...previews]);
+    setPreviewImages(previews);
 
-    // Keep track of all uploaded URLs in this batch
-    let allUploadedUrls = [];
-
-    // Upload each file individually
-    for (const file of files) {
-      const form = new FormData();
-      form.append("images", file);
-
-      try {
-        const res = await uploadImg(form);
-        if (res?.success) {
-          // Add new URLs to our collection
-          if (Array.isArray(res.urls)) {
-            allUploadedUrls = [...allUploadedUrls, ...res.urls];
-          } else if (res.urls) {
-            // If it's a single URL, add it as is
-            allUploadedUrls.push(res.urls);
-          }
-          toast.success('Image uploaded successfully');
-        } else {
-          toast.error("Failed to upload one or more images");
-        }
-      } catch (error) {
-        console.error("Image upload error:", error);
-        toast.error("Error uploading image");
-      }
-    }
-
-    // Update Formik state once with all new URLs
-    if (allUploadedUrls.length > 0) {
-      formik.setFieldValue('images', [
-        ...(formik.values.images || []),
-        ...allUploadedUrls
-      ]);
-
-      // Log the updated images array to verify
-      console.log("Updated images array:", [
-        ...(formik.values.images || []),
-        ...allUploadedUrls
-      ]);
-    }
+    // Update Formik's images field so validation passes
+    formik.setFieldValue('images', files);
   };
 
 

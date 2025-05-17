@@ -1,6 +1,7 @@
 const truckService = require('../services/truckService');
 const nodemailer = require('nodemailer');
 const subscriptionService = require('../services/subscriptionService');
+const Product = require('../models/prooductModel');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
@@ -154,25 +155,24 @@ const addTruck = async (req, res, next) => {
       return res.status(400).json({ message: 'Subscription information not found' });
     }
 
-    const { planName } = info;
+    const { productId } = info;
+
+    const productData = await Product.findOne({ productId });
 
     // Get current number of trucks for the user
     const userTrucks = await truckService.getUserTrucks(userId);
     const truckCount = userTrucks.length;
 
     // Restrict based on plan
-    if (planName === 'Basic Membership' && truckCount >= 3) {
-      return res.status(403).json({ message: 'Basic Membership allows only up to 3 trucks.' });
-    }
-
-    if (planName === 'Premium Membership' && truckCount >= 5) {
-      return res.status(403).json({ message: 'Premium Membership allows only up to 5 trucks.' });
+    if (truckCount >= productData.listings) {
+      return res.status(403).json({ message: `Basic Membership allows only up to ${productData.listings} trucks.` });
     }
 
     // Proceed to create new truck
     const data = {
       ...req.body,
-      userId
+      userId,
+      ...(productData.features.includes('Featured Listings') && { Featured: true })
     };
 
     const newTruck = await truckService.createTruck(data);

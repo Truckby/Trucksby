@@ -10,6 +10,15 @@ const getAllTrucks = async (userId, skip, limit) => {
   return { trucks, total };
 };
 
+const getUserTrucks = async (userId) => {
+  const [trucks, total] = await Promise.all([
+    Truck.find({ userId }),
+    Truck.countDocuments({ userId }),
+  ]);
+
+  return { trucks, total };
+};
+
 
 const getAllTrucksWithFilter = async (filters = {}) => {
   let query = {};
@@ -178,4 +187,5 @@ module.exports = {
   createTruck,
   updateTruck,
   deleteTruck,
+  getUserTrucks,
 };

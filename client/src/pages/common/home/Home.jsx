@@ -182,10 +182,10 @@ const Home = () => {
 
       </div>
 
-      <div className='pt-[60px] pb-[70px] px-4'>
+      <div className='pt-[60px] pb-[70px] px-4 flex flex-col justify-center'>
         <h3 className=' text-2xl sm:text-[32px] font-bold'>Browse by Type</h3>
 
-        <div className='flex justify-center sm:justify-start items-center flex-wrap'>
+        <div className='flex w-fit justify-center sm:justify-start items-center flex-wrap'>
           {truckCategoryData.map((truck, index) => (
             <div
               onClick={() => {
@@ -198,7 +198,7 @@ const Home = () => {
               }}
 
               key={index}
-              className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
+              className='w-[188px]  m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
               <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
               <span className="text-lg sm:text-xl font-semibold pt-9 text-center">

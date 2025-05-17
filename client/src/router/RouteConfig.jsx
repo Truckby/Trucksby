@@ -26,7 +26,7 @@ const routes = [
   { path: "/seller/profile", element: <SellerProfile />, protected: true, authRedirect: true },
   { path: "/success", element: <SuccessPage />, protected: false, authRedirect: false },
 
-  { path: "/plans", element: <Plans />, protected: false, authRedirect: false },
+  { path: "/seller/plans", element: <Plans />, protected: false, authRedirect: false },
 
   //common
   { path: "/", element: <Redirect />, protected: true, authRedirect: false },

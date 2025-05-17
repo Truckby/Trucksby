@@ -1,9 +1,12 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaYoutube, FaTelegramPlane } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaYoutube, FaTelegramPlane, FaInstagram } from "react-icons/fa";
 import logo from "../assets/images/footer_logo.svg";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function Footer() {
+  const user = useSelector((state) => state.user.user);
+
   return (
     <footer className="bg-[#333333] text-white py-8 flex flex-col items-center justify-center">
       <div className="flex justify-center items-center mb-10 md:mb-0">
@@ -26,17 +29,17 @@ export default function Footer() {
           </div>
 
           <nav className="flex mb-6 lg:mb-0 space-x-10 sm:space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
-            <Link to={'/'} className="hover:text-white">
+            <Link to={'/home'} className="hover:text-white">
               Home
             </Link>
-            <Link to={'/'} className="hover:text-white">
-              Explore
-            </Link>
-            <Link to={'/'} className="hover:text-white">
-              Profile
-            </Link>
-            <Link to={'/'} className="hover:text-white">
-              Help
+            {user?.role === "seller" && <Link to={'/seller/listing'} className="hover:text-white">
+              Listing
+            </Link>}
+            {user?.role === "seller" && <Link to={'/seller/plans'} className="hover:text-white">
+              Plans
+            </Link>}
+            <Link to={'/privacy'} className="hover:text-white">
+              Privacy
             </Link>
           </nav>
 
@@ -45,6 +48,11 @@ export default function Footer() {
               <Link to={'/'} className="hover:text-white">
                 <FaFacebookF size={18} />
               </Link>
+
+              <Link to={'/'} className="hover:text-white">
+                <FaInstagram size={18} />
+              </Link>
+
               <Link to={'/'} className="hover:text-white">
                 <FaTwitter size={18} />
               </Link>
@@ -53,7 +61,7 @@ export default function Footer() {
               </Link>
             </div>
             <div className="text-center text-[#FFFFFF] text-xs mt-6">
-              © Copyright 2024 - Coolpai
+              © Copyright {new Date().getFullYear()} - Trucksby
             </div>
           </div>
         </div>

@@ -120,7 +120,7 @@ const Listing = () => {
           </button>
         ) : (
           <Link
-            to="/plans"
+            to="/seller/plans"
             className="px-4 py-2 h-fit bg-[#DF0805] text-white font-medium rounded-lg"
           >
             Add Truck

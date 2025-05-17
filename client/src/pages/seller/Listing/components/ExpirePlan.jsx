@@ -9,7 +9,7 @@ const ExpirePlan = () => {
             <h3 className='text-[24px] sm:text-[32px] font-bold py-4'>Your plan has expired</h3>
             <p className='text-lg font-medium'>Upgrade your plan now</p>
             <Link
-                to="/plans"
+                to="/seller/plans"
                 className="px-4 py-2 mt-6 bg-[#DF0805] text-white font-medium rounded-lg"
             >
                 Upgrade Now

@@ -12,7 +12,7 @@ import { fetchUserInfo } from '../../../redux/userSlice';
 const allFeatures = [
     "Advanced Analytics",
     "Business Branding",
-    "Highlited Listing Badge",
+    "Featured Listings",
     "Top Search Visibility",
     "Email Support",
     "Email Blast",

@@ -23,8 +23,10 @@ export default function SellerHeader() {
   };
 
   const navLinks = [
+    { name: "Home", to: "/home" },
     { name: "Listing", to: "/seller/listing" },
-    { name: "Plans", to: "/plans" },
+    { name: "Plans", to: "/seller/plans" },
+    { name: "Privacy", to: "/privacy" },
     // { name: "Contact", to: "/contact" },
   ];
 

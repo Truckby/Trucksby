@@ -6,9 +6,9 @@ const Redirect = () => {
     console.log('User: ', user);
 
     if (user.role === 'seller') {
-        return <Navigate to="/seller/listing" />;
+        return <Navigate to="/home" />;
     } else if (user.role === 'user') {
-        return <Navigate to="/user/filter" />;
+        return <Navigate to="/home" />;
     }
 };
 

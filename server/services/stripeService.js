@@ -98,7 +98,7 @@ const createCheckoutSession = async (priceId, stripeCustomerId, CLIENT_URL) => {
                     },
                 ],
                 success_url: `${CLIENT_URL}/success`,
-                cancel_url: `${CLIENT_URL}/plans`,
+                cancel_url: `${CLIENT_URL}/seller/plans`,
                 customer: stripeCustomerId,
             }
         );

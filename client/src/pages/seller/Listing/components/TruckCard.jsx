@@ -33,17 +33,23 @@ export default function TruckCard({ data, handleDeleteClick }) {
         <p className="text-[#DF0805] text-lg font-semibold mt-4">{data?.vehiclePrice} $</p>
 
         <div className="flex items-center  text-sm mt-4">
-          <FaMapMarkerAlt className="mr-1" />
+          {data?.country && <FaMapMarkerAlt className="mr-1" />}
           {data?.country && <span>{data?.country}</span>}
-          <span className="ml-[30px] mr-1"><IoSpeedometer /> </span>
-          {data?.mileage && <span>{data?.mileage} Miles</span>}
+          {data?.mileage && (
+            <>
+              <span className="ml-[30px] mr-1">
+                <IoSpeedometer />{" "}
+              </span>
+              <span>{data?.mileage} Miles</span>
+            </>
+          )}
         </div>
 
 
         <div className="flex mt-4">
           <button
             onClick={() => navigate('/seller/edit-truck', { state: data })}
-            className="bg-black text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3 hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
+            className="bg-[#DF0805] text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3 hover:bg-[#BF0602] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
             aria-label="Edit truck details"
           >
             Edit

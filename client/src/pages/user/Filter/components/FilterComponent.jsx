@@ -5,7 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { CountryDropdown } from "react-country-region-selector";
 import { useSearchParams } from 'react-router-dom';
 
-const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
+const   FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [openSections, setOpenSections] = useState({
@@ -298,24 +298,12 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
         </FilterSection>
 
         {/* Transmission */}
-        <FilterSection title="transmissionType" isOpen={openSections.transmissionType} toggle={() => toggleSection("transmissionType")}>
-          <div>
-            <Checkbox
-              label="Automatic"
-              checked={filters.transmission === "Automatic"}
-              onChange={() => handleCheckboxChange("transmissionType", "Automatic")}
-            />
-            <Checkbox
-              label="Manual"
-              checked={filters.transmissionType === "Manual"}
-              onChange={() => handleCheckboxChange("transmissionType", "Manual")}
-            />
-            <Checkbox
-              label="Semi Auto"
-              checked={filters.transmissionType === "Semi Auto"}
-              onChange={() => handleCheckboxChange("transmissionType", "Semi Auto")}
-            />
-          </div>
+        <FilterSection title="Transmission Type" isOpen={openSections.transmissionType} toggle={() => toggleSection("transmissionType")}>
+         <SelectBox
+            options={["Automatic", "Manual", "Semi Auto"]}
+            value={filters.transmissionType}
+            onChange={(value) => handleCheckboxChange("transmissionType", value)}
+          />
         </FilterSection>
 
         <FilterSection title="Number of Speeds" isOpen={openSections.noofSpeeds} toggle={() => toggleSection("noofSpeeds")}>

@@ -53,9 +53,9 @@ const getAllTrucksWithFilter = async (filters = {}) => {
   }
 
   // Apply manufacturer filter
-  if (filters.vehicleManufacturer) {
-    query.vehicleManufacturer = filters.vehicleManufacturer;
-  }
+if (filters.vehicleManufacturer) {
+  query.vehicleManufacturer = { $regex: filters.vehicleManufacturer, $options: "i" };
+}
 
   // Apply year range filter
   if (filters.minYear || filters.maxYear) {

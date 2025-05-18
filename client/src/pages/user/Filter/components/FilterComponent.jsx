@@ -5,7 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { CountryDropdown } from "react-country-region-selector";
 import { useSearchParams } from 'react-router-dom';
 
-const   FilterComponent = ({ onFilterChange, filters, setFilters }) => {
+const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [openSections, setOpenSections] = useState({
@@ -214,10 +214,10 @@ const   FilterComponent = ({ onFilterChange, filters, setFilters }) => {
 
         {/* Manufacturer */}
         <FilterSection title="Vehicle Manufacturer" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
-          <SelectBox
-            options={["Hyundai", "KIA", "Isuzu", 'Mitsubishi', 'Hino']}
+          <SearchInput
+            placeholder="Search Vehicle Manufacturer"
             value={filters.vehicleManufacturer}
-            onChange={(value) => handleCheckboxChange("vehicleManufacturer", value)}
+            onChange={(value) => handleTextInputChange("vehicleManufacturer", value)}
           />
         </FilterSection>
 
@@ -299,7 +299,7 @@ const   FilterComponent = ({ onFilterChange, filters, setFilters }) => {
 
         {/* Transmission */}
         <FilterSection title="Transmission Type" isOpen={openSections.transmissionType} toggle={() => toggleSection("transmissionType")}>
-         <SelectBox
+          <SelectBox
             options={["Automatic", "Manual", "Semi Auto"]}
             value={filters.transmissionType}
             onChange={(value) => handleCheckboxChange("transmissionType", value)}

@@ -20,6 +20,7 @@ const Listing = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 5;
+  const [productData, setProductData] = useState(null);
   const [info, setInfo] = useState({
     status: false,
     planName: '',
@@ -77,6 +78,7 @@ const Listing = () => {
         const response = await subscriptionService.getUserSubscriptionInfo();
         if (response.info) {
           setInfo(response.info);
+          setProductData(response.productData);
         }
 
 
@@ -91,14 +93,11 @@ const Listing = () => {
   }, []);
 
   const isLimitExceeded = () => {
-    if (info.planName === 'Basic Membership' && listData.length >= 3) {
-      toast.error("You can only add up to 3 trucks on Basic Membership");
+    if (listData.length >= productData?.listings) {
+      toast.error(`You can only add up to ${productData?.listings} trucks on Basic Membership`);
       return true;
     }
-    if (info.planName === 'Premium Membership' && listData.length >= 5) {
-      toast.error("You can only add up to 5 trucks on Premium Membership");
-      return true;
-    }
+
     return false;
   };
 
@@ -158,7 +157,7 @@ const Listing = () => {
         </div>
       }
 
-     {info.subscriptionId !== '' && !info.status && <ExpirePlan />}
+      {info.subscriptionId !== '' && !info.status && <ExpirePlan />}
 
 
       <DeleteConfirmationModal

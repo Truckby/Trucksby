@@ -69,6 +69,8 @@ const getUserSubscriptionStatus = async (userId) => {
         status = ['Lost'];
     }
 
+    console.log(paymentStatus,'paymentStatus');
+
     return {
         status: status,
         paymentStatus: paymentStatus

@@ -30,23 +30,29 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const groupedRanges = new Set();
 
   const displayedFilters = Object.entries(filters)
-    .filter(([_, value]) => value !== '' && value !== undefined)
-    .map(([key, value]) => {
+    .filter(([_, value]) =>
+      value !== '' &&
+      value !== undefined &&
+      !(Array.isArray(value) && value.length === 0)
+    )
+    .flatMap(([key, value]) => {
+      if (Array.isArray(value)) {
+        // Show each selected value as a separate filter
+        return value.map(val => `${key}: ${val}`);
+      }
       if (key.startsWith("min") || key.startsWith("max")) {
         const base = key.replace(/^min|^max/, "");
-        if (groupedRanges.has(base)) return null; // skip duplicate
+        if (groupedRanges.has(base)) return [];
         groupedRanges.add(base);
 
         const min = filters[`min${base}`];
         const max = filters[`max${base}`];
-        if (min || max) return `${base}: ${min || 'Any'}-${max || 'Any'}`;
-        return null;
+        if (min || max) return [`${base}: ${min || 'Any'}-${max || 'Any'}`];
+        return [];
       }
-
-      return `${key}: ${value}`;
+      return [`${key}: ${value}`];
     })
     .filter(Boolean);
-
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -83,29 +89,39 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     updateFilterAndParams({ [category]: value || '' });
   };
 
-  const removeFilter = (filterLabel) => {
-    const [rawKey] = filterLabel.split(':').map(str => str.trim());
-    const baseKey = rawKey.replace(/\s+/g, '');
-    const minKey = `min${baseKey}`;
-    const maxKey = `max${baseKey}`;
+const removeFilter = (filterLabel) => {
+  const [rawKey, rawValue] = filterLabel.split(':').map(str => str.trim());
+  const baseKey = rawKey.replace(/\s+/g, '');
+  const minKey = `min${baseKey}`;
+  const maxKey = `max${baseKey}`;
 
-    const updatedFilters = { ...filters };
-    const updatedParams = new URLSearchParams(searchParams.toString());
+  const updatedFilters = { ...filters };
+  const updatedParams = new URLSearchParams(searchParams.toString());
 
-    if (minKey in filters || maxKey in filters) {
-      delete updatedFilters[minKey];
-      delete updatedFilters[maxKey];
-      updatedParams.delete(minKey);
-      updatedParams.delete(maxKey);
+  if (minKey in filters || maxKey in filters) {
+    delete updatedFilters[minKey];
+    delete updatedFilters[maxKey];
+    updatedParams.delete(minKey);
+    updatedParams.delete(maxKey);
+  } else if (Array.isArray(filters[rawKey]) || Array.isArray(filters[baseKey])) {
+    // Remove only the selected value from the array
+    const key = filters[rawKey] ? rawKey : baseKey;
+    const newArr = (filters[key] || []).filter(val => val !== rawValue);
+    updatedFilters[key] = newArr;
+    if (newArr.length === 0) {
+      updatedParams.delete(key);
     } else {
-      const formattedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1).replace(/\s+/g, '');
-      delete updatedFilters[formattedKey];
-      updatedParams.delete(formattedKey);
+      updatedParams.set(key, newArr.join(','));
     }
+  } else {
+    const formattedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1).replace(/\s+/g, '');
+    delete updatedFilters[formattedKey];
+    updatedParams.delete(formattedKey);
+  }
 
-    setFilters(updatedFilters);
-    setSearchParams(updatedParams, { replace: true });
-  };
+  setFilters(updatedFilters);
+  setSearchParams(updatedParams, { replace: true });
+};
 
   const clearAllFilters = () => {
     const cleared = {
@@ -185,24 +201,24 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
         {/* Listing Type */}
         <FilterSection title="Listing Type" isOpen={openSections.listingType} toggle={() => toggleSection("listingType")}>
           <div>
-            <Checkbox
-              label="For Sale"
-              checked={filters.listingType === "For Sale"}
-              onChange={() => handleCheckboxChange("listingType", "For Sale")}
-            />
-            <Checkbox
-              label="For Lease"
-              checked={filters.listingType === "For Lease"}
-              onChange={() => handleCheckboxChange("listingType", "For Lease")}
-            />
-            <Checkbox
-              label="For Auction"
-              checked={filters.listingType === "For Auction"}
-              onChange={() => handleCheckboxChange("listingType", "For Auction")}
-            />
+            {["For Sale", "For Lease", "For Auction"].map(type => (
+              <Checkbox
+                key={type}
+                label={type}
+                checked={Array.isArray(filters.listingType) && filters.listingType.includes(type)}
+                onChange={() => {
+                  let newTypes = Array.isArray(filters.listingType) ? [...filters.listingType] : [];
+                  if (newTypes.includes(type)) {
+                    newTypes = newTypes.filter(t => t !== type);
+                  } else {
+                    newTypes.push(type);
+                  }
+                  handleCheckboxChange("listingType", newTypes);
+                }}
+              />
+            ))}
           </div>
         </FilterSection>
-
         {/* Category */}
         <FilterSection title="Category" isOpen={openSections.category} toggle={() => toggleSection("category")}>
           <SelectBox
@@ -316,21 +332,22 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
 
         <FilterSection title="Condition" isOpen={openSections.condition} toggle={() => toggleSection("condition")}>
           <div>
-            <Checkbox
-              label="New"
-              checked={filters.condition === "New"}
-              onChange={() => handleCheckboxChange("condition", "New")}
-            />
-            <Checkbox
-              label="Used"
-              checked={filters.condition === "Used"}
-              onChange={() => handleCheckboxChange("condition", "Used")}
-            />
-            <Checkbox
-              label="Salvaged"
-              checked={filters.condition === "Salvaged"}
-              onChange={() => handleCheckboxChange("condition", "Salvaged")}
-            />
+            {["New", "Used", "Salvaged"].map(cond => (
+              <Checkbox
+                key={cond}
+                label={cond}
+                checked={Array.isArray(filters.condition) && filters.condition.includes(cond)}
+                onChange={() => {
+                  let newConditions = Array.isArray(filters.condition) ? [...filters.condition] : [];
+                  if (newConditions.includes(cond)) {
+                    newConditions = newConditions.filter(c => c !== cond);
+                  } else {
+                    newConditions.push(cond);
+                  }
+                  handleCheckboxChange("condition", newConditions);
+                }}
+              />
+            ))}
           </div>
         </FilterSection>
 

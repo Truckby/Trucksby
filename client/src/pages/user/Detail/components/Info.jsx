@@ -20,13 +20,13 @@ const Info = ({ data }) => {
       toast.error("Both Email and Message are required!");
       return;
     }
-  
+
     const payload = {
       email: email,
       message: message,
       sellerEmail: data?.email
     };
-  
+
     dispatch(ShowLoading());
     try {
       const response = await truckService.sendMessage(payload);
@@ -41,7 +41,7 @@ const Info = ({ data }) => {
     }
     setShowPopup(false);
   };
-  
+
   const handleCancel = () => {
     setShowPopup(false);
     setEmail('');
@@ -67,10 +67,13 @@ const Info = ({ data }) => {
           {/* Price Section */}
           <div className="mb-3 flex justify-between">
             <p className="text-lg font-medium">Price</p>
-
-            {data?.mileage && <p className="flex items-center gap-2 text-sm">
-              <span><IoIosSpeedometer /></span> {data?.mileage} Miles
-            </p>}
+            {data.mileage ?
+              <p className="flex items-center gap-2 text-sm">
+                <span><IoIosSpeedometer /></span> {data?.mileage} Miles
+              </p>
+              :
+              ''
+            }
           </div>
 
           {/* Mileage & Location */}
@@ -90,10 +93,10 @@ const Info = ({ data }) => {
             <div className="flex items-center gap-2 text-gray-700">
               <FaUser />
               <span>{data?.name}</span>
-            </div> 
+            </div>
 
-           { data?.address && <div className="flex items-center gap-2 text-gray-700 mt-2">
-              <PiAddressBookTabsFill   />
+            {data?.address && <div className="flex items-center gap-2 text-gray-700 mt-2">
+              <PiAddressBookTabsFill />
               <span>{data?.address}</span>
             </div>}
 

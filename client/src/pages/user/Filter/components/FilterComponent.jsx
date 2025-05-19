@@ -386,7 +386,7 @@ const SelectBox = ({ options, value, onChange }) => (
 const FilterSection = ({ title, isOpen, toggle, children }) => {
   return (
     <div className="pb-6">
-      <button className="w-full flex justify-between items-center font-semibold" onClick={toggle}>
+      <button className="w-full flex justify-between items-center font-semibold cursor-pointer" onClick={toggle}>
         {title}
         <span>{isOpen ? <FaChevronUp /> : <FaAngleDown />}</span>
       </button>

@@ -56,7 +56,7 @@ const DetailPage = () => {
       "Front Axle Weight": data?.frontAxleWeight,
       "Back Axle Weight": data?.backAxleWeight,
       'Gross Vehicle Weight': data?.grossVehicleWeight,
-      'Type of Rear Axles': data?.typeofRearAxles,
+      'Type of Axle': data?.typeofRearAxles,
 
     },
   };

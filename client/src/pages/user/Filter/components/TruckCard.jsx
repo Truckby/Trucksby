@@ -24,9 +24,9 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
             </div>
           ))}
         </Carousel>
-        <button className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
+        {/* <button className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
           <FaRegHeart className="text-gray-600" size={18} />
-        </button>
+        </button> */}
       </div>
 
       {/* Details Section */}
@@ -35,7 +35,7 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
         <p className="text-[#DF0805] mt-[6px]">{price} $</p>
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">
           <p className="flex items-center"><FaLocationDot className="mr-1" />{location}</p>
-          <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{miles} Miles</p>
+        {miles > 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{miles} Miles</p>}
         </div>
       </div>
     </div>

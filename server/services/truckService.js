@@ -52,10 +52,14 @@ const getAllTrucksWithFilter = async (filters = {}) => {
     query.truckCategory = filters.truckCategory;
   }
 
+  if (filters.typeofRearAxles) {
+    query.typeofRearAxles = filters.typeofRearAxles;
+  }
+
   // Apply manufacturer filter
-if (filters.vehicleManufacturer) {
-  query.vehicleManufacturer = { $regex: filters.vehicleManufacturer, $options: "i" };
-}
+  if (filters.vehicleManufacturer) {
+    query.vehicleManufacturer = { $regex: filters.vehicleManufacturer, $options: "i" };
+  }
 
   // Apply year range filter
   if (filters.minYear || filters.maxYear) {

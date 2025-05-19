@@ -24,7 +24,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     transmissionType: false,
     noofSpeeds: false,
     condition: false,
-    Country: false
+    typeofRearAxles: false
   });
 
   const groupedRanges = new Set();
@@ -89,39 +89,39 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     updateFilterAndParams({ [category]: value || '' });
   };
 
-const removeFilter = (filterLabel) => {
-  const [rawKey, rawValue] = filterLabel.split(':').map(str => str.trim());
-  const baseKey = rawKey.replace(/\s+/g, '');
-  const minKey = `min${baseKey}`;
-  const maxKey = `max${baseKey}`;
+  const removeFilter = (filterLabel) => {
+    const [rawKey, rawValue] = filterLabel.split(':').map(str => str.trim());
+    const baseKey = rawKey.replace(/\s+/g, '');
+    const minKey = `min${baseKey}`;
+    const maxKey = `max${baseKey}`;
 
-  const updatedFilters = { ...filters };
-  const updatedParams = new URLSearchParams(searchParams.toString());
+    const updatedFilters = { ...filters };
+    const updatedParams = new URLSearchParams(searchParams.toString());
 
-  if (minKey in filters || maxKey in filters) {
-    delete updatedFilters[minKey];
-    delete updatedFilters[maxKey];
-    updatedParams.delete(minKey);
-    updatedParams.delete(maxKey);
-  } else if (Array.isArray(filters[rawKey]) || Array.isArray(filters[baseKey])) {
-    // Remove only the selected value from the array
-    const key = filters[rawKey] ? rawKey : baseKey;
-    const newArr = (filters[key] || []).filter(val => val !== rawValue);
-    updatedFilters[key] = newArr;
-    if (newArr.length === 0) {
-      updatedParams.delete(key);
+    if (minKey in filters || maxKey in filters) {
+      delete updatedFilters[minKey];
+      delete updatedFilters[maxKey];
+      updatedParams.delete(minKey);
+      updatedParams.delete(maxKey);
+    } else if (Array.isArray(filters[rawKey]) || Array.isArray(filters[baseKey])) {
+      // Remove only the selected value from the array
+      const key = filters[rawKey] ? rawKey : baseKey;
+      const newArr = (filters[key] || []).filter(val => val !== rawValue);
+      updatedFilters[key] = newArr;
+      if (newArr.length === 0) {
+        updatedParams.delete(key);
+      } else {
+        updatedParams.set(key, newArr.join(','));
+      }
     } else {
-      updatedParams.set(key, newArr.join(','));
+      const formattedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1).replace(/\s+/g, '');
+      delete updatedFilters[formattedKey];
+      updatedParams.delete(formattedKey);
     }
-  } else {
-    const formattedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1).replace(/\s+/g, '');
-    delete updatedFilters[formattedKey];
-    updatedParams.delete(formattedKey);
-  }
 
-  setFilters(updatedFilters);
-  setSearchParams(updatedParams, { replace: true });
-};
+    setFilters(updatedFilters);
+    setSearchParams(updatedParams, { replace: true });
+  };
 
   const clearAllFilters = () => {
     const cleared = {
@@ -146,7 +146,8 @@ const removeFilter = (filterLabel) => {
       transmissionType: '',
       noofSpeeds: '',
       condition: '',
-      country: ''
+      country: '',
+      typeofRearAxles: '',
     };
     setFilters(cleared);
     setSearchParams(new URLSearchParams(), { replace: true });
@@ -289,11 +290,11 @@ const removeFilter = (filterLabel) => {
           />
         </FilterSection>
 
-        <FilterSection title="Number of Rear Axles" isOpen={openSections.axel} toggle={() => toggleSection("axel")}>
-          <SearchInput
-            placeholder="Rear Axles"
-            value={filters.rearAxles}
-            onChange={(value) => handleCheckboxChange("rearAxles", value)}
+        <FilterSection title="Type of Axle" isOpen={openSections.typeofRearAxles} toggle={() => toggleSection("typeofRearAxles")}>
+          <SelectBox
+            options={["Single Axle", "Regular Tandem", "Tri Axle", 'Quad Axle', 'Other']}
+            value={filters.typeofRearAxles}
+            onChange={(value) => handleCheckboxChange("typeofRearAxles", value)}
           />
         </FilterSection>
 

@@ -50,6 +50,7 @@ const FilterPage = () => {
       noofSpeeds: params.noofSpeeds || '',
       condition: params.condition || '',
       vehicleManufacturer: params.vehicleManufacturer || '',
+      typeofRearAxles: params.typeofRearAxles || '',
     };
   });
 

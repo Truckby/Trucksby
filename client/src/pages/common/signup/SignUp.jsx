@@ -1,8 +1,6 @@
 import React from "react";
 import SignupSelector from "./components/SignupSelector";
 import bgImage from '../../../assets/images/truck_image.png'
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
 
 export default function SignUp() {
   return (

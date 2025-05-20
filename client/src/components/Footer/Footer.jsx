@@ -1,6 +1,6 @@
 import React from "react";
 import { FaFacebookF, FaTwitter, FaYoutube, FaTelegramPlane, FaInstagram } from "react-icons/fa";
-import logo from "../assets/images/footer_logo.svg";
+import logo from "../../assets/images/footer_logo.svg";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 

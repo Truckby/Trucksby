@@ -105,7 +105,7 @@ const Home = () => {
                 if (searchCountry) newParams.set('country', searchCountry);
                 if (listingType) newParams.set('listingType', listingType);
                 if (truckCategory) newParams.set('truckCategory', truckCategory);
-                navigate(`/user/filter?${newParams.toString()}`);
+                navigate(`/filter?${newParams.toString()}`);
               }}
               className='absolute top-1.5 right-5 cursor-pointer p-3'
             >
@@ -155,7 +155,7 @@ const Home = () => {
                 if (searchCountry) newParams.set('country', searchCountry);
                 if (listingType) newParams.set('listingType', listingType);
                 if (truckCategory) newParams.set('truckCategory', truckCategory);
-                navigate(`/user/filter?${newParams.toString()}`);
+                navigate(`/filter?${newParams.toString()}`);
               }}
             >
               <FaSearch fontSize={20} />
@@ -194,7 +194,7 @@ const Home = () => {
                 if (searchCountry) newParams.set('country', searchCountry);
                 if (listingType) newParams.set('listingType', listingType);
                 newParams.set('truckCategory', truck); // `truck` here is valid from map()
-                navigate(`/user/filter?${newParams.toString()}`);
+                navigate(`/filter?${newParams.toString()}`);
               }}
 
               key={index}

@@ -4,7 +4,8 @@ import userService from '../services/userService';
 
 const initialState = {
     user: null,
-    userError: null
+    userError: null,
+    loading: false
 };
 
 // Define an async thunk for fetching user info
@@ -33,6 +34,10 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchUserInfo.pending, (state) => {
+                state.loading = true;
+                state.userError = null;
+            })
             .addCase(fetchUserInfo.fulfilled, (state, action) => {
                 state.user = action.payload;
                 state.userError = null;

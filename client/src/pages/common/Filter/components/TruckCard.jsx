@@ -15,7 +15,7 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
       <div className="relative">
         <Carousel showThumbs={false} infiniteLoop autoPlay>
           {images.map((img, index) => (
-            <div key={index} onClick={() =>  navigate("/user/detail", { state: data })} >
+            <div key={index} onClick={() => navigate("/detail", { state: data })} >
               <img
                 src={img}
                 alt={`${title} - ${index + 1}`}
@@ -30,12 +30,12 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
       </div>
 
       {/* Details Section */}
-      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/user/detail", { state: data })} >
+      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })} >
         <h3 className="text-base font-medium">{title}</h3>
         <p className="text-[#DF0805] mt-[6px]">{price} $</p>
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">
           <p className="flex items-center"><FaLocationDot className="mr-1" />{location}</p>
-        {miles > 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{miles} Miles</p>}
+          {miles > 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{miles} Miles</p>}
         </div>
       </div>
     </div>

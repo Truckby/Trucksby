@@ -19,158 +19,121 @@ const getUserTrucks = async (userId) => {
   return { trucks, total };
 };
 
+function buildMatchQuery(f) {
+  const q = {};
 
-const getAllTrucksWithFilter = async (filters = {}) => {
-  let query = {};
-
-  // Step 1: Apply filters to the query
-  // Apply featured filter
-  if (filters.Featured) {
-    query.Featured = filters.Featured;
-  }
-
-  // Apply search query (name)
-  if (filters.searchText) {
-    query.$or = [
-      { vehicleName: { $regex: filters.searchText, $options: "i" } },
-      { name: { $regex: filters.searchText, $options: "i" } }
-    ];
-  }
-
-  // Apply country filter
-  if (filters.country) {
-    query.country = { $regex: filters.country, $options: "i" };
-  }
-
-  // Apply listing type filter
-  if (filters.listingType) {
-    query.listingType = filters.listingType;
-  }
-
-  // Apply truck category filter
-  if (filters.truckCategory) {
-    query.truckCategory = filters.truckCategory;
-  }
-
-  if (filters.typeofRearAxles) {
-    query.typeofRearAxles = filters.typeofRearAxles;
-  }
-
-  // Apply manufacturer filter
-  if (filters.vehicleManufacturer) {
-    query.vehicleManufacturer = { $regex: filters.vehicleManufacturer, $options: "i" };
-  }
-
-  // Apply year range filter
-  if (filters.minYear || filters.maxYear) {
-    query.modelYear = {};
-    if (filters.minYear) query.modelYear.$gte = parseInt(filters.minYear);
-    if (filters.maxYear) query.modelYear.$lte = parseInt(filters.maxYear);
-  }
-
-  // Apply mileage range filter
-  if (filters.minMileage || filters.maxMileage) {
-    query.mileage = {};
-    if (filters.minMileage) query.mileage.$gte = parseInt(filters.minMileage);
-    if (filters.maxMileage) query.mileage.$lte = parseInt(filters.maxMileage);
-  }
-
-  // Apply engine manufacturer filter
-  if (filters.engineManufacturer) {
-    query.engineManufacturer = { $regex: filters.engineManufacturer, $options: "i" };
-  }
-
-  // Apply horsepower range filter
-  if (filters.minHorsepower || filters.maxHorsepower) {
-    query.hoursPower = {};
-    if (filters.minHorsepower) query.hoursPower.$gte = parseInt(filters.minHorsepower);
-    if (filters.maxHorsepower) query.hoursPower.$lte = parseInt(filters.maxHorsepower);
-  }
-
-  // Apply wheelbase range filter
-  if (filters.minWheelbase || filters.maxWheelbase) {
-    query.wheelbase = {};
-    if (filters.minWheelbase) query.wheelbase.$gte = parseInt(filters.minWheelbase);
-    if (filters.maxWheelbase) query.wheelbase.$lte = parseInt(filters.maxWheelbase);
-  }
-
-  // Apply suspension filter
-  if (filters.suspension) {
-    query.suspension = { $regex: filters.suspension, $options: "i" };
-  }
-
-
-  // Apply number of rear axles filter
-  if (filters.rearAxles) {
-    query.rearAxles = { $regex: filters.rearAxles, $options: "i" };
-  }
-
-
-  // Apply front axle weight range filter
-  if (filters.minFrontAxleWeight || filters.maxFrontAxleWeight) {
-    query.frontAxleWeight = {};
-    if (filters.minFrontAxleWeight) query.frontAxleWeight.$gte = parseInt(filters.minFrontAxleWeight);
-    if (filters.maxFrontAxleWeight) query.frontAxleWeight.$lte = parseInt(filters.maxFrontAxleWeight);
-  }
-
-  // Apply back axle weight range filter
-  if (filters.minBackAxleWeight || filters.maxBackAxleWeight) {
-    query.backAxleWeight = {};
-    if (filters.minBackAxleWeight) query.backAxleWeight.$gte = parseInt(filters.minBackAxleWeight);
-    if (filters.maxBackAxleWeight) query.backAxleWeight.$lte = parseInt(filters.maxBackAxleWeight);
-  }
-
-  // Apply transmission filter
-  if (filters.transmissionType) {
-    query.transmissionType = filters.transmissionType;
-  }
-
-  // Apply number of noofSpeeds filter
-  if (filters.noofSpeeds) {
-    query.noofSpeeds = { $regex: filters.noofSpeeds, $options: "i" };
-  }
-
-
-  // Apply condition filter
-  if (filters.condition) {
-    query.condition = filters.condition;
-  }
-
-
-  // Apply pagination
-  const pageIndex = filters.pageIndex || 1;
-  const limit = filters.limit || 12;
-  const skip = (pageIndex - 1) * limit;
-  let trucks = await Truck.find(query).sort({ createdAt: -1 });
-
-  // Step 2: Filter out trucks with expired or no active subscriptions
-  const currentDate = new Date();
-
-  const filteredTrucks = [];
-
-  for (const truck of trucks) {
-    const subscriptionDoc = await Subscription.findOne({ user: truck.userId });
-
-    // If no subscription found, skip this truck
-    if (!subscriptionDoc || !subscriptionDoc.subscriptions || subscriptionDoc.subscriptions.length === 0) continue;
-
-    const latestSub = subscriptionDoc.subscriptions[subscriptionDoc.subscriptions.length - 1];
-
-    if (latestSub.status === "active" && new Date(latestSub.endDate) > currentDate) {
-      filteredTrucks.push(truck);
+  // 1️⃣ Simple flags / exact matches ---------------------------------------
+  if (f.Featured !== undefined) q.Featured = f.Featured;
+  if (f.listingType) {
+    if (Array.isArray(f.listingType)) {
+      q.listingType = { $in: f.listingType };
+    } else {
+      q.listingType = f.listingType;
     }
   }
 
-  const totalCount = filteredTrucks.length;
+  if (f.truckCategory) q.truckCategory = f.truckCategory;
+  if (f.typeofRearAxles) q.typeofRearAxles = f.typeofRearAxles;
+  if (f.transmissionType) q.transmissionType = f.transmissionType;
+  if (f.condition) {
+    if (Array.isArray(f.condition)) {
+      q.condition = { $in: f.condition };
+    } else {
+      q.condition = f.condition;
+    }
+  }
+
+
+  // 2️⃣ Regex matches (case-insensitive) ------------------------------------
+  if (f.searchText) {
+    q.$or = [
+      { vehicleName: { $regex: f.searchText, $options: "i" } },
+      { name: { $regex: f.searchText, $options: "i" } },
+    ];
+  }
+  if (f.country) q.country = { $regex: f.country, $options: "i" };
+  if (f.vehicleManufacturer) q.vehicleManufacturer = { $regex: f.vehicleManufacturer, $options: "i" };
+  if (f.engineManufacturer) q.engineManufacturer = { $regex: f.engineManufacturer, $options: "i" };
+  if (f.suspension) q.suspension = { $regex: f.suspension, $options: "i" };
+  if (f.rearAxles) q.rearAxles = { $regex: f.rearAxles, $options: "i" };
+  if (f.noofSpeeds) q.noofSpeeds = { $regex: f.noofSpeeds, $options: "i" };
+
+  // 3️⃣ Numeric / range filters --------------------------------------------
+  const addRange = (field, min, max) => {
+    if (min || max) {
+      q[field] = {};
+      if (min) q[field].$gte = Number(min);
+      if (max) q[field].$lte = Number(max);
+    }
+  };
+  addRange("modelYear", f.minYear, f.maxYear);
+  addRange("mileage", f.minMileage, f.maxMileage);
+  addRange("hoursPower", f.minHorsepower, f.maxHorsepower);
+  addRange("wheelbase", f.minWheelbase, f.maxWheelbase);
+  addRange("frontAxleWeight", f.minFrontAxleWeight, f.maxFrontAxleWeight);
+  addRange("backAxleWeight", f.minBackAxleWeight, f.maxBackAxleWeight);
+
+  return q;
+}
+
+const getAllTrucksWithFilter = async (filters = {}) => {
+  const matchQuery = buildMatchQuery(filters);
+
+  // Pagination parameters ---------------------------------------------------
+  const pageIndex = Number(filters.pageIndex) || 1;
+  const limit = Number(filters.limit) || 12;
+  const skip = (pageIndex - 1) * limit;
+
+  const currentDate = new Date();
+
+  const pipeline = [
+    { $match: matchQuery },
+
+    // Join with subscriptions collection -----------------------------------
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "userId",
+        foreignField: "user",
+        as: "subscriptionInfo",
+      },
+    },
+
+    // Pull out the **last** subscription in the array (your original rule) --
+    {
+      $addFields: {
+        latestSubscription: {
+          $arrayElemAt: ["$subscriptionInfo.subscriptions", -1],
+        },
+      },
+    },
+
+    // Keep trucks whose latest sub is active and not expired ---------------
+    {
+      $match: {
+        "latestSubscription.status": "active",
+        "latestSubscription.endDate": { $gt: currentDate },
+      },
+    },
+
+    { $sort: { createdAt: -1 } },
+
+    // Facet for pagination + total count in ONE round-trip -----------------
+    {
+      $facet: {
+        paginatedResults: [{ $skip: skip }, { $limit: limit }],
+        totalCount: [{ $count: "count" }],
+      },
+    },
+  ];
+
+  const [aggResult] = await Truck.aggregate(pipeline);
+
+  const trucks = aggResult.paginatedResults;
+  const totalCount = aggResult.totalCount[0]?.count || 0;
   const totalPages = Math.ceil(totalCount / limit);
 
-  // Step 3: Apply pagination manually after filtering
-  const paginatedTrucks = filteredTrucks.slice(skip, skip + limit);
-  return {
-    trucks: paginatedTrucks,
-    totalPages,
-    totalCount,
-  };
+  return { trucks, totalPages, totalCount };
 };
 
 const getTruckById = async (id) => {

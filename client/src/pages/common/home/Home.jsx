@@ -10,6 +10,16 @@ import { useDispatch } from 'react-redux';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import truckService from '../../../services/truckService';
 import { useNavigate } from 'react-router';
+import Aggregateandmining from '../../../assets/images/trucks/Aggregateandmining.png'
+import Constructionequipment from '../../../assets/images/trucks/Constructionequipment.png'
+import Farmequipment from '../../../assets/images/trucks/Farmequipment.png'
+import IndustrialEquipment from '../../../assets/images/trucks/Industrial Equipment.png'
+import Liftingequipment from '../../../assets/images/trucks/Liftingequipment.png'
+import Loggingequipment from '../../../assets/images/trucks/Loggingequipment.png'
+import others from '../../../assets/images/trucks/others.png'
+import RV from '../../../assets/images/trucks/RV.png'
+import Trailer from '../../../assets/images/trucks/Trailer.png'
+import trucks from '../../../assets/images/trucks/trucks.png'
 
 const Home = () => {
   const [listData, setListData] = useState([]);
@@ -69,6 +79,18 @@ const Home = () => {
     'Lifting Equipment',
     'Industrial Equipment',
     'RVs'
+  ];
+
+  const truckCategoryDataWithImage = [
+    { name: 'Trucks', image: trucks },
+    { name: 'Trailers', image: Trailer },
+    { name: 'Construction Equipment', image: Constructionequipment },
+    { name: 'Logging Equipment', image: Loggingequipment },
+    { name: 'Farm Equipment', image: Farmequipment },
+    { name: 'Aggregate and Mining Equipment', image: Aggregateandmining },
+    { name: 'Lifting Equipment', image: Liftingequipment },
+    { name: 'Industrial Equipment', image: IndustrialEquipment },
+    { name: 'RVs', image: RV }
   ];
 
 
@@ -186,23 +208,23 @@ const Home = () => {
         <h3 className=' text-2xl sm:text-[32px] font-bold'>Browse by Type</h3>
 
         <div className='flex justify-center sm:justify-start items-center flex-wrap'>
-          {truckCategoryData.map((truck, index) => (
+          {truckCategoryDataWithImage.map((truck, index) => (
             <div
               onClick={() => {
                 const newParams = new URLSearchParams();
                 if (searchText) newParams.set('searchText', searchText);
                 if (searchCountry) newParams.set('country', searchCountry);
                 if (listingType) newParams.set('listingType', listingType);
-                newParams.set('truckCategory', truck); // `truck` here is valid from map()
+                newParams.set('truckCategory', truck.name); // `truck` here is valid from map()
                 navigate(`/filter?${newParams.toString()}`);
               }}
 
               key={index}
               className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
-              <img src={TypeTruck} alt={truck} className='w-[145px] h-[100px] object-contain' />
+              <img src={truck.image} alt={truck.name} className='w-[145px] h-[100px] object-contain' />
               <span className="text-lg sm:text-xl font-semibold pt-9 text-center">
-                {truck}
+                {truck.name}
               </span>
 
             </div>

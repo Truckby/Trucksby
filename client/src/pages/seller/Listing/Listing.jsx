@@ -94,7 +94,7 @@ const Listing = () => {
 
   const isLimitExceeded = () => {
     if (listData.length >= productData?.listings) {
-      toast.error(`You can only add up to ${productData?.listings} trucks on Basic Membership`);
+      toast.error(`Your current membership allows only up to ${productData?.listings} listing${productData?.listings > 1 ? 's' : ''}. You can't exceed this limit.`);
       return true;
     }
 

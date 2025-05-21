@@ -79,8 +79,8 @@ const AddTruckPage = () => {
       vehiclePrice: Yup.string().required("Vehicle price is required"),
       description: Yup.string().required("Description is required"),
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
-
     }),
+    
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       dispatch(ShowLoading());
 

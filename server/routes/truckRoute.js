@@ -11,6 +11,7 @@ router.get('/by-user', authMiddleware.authenticateRequest, truckController.fetch
 router.get('/get-all', truckController.getAllTrucks);
 
 router.post('/send-message', truckController.sendMessage);
+router.post('/news-letter', truckController.subscribeToNewsletter);
 
 router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
 

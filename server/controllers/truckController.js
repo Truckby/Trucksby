@@ -138,6 +138,45 @@ const sendMessage = async (req, res) => {
   }
 };
 
+const subscribeToNewsletter = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Email is required' });
+  }
+
+  try {
+    // Setup transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.SENDER_EMAIL,
+        pass: process.env.SENDER_EMAIL_PASSWORD,
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: process.env.CLIENT_EMAIL, // your email to receive the notification
+      subject: 'New Newsletter Subscription',
+      html: `
+        <p>A new user has subscribed to the newsletter:</p>
+        <p><strong>Email:</strong> ${email}</p>
+      `,
+    };
+
+    // Send mail
+    await transporter.sendMail(mailOptions);
+
+    res.json({ success: true, message: 'Subscription successful. Thank you!' });
+  } catch (error) {
+    console.error('Error sending subscription email:', error);
+    res.status(500).json({ success: false, message: 'Subscription failed' });
+  }
+};
+
+
 const fetchTruckById = async (req, res, next) => {
   try {
     const truck = await truckService.getTruckById(req.params.id);
@@ -209,6 +248,7 @@ const deleteTruck = async (req, res, next) => {
 };
 
 module.exports = {
+  subscribeToNewsletter,
   sendMessage,
   fetchAllTrucks,
   getAllTrucks,

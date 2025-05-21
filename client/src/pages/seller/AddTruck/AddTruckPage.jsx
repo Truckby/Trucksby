@@ -10,6 +10,7 @@ import { IoImage } from 'react-icons/io5';
 import { useLocation, useNavigate } from 'react-router';
 import { uploadImg } from '../../../services/image';
 import { FaTimes } from 'react-icons/fa';
+import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 
 const AddTruckPage = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const AddTruckPage = () => {
   const [previewImages, setPreviewImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // Add this useEffect to handle existing images
   useEffect(() => {
     if (oldTruckData?.images && Array.isArray(oldTruckData.images)) {
@@ -80,6 +82,8 @@ const AddTruckPage = () => {
 
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      dispatch(ShowLoading());
+
       setSubmitting(true);
       const numericFields = [
         "vehiclePrice",
@@ -146,6 +150,8 @@ const AddTruckPage = () => {
       } catch (error) {
         toast.error(error?.response?.data?.error || 'Listing failed');
         console.error('Listing error:', error);
+      } finally {
+        dispatch(HideLoading());
       }
       setSubmitting(false);
     }

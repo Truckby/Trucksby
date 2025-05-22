@@ -78,6 +78,7 @@ function buildMatchQuery(f) {
 
 const getAllTrucksWithFilter = async (filters = {}) => {
   const matchQuery = buildMatchQuery(filters);
+  console.log("Match Query: ", matchQuery);
 
   // Pagination parameters ---------------------------------------------------
   const pageIndex = Number(filters.pageIndex) || 1;

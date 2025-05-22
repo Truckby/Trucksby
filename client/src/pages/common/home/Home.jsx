@@ -106,20 +106,20 @@ const Home = () => {
             loop
             playsInline
           />
-          {/* <img src={trick} alt="Truck" className="w-full object-cover h-[585px] " /> */}
+          {/* <img src={trick} alt="Equipment" className="w-full object-cover h-[585px] " /> */}
         </div>
 
         {/* Left Section */}
         <div className="lg:w-1/2 space-y-4 mt-8 lg:mt-0 pr-4 px-4 lg:mr-0">
           <h1 className=" text-2xl sm:text-4xl md:text-[64px] md:leading-[61px] font-bold text-black " style={{ fontFamily: 'Oswald' }}>Drive Your <br /> Business Forward</h1>
-          <h4 className=" text-lg md:text-2xl text-gray-600">Sell Trucks with Confidence!</h4>
+          <h4 className=" text-lg md:text-2xl text-gray-600">Sell Equipment with Confidence!</h4>
 
           {/* Search Input */}
           <div className="relative mt-4 w-full xl:w-[587px]">
             <input
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              type="text" placeholder="Search for Trucks" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
+              type="text" placeholder="Search for Equipment" className="p-3 outline-none h-[60px] w-full xl:w-[587px] shadow rounded-[10px]" />
             <span
               onClick={() => {
                 const newParams = new URLSearchParams();
@@ -138,7 +138,7 @@ const Home = () => {
 
           {/* Search Filters */}
           <div className="flex w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
-            {/* <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
+            {/* <input type="text" placeholder="Equipment Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
             <select
               className="p-3 w-full lg:w-[130px] border-r border-[#F6F6F6] h-[60px] outline-none border-l"
               value={listingType}
@@ -155,7 +155,7 @@ const Home = () => {
               value={truckCategory}
               onChange={(e) => settruckCategory(e.target.value)}
             >
-              <option value="">Truck Category</option>
+              <option value="">Category</option>
               {truckCategoryData.map((category, index) => (
                 <option key={index} value={category}>{category}</option>
               ))}
@@ -235,7 +235,7 @@ const Home = () => {
 
 
       <div className='pt-[60px] pb-[70px] bg-white px-4 lg:px-0'>
-        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8  '>Featured Trucks</h3>
+        <h3 className=' text-2xl sm:text-[32px] font-bold mb-8  '>Featured Listings</h3>
 
         <div className='flex justify-center sm:justify-start items-center flex-wrap'>
           {listData?.map((truck, index) => (

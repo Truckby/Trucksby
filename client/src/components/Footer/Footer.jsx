@@ -24,23 +24,22 @@ export default function Footer() {
       return;
     }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    toast.error("Please enter a valid email address!");
-    return;
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address!");
+      return;
+    }
 
     const payload = { email };
 
     dispatch(ShowLoading());
     try {
       const response = await truckService.newsLetter(payload);
-      console.log("Response from server:", response);
       setEmail("");
-      toast.success("Subscribed successfully!");
+      toast.success("Newsletter Subscribed successfully!");
     } catch (error) {
       console.error("Newsletter subscription error:", error);
-      toast.error("Subscription failed. Please try again.");
+      toast.error("Newsletter Subscription failed. Please try again.");
     } finally {
       dispatch(HideLoading());
     }

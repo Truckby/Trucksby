@@ -71,8 +71,8 @@ const AddTruckPage = () => {
       email: Yup.string().email("Invalid email").required("Email is required"),
       country: Yup.string().required("Country is required"),
       listingType: Yup.string().required("Listing type is required"),
-      truckCategory: Yup.string().required("Truck category is required"),
-      truckSubCategory: Yup.string().required("Truck subcategory is required"),
+      truckCategory: Yup.string().required("Category is required"),
+      truckSubCategory: Yup.string().required("Subcategory is required"),
       condition: Yup.string().required("Condition is required"),
       vehicleManufacturer: Yup.string().required("Vehicle manufacturer is required"),
       modelYear: Yup.string().required("Model year is required"),
@@ -80,7 +80,7 @@ const AddTruckPage = () => {
       description: Yup.string().required("Description is required"),
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
     }),
-    
+
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       dispatch(ShowLoading());
 
@@ -138,10 +138,10 @@ const AddTruckPage = () => {
       try {
         if (oldTruckData?._id) {
           await truckService.updateTruck(oldTruckData._id, truckData);
-          toast.success('Truck updated successfully!');
+          toast.success('Equipment updated successfully!');
         } else {
           await truckService.createTruck(truckData);
-          toast.success('Truck listed successfully!');
+          toast.success('Equipment listed successfully!');
           resetForm();
           setPreviewImages([]);
           setSelectedFiles([]);
@@ -344,14 +344,14 @@ const AddTruckPage = () => {
 
             <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="truckCategory">Truck Category *</label>
+                <label className="label" htmlFor="truckCategory">Category *</label>
                 <select
                   name="truckCategory"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.truckCategory}
                 >
-                  <option value="" disabled>Select Truck Type</option>
+                  <option value="" disabled>Select Equipment Type</option>
                   {truckCategory.map((category, index) => (
                     <option key={index} value={category}>{category}</option>
                   ))}
@@ -915,7 +915,7 @@ const AddTruckPage = () => {
             className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? 'Listing...' : oldTruckData ? 'Update Truck' : 'List Truck'}
+            {formik.isSubmitting ? 'Listing...' : oldTruckData ? 'Update Equipment' : 'List Equipment'}
           </button>
         </form>
       </div>

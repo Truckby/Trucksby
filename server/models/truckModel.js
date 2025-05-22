@@ -8,7 +8,7 @@ const truckSchema = new mongoose.Schema(
             required: true,
         },
 
-        // Basic Truck Info
+        // Basic Equipment Info
         vehicleName: { type: String, trim: true },
         vehiclePrice: { type: Number, trim: true },
         truckCategory: { type: String, trim: true },
@@ -34,11 +34,11 @@ const truckSchema = new mongoose.Schema(
         vehicleManufacturer: { type: String, trim: true },
         hours: { type: String, trim: true },
         vin: { type: String, trim: true },
-        condition: { 
-            type: String, 
+        condition: {
+            type: String,
             trim: true,
-            enum: ["New", "Used", "Salvaged"], 
-          },
+            enum: ["New", "Used", "Salvaged"],
+        },
 
         // Body & Chassis
         wheelbase: { type: Number, trim: true },
@@ -46,17 +46,17 @@ const truckSchema = new mongoose.Schema(
         suspension: { type: String, trim: true },
         engineManufacturer: { type: String, trim: true },
         engineModel: { type: String, trim: true },
-        hoursPower:{ type: Number, trim: true },
-        description:{ type: String, trim: true },
+        hoursPower: { type: Number, trim: true },
+        description: { type: String, trim: true },
 
         // Transmission
         transmissionType: { type: String, trim: true },
         noofSpeeds: { type: String, trim: true },
         transmissionManufacturer: { type: String, trim: true },
-        typeofRearAxles: { 
-            type: String, 
+        typeofRearAxles: {
+            type: String,
             trim: true,
-          },
+        },
 
         // Axles
         frontAxleWeight: { type: Number, trim: true },

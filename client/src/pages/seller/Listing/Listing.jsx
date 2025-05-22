@@ -60,7 +60,7 @@ const Listing = () => {
     try {
       await truckService.deleteTruck(deleteTruckId);
       setListData((listData) => listData.filter(list => list._id !== deleteTruckId));
-      toast.success("Service deleted successfully");
+      toast.success("Equipment deleted successfully");
       await fetchAllTrucks(page);
     } catch (error) {
       console.error("Error deleting service:", error);
@@ -115,14 +115,14 @@ const Listing = () => {
             }}
             className="px-4 py-2 h-fit cursor-pointer bg-[#DF0805] text-white font-medium rounded-lg"
           >
-            Add Truck
+            Add Equipment
           </button>
         ) : (
           <Link
             to="/seller/plans"
             className="px-4 py-2 h-fit cursor-pointer bg-[#DF0805] text-white font-medium rounded-lg"
           >
-            Add Truck
+            Add Equipment
           </Link>
         )}
 

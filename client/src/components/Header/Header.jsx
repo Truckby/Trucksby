@@ -105,7 +105,7 @@ export default function Header() {
                 to="/signup?type=seller"
                 className="px-4 py-2 bg-[#DF0805] text-white font-medium rounded-lg"
               >
-                Sell Your Truck
+                Sell Your Equipment
               </Link>
             </>
           }

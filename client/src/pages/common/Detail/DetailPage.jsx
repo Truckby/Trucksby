@@ -9,8 +9,8 @@ const DetailPage = () => {
 
   const sampleData = {
     General: {
-      'Truck Category': data?.truckCategory,
-      'Truck SubCategory': data?.truckSubCategory,
+      'Equipment Category': data?.truckCategory,
+      'Equipment SubCategory': data?.truckSubCategory,
       'Listing Type': data?.listingType,
       'Country': data?.country,
       Year: data?.modelYear,

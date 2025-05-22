@@ -137,7 +137,7 @@ const FilterPage = () => {
     <div className='pb-20 max-w-[1340px] mx-auto px-4 lg:px-0'>
       <SearchFilter filters={filters} setFilters={setFilters} />
 
-      <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Trucks For Sale</h1>
+      <h1 className=' text-2xl sm:text-[32px] font-bold mt-[50px] mb-[40px] lg:mx-4'>Equipment For Sale</h1>
 
       <div className="flex flex-col md:flex-row lg:mx-4">
         <div className="hidden md:block">
@@ -169,7 +169,7 @@ const FilterPage = () => {
           </div>
         )}
 
-        {/* Truck cards container */}
+        {/* Equipment cards container */}
         <div className=" flex justify-center sm:justify-start items-center flex-wrap h-fit">
           {listData?.map((truck, index) => (
             <div className='' key={index}>

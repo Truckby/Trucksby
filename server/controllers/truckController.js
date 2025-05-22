@@ -57,8 +57,6 @@ const getAllTrucks = async (req, res, next) => {
       typeofRearAxles
     } = req.query;
 
-    console.log(req.query, 'query')
-
     const parsedPageIndex = parseInt(pageIndex) || 1;
     const parsedLimit = parseInt(limit) || 12;
 
@@ -89,7 +87,7 @@ const getAllTrucks = async (req, res, next) => {
       noofSpeeds,
       condition,
       vehicleManufacturer,
-      Featured,
+      ...(Featured != null && { Featured: Featured.toLowerCase() === 'true' }),
       typeofRearAxles,
     });
 
@@ -169,10 +167,10 @@ const subscribeToNewsletter = async (req, res) => {
     // Send mail
     await transporter.sendMail(mailOptions);
 
-    res.json({ success: true, message: 'Subscription successful. Thank you!' });
+    res.json({ success: true, message: 'Newsletter Subscription successful. Thank you!' });
   } catch (error) {
     console.error('Error sending subscription email:', error);
-    res.status(500).json({ success: false, message: 'Subscription failed' });
+    res.status(500).json({ success: false, message: 'Newsletter Subscription failed' });
   }
 };
 
@@ -180,7 +178,7 @@ const subscribeToNewsletter = async (req, res) => {
 const fetchTruckById = async (req, res, next) => {
   try {
     const truck = await truckService.getTruckById(req.params.id);
-    if (!truck) return res.status(404).json({ message: 'Truck not found' });
+    if (!truck) return res.status(404).json({ message: 'Equipment not found' });
     res.status(200).json(truck);
   } catch (error) {
     next(error);
@@ -219,7 +217,7 @@ const addTruck = async (req, res, next) => {
     };
 
     const newTruck = await truckService.createTruck(data);
-    res.status(201).json({ message: 'Truck added successfully', truck: newTruck });
+    res.status(201).json({ message: 'Equipment added successfully', truck: newTruck });
 
   } catch (error) {
     next(error);
@@ -230,8 +228,8 @@ const addTruck = async (req, res, next) => {
 const updateTruck = async (req, res, next) => {
   try {
     const updatedTruck = await truckService.updateTruck(req.params.id, req.body);
-    if (!updatedTruck) return res.status(404).json({ message: 'Truck not found' });
-    res.status(200).json({ message: 'Truck updated successfully', truck: updatedTruck });
+    if (!updatedTruck) return res.status(404).json({ message: 'Equipment not found' });
+    res.status(200).json({ message: 'Equipment updated successfully', truck: updatedTruck });
   } catch (error) {
     next(error);
   }
@@ -240,8 +238,8 @@ const updateTruck = async (req, res, next) => {
 const deleteTruck = async (req, res, next) => {
   try {
     const deletedTruck = await truckService.deleteTruck(req.params.id);
-    if (!deletedTruck) return res.status(500).json({ message: 'Truck not found' });
-    res.status(200).json({ message: 'Truck deleted successfully' });
+    if (!deletedTruck) return res.status(500).json({ message: 'Equipment not found' });
+    res.status(200).json({ message: 'Equipment deleted successfully' });
   } catch (error) {
     next(error);
   }

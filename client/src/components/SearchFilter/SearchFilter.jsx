@@ -45,7 +45,7 @@ const SearchFilter = ({ filters, setFilters }) => {
                         value={filters.truckCategory}
                         onChange={(e) => setFilters(prev => ({ ...prev, truckCategory: e.target.value }))}
                         className="p-3 w-full lg:w-[150px] outline-none h-[60px]  ">
-                        <option value="">Truck Category</option>
+                        <option value="">Category</option>
                         {truckCategory.map((category, index) => (
                             <option key={index} value={category}>{category}</option>
                         ))}
@@ -67,11 +67,11 @@ const SearchFilter = ({ filters, setFilters }) => {
 
                 {/* Search Input */}
                 <div className="relative w-full mt-4 lg:mt-0 sm:w-[587px]">
-                <input
+                    <input
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         type="text"
-                        placeholder="Search for Trucks"
+                        placeholder="Search for Equipment"
                         className="p-3 outline-none h-[60px] w-full lg:w-[587px] shadow rounded-[10px]"
                     />
                     <span className='absolute top-5 right-5'>

@@ -15,14 +15,14 @@ const transformToNull = (value, originalValue) => originalValue === '' ? null : 
 const truckSchema = yup.object().shape({
   userId: ObjectId.optional(),
 
-  // Basic Truck Info
+  // Basic Equipment Info
   vehicleName: yup.string().trim().required('Vehicle name is required'),
   vehiclePrice: yup.number()
     .transform(transformToNull)
     .typeError('Vehicle price must be a number')
     .required('Vehicle price is required'),
-  truckCategory: yup.string().trim().required('Truck category is required'),
-  truckSubCategory: yup.string().trim().required('Truck subcategory is required'),
+  truckCategory: yup.string().trim().required('Equipment category is required'),
+  truckSubCategory: yup.string().trim().required('Equipment subcategory is required'),
   listingType: yup.string().trim().required('Listing type is required'),
   country: yup.string().trim().required('Country is required'),
   state: yup.string().trim().optional(),

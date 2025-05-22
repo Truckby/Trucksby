@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt, FaRegHeart, FaSearch, FaUser } from 'react-icons/fa'
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaPhoneAlt, FaRegHeart, FaSearch, FaUser } from 'react-icons/fa'
 import { IoIosSpeedometer } from 'react-icons/io';
 import { FaWhatsapp } from "react-icons/fa";
 import { FaMessage } from 'react-icons/fa6';
@@ -98,6 +98,11 @@ const Info = ({ data }) => {
             {data?.address && <div className="flex items-center gap-2 text-gray-700 mt-2">
               <PiAddressBookTabsFill />
               <span>{data?.address}</span>
+            </div>}
+
+            {data?.phone && <div className="flex items-center gap-2 text-gray-700 mt-2">
+              <FaPhone />
+              <span>{data?.phone}</span>
             </div>}
 
             <div className='flex flex-col sm:flex-row justify-between'>

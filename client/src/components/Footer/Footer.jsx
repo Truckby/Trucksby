@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import truckService from "../../services/truckService";
 import { HideLoading, ShowLoading } from "../../redux/loaderSlice";
 import toast from "react-hot-toast";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   const user = useSelector((state) => state.user.user);
@@ -103,7 +104,7 @@ export default function Footer() {
                 <FaInstagram size={18} />
               </Link>
               <Link to={"/"} className="hover:text-white">
-                <FaTwitter size={18} />
+                <FaXTwitter size={18} />
               </Link>
               <Link to={"/"} className="hover:text-white">
                 <FaYoutube size={18} />

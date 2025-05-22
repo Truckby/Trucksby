@@ -114,7 +114,7 @@ const Plans = () => {
                                                 }
                                                 handleContinue(plan.priceId);
                                             }}
-                                            className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${info.status && plan.productId === info.productId ? 'bg-gray-400' : 'bg-black'} `}
+                                            className={`mt-2 px-4 py-2 text-sm sm:text-base text-white rounded cursor-pointer w-full ${info.status && plan.productId === info.productId ? 'bg-gray-400' : 'bg-[#DF0805]'} `}
                                         >
                                             {plan.name}
                                         </button>

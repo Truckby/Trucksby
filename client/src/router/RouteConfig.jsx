@@ -1,3 +1,4 @@
+import React from 'react';
 import Home from '../pages/common/Home/Home.jsx';
 import Login from '../pages/common/Login/Login.jsx';
 import NotFound from '../pages/common/NotFound/NotFound.jsx';
@@ -5,11 +6,11 @@ import PrivacyPage from '../pages/common/Privacy/PrivacyPage.jsx';
 import SellerProfile from '../pages/common/Profile/SellerProfile.jsx';
 import SignUp from '../pages/common/Signup/SignUp.jsx';
 import AddTruckPage from '../pages/seller/AddTruck/AddTruckPage.jsx';
-import Listing from '../pages/seller/Listing/Listing.jsx';
 import Plans from '../pages/seller/Plans/Plans.jsx';
 import SuccessPage from '../pages/seller/Plans/components/ConfirmModal.jsx';
 import DetailPage from '../pages/common/Detail/DetailPage.jsx';
 import FilterPage from '../pages/common/Filter/FilterPage.jsx';
+import Listing from '../pages/seller/Listing/Listing.jsx';
 
 const routes = [
   //seller

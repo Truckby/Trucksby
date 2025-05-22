@@ -90,7 +90,8 @@ const Home = () => {
     { name: 'Aggregate and Mining Equipment', image: Aggregateandmining },
     { name: 'Lifting Equipment', image: Liftingequipment },
     { name: 'Industrial Equipment', image: IndustrialEquipment },
-    { name: 'RVs', image: RV }
+    { name: 'RVs', image: RV },
+    { name: 'Others', image: others }
   ];
 
 

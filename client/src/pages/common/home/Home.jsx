@@ -78,7 +78,8 @@ const Home = () => {
     'Aggregate and Mining Equipment',
     'Lifting Equipment',
     'Industrial Equipment',
-    'RVs'
+    'RVs',
+    'Others',
   ];
 
   const truckCategoryDataWithImage = [
@@ -91,7 +92,7 @@ const Home = () => {
     { name: 'Lifting Equipment', image: Liftingequipment },
     { name: 'Industrial Equipment', image: IndustrialEquipment },
     { name: 'RVs', image: RV },
-    { name: 'Others', image: others }
+    { name: 'Others', image: others },
   ];
 
 

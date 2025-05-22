@@ -166,7 +166,8 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     'Aggregate and Mining Equipment',
     'Lifting Equipment',
     'Industrial Equipment',
-    'RVs'
+    'RVs',
+    'Others',
   ];
 
   return (

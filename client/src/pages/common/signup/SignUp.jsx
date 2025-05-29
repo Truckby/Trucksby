@@ -1,13 +1,10 @@
 import React from "react";
 import SignupSelector from "./components/SignupSelector";
 import bgImage from '../../../assets/images/truck_image.png'
-import Header from "../../../components/Header";
-import Footer from "../../../components/Footer";
 
 export default function SignUp() {
   return (
     <div>
-      <Header />
       <div className="min-h-screen flex flex-col px-4 relative">
         <div
           className="absolute top-0 left-0 w-full h-[60vh] bg-cover bg-center bg-no-repeat"
@@ -20,7 +17,6 @@ export default function SignUp() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

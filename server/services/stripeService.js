@@ -1,8 +1,9 @@
-const factoryUtils = require('../utils/factoryUtils');
 const commonService = require('./commonService');
+const stripe = require('../configs/stripe.config')
 
-const fetchProductInfo = async (stripeConfig, productId) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
+const webHookKey = process.env.STRIPE_WEBHOOK_KEY
+
+const fetchProductInfo = async (productId) => {
     try {
         const product = await stripe.products.retrieve(productId);
         if (!product) {
@@ -63,8 +64,7 @@ const fetchProductInfo = async (stripeConfig, productId) => {
     }
 };
 
-const createCustomer = async (stripeConfig, name, email) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
+const createCustomer = async (name, email) => {
     const customer = await stripe.customers.create({ name, email });
     if (!customer) {
         const error = new Error('Unable to create customer!');
@@ -74,8 +74,7 @@ const createCustomer = async (stripeConfig, name, email) => {
     return customer.id;
 };
 
-const updateCustomerEmail = async (stripeConfig, stripeCustomerId, newEmail) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
+const updateCustomerEmail = async (stripeCustomerId, newEmail) => {
     const customer = await stripe.customers.update(stripeCustomerId, {
         email: newEmail,
     });
@@ -86,8 +85,7 @@ const updateCustomerEmail = async (stripeConfig, stripeCustomerId, newEmail) => 
     }
 };
 
-const createCheckoutSession = async (stripeConfig, priceId, stripeCustomerId, CLIENT_URL) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
+const createCheckoutSession = async (priceId, stripeCustomerId, CLIENT_URL) => {
     try {
         const session = await stripe.checkout.sessions.create(
             {
@@ -99,8 +97,8 @@ const createCheckoutSession = async (stripeConfig, priceId, stripeCustomerId, CL
                         quantity: 1,
                     },
                 ],
-                success_url: `${CLIENT_URL}/success`,
-                cancel_url: `${CLIENT_URL}/plans`,
+                success_url: `${CLIENT_URL}/seller/success`,
+                cancel_url: `${CLIENT_URL}/seller/plans`,
                 customer: stripeCustomerId,
             }
         );
@@ -112,10 +110,9 @@ const createCheckoutSession = async (stripeConfig, priceId, stripeCustomerId, CL
     }
 };
 
-const constructEvent = async (stripeConfig, sig, data) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
+const constructEvent = async (sig, data) => {
     try {
-        const event = stripe.webhooks.constructEvent(data, sig, stripeConfig.webhookKey);
+        const event = stripe.webhooks.constructEvent(data, sig, webHookKey);
         return event;
     } catch (err) {
         const newError = new Error(`Unable to construct event!`);
@@ -124,26 +121,36 @@ const constructEvent = async (stripeConfig, sig, data) => {
     }
 };
 
-const handlePaymentSucceededEvent = async (connectionId, stripeConfig, event) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
+const handlePaymentSucceededEvent = async (event) => {
+    console.log(event.data, 'handle event data')
     try {
         const invoice = event.data.object;
         // console.log('Invoice: ', invoice);
         const customerId = invoice.customer;
 
-        const userId = await commonService.fetchUserId(connectionId, { stripeCustomerId: customerId });
-        const chargeId = invoice.charge;
+        const userId = await commonService.fetchUserId({ stripeCustomerId: customerId });
+        const invoiceId = invoice.id;
+
         const billingReason = invoice.billing_reason;
         // subscription_create
-        const subscriptionId = invoice.subscription;
-        const productId = invoice.lines.data[0].price.product;
+        const subscriptionId =
+            invoice.subscription ||
+            invoice.lines.data[0]?.parent?.subscription_item_details?.subscription ||
+            null;
+
+        console.log(invoice.lines.data[0], 'invoice lines data')
+        const productId = invoice.lines.data[0].pricing.price_details.product;
         const { name, description } = await stripe.products.retrieve(productId);
+
+        const lineItem = invoice.lines.data[0];
+        const priceDetails = lineItem.pricing.price_details;
+
         const planInfo = {
             productId,
             name,
             description,
-            priceId: invoice.lines.data[0].price.id,
-            amount: invoice.lines.data[0].price.unit_amount / 100,
+            priceId: priceDetails.price,
+            amount: parseInt(lineItem.amount) / 100,
             currency: invoice.currency,
         };
         const paidAmount = invoice.amount_paid / 100;
@@ -154,7 +161,7 @@ const handlePaymentSucceededEvent = async (connectionId, stripeConfig, event) =>
             customerId,
             subscriptionInfo: {
                 subscriptionId,
-                chargeId,
+                invoiceId,
                 planInfo,
                 paidAmount,
                 billingReason,
@@ -171,111 +178,11 @@ const handlePaymentSucceededEvent = async (connectionId, stripeConfig, event) =>
     }
 };
 
-const handleSubscriptionUpdatedEvent = async (connectionId, stripeConfig, event) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    try {
-        const subscription = event.data.object;
-        // console.log('Subscription: ', subscription);
-        const customerId = subscription.customer;
-
-        const userId = await commonService.fetchUserId(connectionId, { stripeCustomerId: customerId });
-        const subscriptionId = subscription.id;
-        const price = subscription.items.data[0].price;
-        const productId = price.product;
-        const { name, description } = await stripe.products.retrieve(productId);
-        const planInfo = {
-            productId,
-            name,
-            description,
-            priceId: price.id,
-            amount: price.unit_amount / 100,
-            currency: price.currency,
-        }
-        const data = {
-            user: userId,
-            customerId,
-            subscriptionInfo: {
-                subscriptionId,
-                planInfo,
-            }
-        };
-        return data;
-    } catch (error) {
-        console.error('Event Error:', error);
-        const newError = new Error(`Unable to fetch info from event!`);
-        newError.code = 400;
-        throw newError;
-    }
-};
-
-const createBillingPortalSession = async (stripeConfig, customerId, CLIENT_URL) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    if (!customerId) {
-        const newError = new Error(`Customer not found!`);
-        newError.code = 404;
-        throw newError;
-    }
-    try {
-        const session = await stripe.billingPortal.sessions.create({
-            customer: customerId,
-            return_url: `${CLIENT_URL}/billing`,
-        });
-
-        return session.url;
-    } catch (error) {
-        if (err.code && !isNaN(err.code)) {
-            throw error;
-        }
-        else {
-            const newError = new Error(`Unable to create billing portal session!`);
-            newError.code = 400;
-            throw newError;
-        }
-    }
-};
-
-const fetchSubscription = async (stripeConfig, subscriptionId) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    try {
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        return subscription;
-    } catch (error) {
-        const newError = new Error(`Unable to fetch subscription!`);
-        newError.code = 404;
-        throw newError;
-    }
-};
-
-const updateSubscription = async (stripeConfig, subscriptionId, subscriptionItemId, newPriceId) => {
-    const stripe = factoryUtils.createStripeClient(stripeConfig);
-    try {
-        const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
-            items: [
-                {
-                    id: subscriptionItemId,
-                    price: newPriceId,
-                },
-            ],
-            proration_behavior: 'create_prorations', // Automatically handle proration
-        });
-
-        return updatedSubscription;
-    } catch (error) {
-        const newError = new Error(`Unable to update subscription!`);
-        newError.code = 400;
-        throw newError;
-    }
-};
-
 module.exports = {
     fetchProductInfo,
     createCustomer,
     updateCustomerEmail,
     constructEvent,
     handlePaymentSucceededEvent,
-    handleSubscriptionUpdatedEvent,
-    createCheckoutSession,
-    createBillingPortalSession,
-    fetchSubscription,
-    updateSubscription
+    createCheckoutSession
 }

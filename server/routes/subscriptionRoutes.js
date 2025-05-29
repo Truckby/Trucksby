@@ -7,15 +7,8 @@ const validationMiddleware = require('../middleware/validationMiddleware');
 router.get(
     "/get-user-subscription-info",
     authMiddleware.authenticateRequest,
-    authMiddleware.verifyRole(['user']),
+    // authMiddleware.verifyRole(['user']),
     controller.GetUserSubscriptionInfo
-);
-router.get(
-    "/get-dashboard-data",
-    authMiddleware.authenticateRequest,
-    authMiddleware.verifyRole(['admin']),
-    validationMiddleware.validateQuery(subscriptionSchemas.dashboardDataSchema),
-    controller.GetDashboardData
 );
 
 module.exports = router;

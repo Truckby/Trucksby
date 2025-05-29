@@ -8,11 +8,10 @@ const connectDB = require("./configs/db.config");
 const routes = require('./routes/index');
 const trimMiddleware = require('./middleware/trimMiddleware');
 const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware');
-const handlebarsHelpers = require('./helpers/handlebarsHelpers');
 
 //Express Server Setup
 const app = express();
-const port = process.env.PORT || 5777;
+const port = process.env.PORT || 5778;
 const env = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const origins = allowedOrigins[env];
 const corsOptions = {
@@ -40,7 +39,7 @@ connectDB(DB);
 
 //Server status endpoint
 app.get('/', (req, res) => {
-    res.send('AdStatixx Server is up!');
+    res.send('Trucksby Server is up!');
 });
 
 // Routes

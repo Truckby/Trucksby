@@ -1,5 +1,5 @@
 import React from 'react'
-import alarm from '../../../../assets/images/ExpirePlan.svg'
+import alarm from '../../../../assets/images/expirePlan.svg'
 import { Link } from 'react-router'
 
 const ExpirePlan = () => {

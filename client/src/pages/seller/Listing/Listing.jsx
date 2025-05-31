@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import { useDispatch } from 'react-redux';
 import truckService from '../../../services/truckService';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
-import ExpirePlan from './components/expirePlan';
+import ExpirePlan from './components/ExpirePlan';
 import DeleteConfirmationModal from '../../../components/Delete/DeleteConfirmationModal';
 import subscriptionService from '../../../services/subscriptionService';
 import { useNavigate } from 'react-router-dom';

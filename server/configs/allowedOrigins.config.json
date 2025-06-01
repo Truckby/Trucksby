@@ -1,6 +1,7 @@
 {
     "production": [
-        
+        "https://truckby.com",
+        "https://www.truckby.com"
     ],
     "development": [
         "http://localhost:5173"

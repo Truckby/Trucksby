@@ -28,6 +28,7 @@ const FilterPage = () => {
     return {
       listingType: params.listingType || '',
       truckCategory: params.truckCategory || '',
+      truckSubCategory: params.truckSubCategory || '',
       country: params.country || '',
       searchText: params.searchText || '',
       transmissionManufacturer: params.transmissionManufacturer || '',

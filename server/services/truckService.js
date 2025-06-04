@@ -33,6 +33,7 @@ function buildMatchQuery(f) {
   }
 
   if (f.truckCategory) q.truckCategory = f.truckCategory;
+  if (f.truckSubCategory) q.truckSubCategory = f.truckSubCategory;
   if (f.typeofRearAxles) q.typeofRearAxles = f.typeofRearAxles;
   if (f.transmissionType) q.transmissionType = f.transmissionType;
   if (f.condition) {

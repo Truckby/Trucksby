@@ -4,6 +4,7 @@ import { FaChevronUp } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { CountryDropdown } from "react-country-region-selector";
 import { useSearchParams } from 'react-router-dom';
+import { truckSubCategories } from "../../../../data/Content";
 
 const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -227,6 +228,14 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
             options={truckCategory}
             value={filters.truckCategory}
             onChange={(value) => handleCheckboxChange("truckCategory", value)}
+          />
+        </FilterSection>
+
+        <FilterSection title="SubCategory" isOpen={openSections.subCategory} toggle={() => toggleSection("subCategory")}>
+          <SelectBox
+            options={truckSubCategories[filters.truckCategory] || []}
+            value={filters.truckSubCategory}
+            onChange={(value) => handleCheckboxChange("truckSubCategory", value)}
           />
         </FilterSection>
 

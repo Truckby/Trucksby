@@ -13,7 +13,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
       <img
         src={data?.images[0] || image}
         alt="Equipment"
-        className=" w-full md:w-[255px] object-cover"
+        className=" w-full md:w-[255px] md:h-[230px] object-cover"
       />
 
       <div className="p-3 sm:p-[26px] flex flex-col w-full">

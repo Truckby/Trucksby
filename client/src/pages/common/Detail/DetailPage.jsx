@@ -16,13 +16,13 @@ const DetailPage = () => {
       Year: data?.modelYear,
       'Make': data?.vehicleManufacturer,
       Model: data?.engineModel,
-      Mileage: data?.mileage,
+      Mileage: data?.mileage.toLocaleString(),
       VIN: data?.vin,
       Condition: data?.condition,
+      Hours: data?.hours.toLocaleString(),
     },
     "Contact Information": {
       name: data?.name,
-      email: data?.email,
       phone: data?.phone,
       address: data?.address,
       'Company Name': data?.companyName,
@@ -34,7 +34,7 @@ const DetailPage = () => {
       Suspension: data?.suspension,
       "Engine Manufacturer": data?.engineManufacturer,
       "Engine Model": data?.engineModel,
-      "Engine Horsepower": data?.hoursPower,
+      "Engine Horsepower": data?.hoursPower.toLocaleString(),
     },
     Powertrain: {
       "Transmission Manufacturer": data?.transmissionManufacturer,
@@ -42,9 +42,9 @@ const DetailPage = () => {
       'no of Speeds': data?.noofSpeeds,
     },
     Chassis: {
-      "Front Axle Weight": data?.frontAxleWeight,
-      "Rear Axle Weight": data?.backAxleWeight,
-      'Gross Vehicle Weight': data?.grossVehicleWeight,
+      "Front Axle Weight": data?.frontAxleWeight.toLocaleString(),
+      "Rear Axle Weight": data?.backAxleWeight.toLocaleString(),
+      'Gross Vehicle Weight': data?.grossVehicleWeight.toLocaleString(),
       'Axle': data?.typeofRearAxles,
 
     },

@@ -3,7 +3,7 @@ const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
 
 const createUser = async (userData, role) => {
-  const { name, email, userName, image, gender, city, country, password, userId } = userData;
+  const { name, email, userName, image, gender, city, country, password, userId, phone, companyName } = userData;
   let existingUser = await User.findOne({ email });
   if (existingUser) {
     const error = new Error('A user with that email has already been registered!');
@@ -35,7 +35,9 @@ const createUser = async (userData, role) => {
       country,
       password: passwordDigest,
       role,
-      userId
+      userId,
+      phone,
+      companyName
     });
   }
 
@@ -139,7 +141,9 @@ const fetchUser = async (userId) => {
     image: 1,
     country: 1,
     role: 1,
-    _id: 1
+    _id: 1,
+    phone: 1,
+    companyName: 1,
   };
   const user = await User.findById(userId, userProjection);
   if (!user) {

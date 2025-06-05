@@ -18,6 +18,7 @@ const AddTruckPage = () => {
   const oldTruckData = location.state;
   const [previewImages, setPreviewImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // Add this useEffect to handle existing images
@@ -27,6 +28,8 @@ const AddTruckPage = () => {
     }
   }, [oldTruckData]);
 
+
+
   const formik = useFormik({
     initialValues: {
       vehicleName: oldTruckData?.vehicleName || "",
@@ -34,11 +37,11 @@ const AddTruckPage = () => {
       truckCategory: oldTruckData?.truckCategory || "",
       truckSubCategory: oldTruckData?.truckSubCategory || "",
       listingType: oldTruckData?.listingType || "",
-      name: oldTruckData?.name || "",
-      phone: oldTruckData?.phone || "",
-      email: oldTruckData?.email || "",
-      companyName: oldTruckData?.companyName || "",
-      address: oldTruckData?.address || "",
+      name: oldTruckData?.name || user?.name || "",
+      phone: oldTruckData?.phone || user?.phone || "",
+      email: oldTruckData?.email || user?.email || "",
+      companyName: oldTruckData?.companyName || user?.companyName || "",
+      address: oldTruckData?.address || user?.city || "",
       modelYear: oldTruckData?.modelYear || "",
       mileage: oldTruckData?.mileage || null,
       vehicleManufacturer: oldTruckData?.vehicleManufacturer || "",

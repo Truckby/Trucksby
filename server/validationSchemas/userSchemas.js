@@ -13,6 +13,8 @@ const registerSchema = yup.object().shape({
   gender: yup.string().trim().optional(),
   image: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
+  phone: yup.number(),
+  companyName: yup.string().trim().optional(),
 });
 
 const loginSchema = yup.object().shape({
@@ -43,6 +45,8 @@ const createUserSchema = yup.object().shape({
   country: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
+  phone: yup.number(),
+  companyName: yup.string().trim().optional(),
 });
 
 const updateUserSchema = yup.object().shape({
@@ -55,6 +59,8 @@ const updateUserSchema = yup.object().shape({
   country: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
+  phone: yup.number(),
+  companyName: yup.string().trim().optional(),
 });
 
 const userIdSchema = yup.object().shape({
@@ -66,6 +72,7 @@ const searchUsersSchema = yup.object().shape({
   limit: yup.number().positive('Limit must be positive').required('Limit is required'),
   searchQuery: yup.string().trim(),
   status: yup.string().trim(),
+  
 });
 
 const changeUserPasswordSchema = yup.object().shape({

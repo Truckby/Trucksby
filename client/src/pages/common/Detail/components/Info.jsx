@@ -24,7 +24,8 @@ const Info = ({ data }) => {
     const payload = {
       email: email,
       message: message,
-      sellerEmail: data?.email
+      sellerEmail: data?.email,
+      vehicleName: data?.vehicleName
     };
 
     dispatch(ShowLoading());

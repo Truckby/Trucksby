@@ -103,9 +103,9 @@ const getAllTrucks = async (req, res, next) => {
 };
 
 const sendMessage = async (req, res) => {
-  const { email, message, sellerEmail } = req.body;
+  const { email, message, sellerEmail, vehicleName } = req.body;
 
-  if (!email || !message || !sellerEmail) {
+  if (!email || !message || !sellerEmail ) {
     return res.status(400).json({ success: false, message: 'Missing fields' });
   }
 
@@ -123,9 +123,11 @@ const sendMessage = async (req, res) => {
     const mailOptions = {
       from: email,
       to: sellerEmail,
+      bcc: process.env.CLIENT_EMAIL, // Add BCC recipient
       subject: 'New Contact Message from Buyer',
       html: `
-       <p><strong>From:</strong> ${email}</p>
+        <p><strong>From:</strong> ${email}</p>
+        <p><strong>Vehicle Name:</strong> ${vehicleName || 'N/A'}</p>
         <p><strong>Message:</strong></p>
         <p>${message}</p>
       `,

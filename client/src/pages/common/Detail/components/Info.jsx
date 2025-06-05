@@ -90,7 +90,7 @@ const Info = ({ data }) => {
 
           {/* Seller Info */}
           <div className="bg-white p-5 mt-10 rounded-[10px]">
-            <p className="font-semibold text-lg mb-2">Sellers Info</p>
+            <p className="font-semibold text-lg mb-2">Contact Information</p>
 
             <div className="flex items-center gap-2 text-gray-700">
               <FaUser />

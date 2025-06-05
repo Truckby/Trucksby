@@ -12,6 +12,8 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [openSections, setOpenSections] = useState({
     listingType: false,
     category: false,
+    engineModel: false,
+    subCategory: false,
     vehicleManufacturer: false,
     year: false,
     mileage: false,
@@ -240,9 +242,9 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
         </FilterSection>
 
         {/* Manufacturer */}
-        <FilterSection title="Vehicle Manufacturer" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
+        <FilterSection title="Make" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
           <SearchInput
-            placeholder="Search Vehicle Manufacturer"
+            placeholder="Search Make"
             value={filters.vehicleManufacturer}
             onChange={(value) => handleTextInputChange("vehicleManufacturer", value)}
           />
@@ -275,6 +277,14 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
+        <FilterSection title="Model" isOpen={openSections.model} toggle={() => toggleSection("model")}>
+          <SearchInput
+            placeholder="Search Model"
+            value={filters.engineModel}
+            onChange={(value) => handleTextInputChange("engineModel", value)}
+          />
+        </FilterSection>
+
         {/* Horsepower */}
         <FilterSection title="Horsepower" isOpen={openSections.horsepower} toggle={() => toggleSection("horsepower")}>
           <RangeInput
@@ -300,7 +310,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        <FilterSection title="Type of Axle" isOpen={openSections.typeofRearAxles} toggle={() => toggleSection("typeofRearAxles")}>
+        <FilterSection title="Axle" isOpen={openSections.typeofRearAxles} toggle={() => toggleSection("typeofRearAxles")}>
           <SelectBox
             options={["Single Axle", "Regular Tandem", "Tri Axle", 'Quad Axle', 'Other']}
             value={filters.typeofRearAxles}
@@ -316,7 +326,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        <FilterSection title="Back Axle Weight" isOpen={openSections.BackAxleWeight} toggle={() => toggleSection("BackAxleWeight")}>
+        <FilterSection title="Rear Axle Weight" isOpen={openSections.BackAxleWeight} toggle={() => toggleSection("BackAxleWeight")}>
           <RangeInput
             minValue={filters.minBackAxleWeight}
             maxValue={filters.maxBackAxleWeight}

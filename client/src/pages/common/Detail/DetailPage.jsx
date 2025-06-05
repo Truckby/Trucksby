@@ -14,13 +14,13 @@ const DetailPage = () => {
       'Listing Type': data?.listingType,
       'Country': data?.country,
       Year: data?.modelYear,
-      'Vehicle Manufacturer': data?.vehicleManufacturer,
+      'Make': data?.vehicleManufacturer,
       Model: data?.engineModel,
       Mileage: data?.mileage,
       VIN: data?.vin,
       Condition: data?.condition,
     },
-    "Personal Info": {
+    "Contact Information": {
       name: data?.name,
       email: data?.email,
       phone: data?.phone,
@@ -43,9 +43,9 @@ const DetailPage = () => {
     },
     Chassis: {
       "Front Axle Weight": data?.frontAxleWeight,
-      "Back Axle Weight": data?.backAxleWeight,
+      "Rear Axle Weight": data?.backAxleWeight,
       'Gross Vehicle Weight': data?.grossVehicleWeight,
-      'Type of Axle': data?.typeofRearAxles,
+      'Axle': data?.typeofRearAxles,
 
     },
   };

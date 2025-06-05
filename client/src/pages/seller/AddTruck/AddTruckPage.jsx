@@ -65,7 +65,7 @@ const AddTruckPage = () => {
       images: oldTruckData?.images || [],
     },
     validationSchema: Yup.object({
-      vehicleName: Yup.string().required("Vehicle name is required"),
+      vehicleName: Yup.string().required("Listing Title is required"),
       name: Yup.string().required("Name is required"),
       companyName: Yup.string().required("Company name is required"),
       phone: Yup.string().required("Phone number is required"),
@@ -75,9 +75,9 @@ const AddTruckPage = () => {
       truckCategory: Yup.string().required("Category is required"),
       truckSubCategory: Yup.string().required("Subcategory is required"),
       condition: Yup.string().required("Condition is required"),
-      vehicleManufacturer: Yup.string().required("Vehicle manufacturer is required"),
+      vehicleManufacturer: Yup.string().required("Make is required"),
       modelYear: Yup.string().required("Model year is required"),
-      vehiclePrice: Yup.string().required("Vehicle price is required"),
+      vehiclePrice: Yup.string().required("Price is required"),
       description: Yup.string().required("Description is required"),
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
     }),
@@ -192,11 +192,11 @@ const AddTruckPage = () => {
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vehicleName">Vehicle Name *</label>
+                <label className="label" htmlFor="vehicleName">Listing Title *</label>
                 <input
                   type="text"
                   name="vehicleName"
-                  placeholder="Enter your vehicle name"
+                  placeholder="Enter your Listing Title"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vehicleName}
@@ -207,7 +207,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="vehiclePrice">Vehicle Price *</label>
+                <label className="label" htmlFor="vehiclePrice">Price *</label>
                 <input
                   type="number"
                   name='vehiclePrice'
@@ -396,7 +396,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Personal Info */}
-          <h3 className="mt-9 bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Personal Info</h3>
+          <h3 className="mt-9 bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Contact Information</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
               <label className="label" htmlFor="name">Name *</label>
@@ -461,7 +461,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="address">Address</label>
+              <label className="label" htmlFor="address">Location</label>
               <input
                 type="text"
                 name='address'
@@ -507,11 +507,11 @@ const AddTruckPage = () => {
 
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vehicleManufacturer">Vehicle Manufacturer *</label>
+                <label className="label" htmlFor="vehicleManufacturer">Make *</label>
                 <input
                   type="text"
                   name='vehicleManufacturer'
-                  placeholder="Enter Vehicle Manufacturer"
+                  placeholder="Enter Make"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vehicleManufacturer}
@@ -540,7 +540,7 @@ const AddTruckPage = () => {
                 <input
                   type="text"
                   name='vin'
-                  placeholder="Enter your Vehicle Name"
+                  placeholder="Enter your Listing Title"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vin}
@@ -564,6 +564,19 @@ const AddTruckPage = () => {
                   <div className="text-red-500 text-sm">{formik.errors.condition}</div>
                 )}
               </div>
+
+              <div className='mb-9'>
+                <label className="label" htmlFor="engineModel">Model</label>
+                <input
+                  type="text"
+                  name='engineModel'
+                  placeholder="Enter your Model"
+                  className="input"
+                  onChange={formik.handleChange}
+                  value={formik.values.engineModel}
+                />
+              </div>
+
             </div>
           </div>
 
@@ -633,18 +646,6 @@ const AddTruckPage = () => {
                 />
               </div>
 
-              <div className='mb-9'>
-                <label className="label" htmlFor="engineModel">Engine Model</label>
-                <input
-                  type="text"
-                  name='engineModel'
-                  placeholder="Enter your Engine Model"
-                  className="input"
-                  onChange={formik.handleChange}
-                  value={formik.values.engineModel}
-                />
-              </div>
-
 
               <div className='mb-9'>
                 <label className="label" htmlFor="hoursPower">Horse Power</label>
@@ -697,7 +698,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="noofSpeeds">No of Speeds</label>
+              <label className="label" htmlFor="noofSpeeds">Number  of Speeds</label>
               <input
                 type="text"
                 name='noofSpeeds'
@@ -726,7 +727,7 @@ const AddTruckPage = () => {
           <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="typeofRearAxles">Type of Axle</label>
+              <label className="label" htmlFor="typeofRearAxles">Axle</label>
               <select
                 name="typeofRearAxles"
                 className="input"
@@ -760,7 +761,7 @@ const AddTruckPage = () => {
 
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="backAxleWeight">Back Axle Weight</label>
+              <label className="label" htmlFor="backAxleWeight">Rear Axle Weight</label>
               <input
                 type="number"
                 name='backAxleWeight'

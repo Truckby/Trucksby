@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import profile from '../../assets/images/profile.svg'
+import profile from '../../assets/images/person.png'
 import { useDispatch, useSelector } from "react-redux";
 import { FaAngleDown } from "react-icons/fa6";
 import { HideLoading, ShowLoading } from "../../redux/loaderSlice";

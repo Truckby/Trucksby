@@ -55,7 +55,8 @@ const getAllTrucks = async (req, res, next) => {
       condition,
       vehicleManufacturer,
       Featured,
-      typeofRearAxles
+      typeofRearAxles,
+      engineModel,
     } = req.query;
 
     const parsedPageIndex = parseInt(pageIndex) || 1;
@@ -89,6 +90,7 @@ const getAllTrucks = async (req, res, next) => {
       noofSpeeds,
       condition,
       vehicleManufacturer,
+      engineModel,
       ...(Featured != null && { Featured: Featured.toLowerCase() === 'true' }),
       typeofRearAxles,
     });

@@ -18,7 +18,7 @@ const ContactUs = () => {
                 </p>
                 <p>
                     Have something for sale?{' '}
-                    <Link to={user?.email ? "/listing" : "/login"} className="text-blue-600 hover:underline">
+                    <Link to={user?.email ? "/seller/listing" : "/login"} className="text-blue-600 hover:underline">
                         Sell Your Equipment
                     </Link>
                 </p>

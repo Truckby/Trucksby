@@ -58,6 +58,7 @@ function buildMatchQuery(f) {
   if (f.suspension) q.suspension = { $regex: f.suspension, $options: "i" };
   if (f.rearAxles) q.rearAxles = { $regex: f.rearAxles, $options: "i" };
   if (f.noofSpeeds) q.noofSpeeds = { $regex: f.noofSpeeds, $options: "i" };
+  if (f.engineModel) q.engineModel = { $regex: f.engineModel, $options: "i" };
 
   // 3️⃣ Numeric / range filters --------------------------------------------
   const addRange = (field, min, max) => {

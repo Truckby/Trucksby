@@ -78,7 +78,9 @@ const Info = ({ data }) => {
 
           {/* Mileage & Location */}
           <div className="flex justify-between  text-sm mb-4">
-            <p className="text-[#DF0805] text-lg sm:text-[32px] font-bold">{data?.vehiclePrice} $</p>
+            <p className="text-[#DF0805] text-lg sm:text-[32px] font-bold">
+              ${data?.vehiclePrice?.toLocaleString()}
+            </p>
 
             <p className="flex items-center gap-1 text-sm">
               <FaMapMarkerAlt />

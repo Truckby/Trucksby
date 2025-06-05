@@ -22,6 +22,9 @@ const corsOptions = {
 };
 
 //Express Middlewares
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 app.use((req, res, next) => {
     if (req.originalUrl.startsWith('/api/stripe/webhooks')) {
         express.raw({ type: 'application/json' })(req, res, next);

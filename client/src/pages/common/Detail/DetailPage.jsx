@@ -63,7 +63,7 @@ const DetailPage = () => {
         </div>
 
         <div className='block lg:hidden'>
-          <DetailInfo data={sampleData} />
+          <DetailInfo data={sampleData} images={data.images} />
         </div>
       </div>
     </div>

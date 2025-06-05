@@ -6,7 +6,7 @@ import {
   FaTelegramPlane,
   FaInstagram,
 } from "react-icons/fa";
-import logo from "../../assets/images/footer_logo.svg";
+import logo from "../../assets/images/footer_logo.png";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import truckService from "../../services/truckService";

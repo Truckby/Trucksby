@@ -14,7 +14,7 @@ const InfoRow = ({ label, value }) => (
 const Section = ({ title, data }) => {
   // Filter out fields with 0, null, undefined, or empty string
   const filteredData = Object.entries(data || {}).filter(
-    ([, value]) => value !== undefined && value !== null && value !== "" && value !== 0
+    ([, value]) => value !== undefined && value !== null && value !== "" && value !== 0 && value !== "0"
   );
 
   if (filteredData.length === 0) return null;
@@ -38,7 +38,7 @@ const DetailInfo = ({ data, images = [] }) => {
   // Filter out entire sections with no valid values
   const filteredSections = Object.entries(data || {}).reduce((acc, [sectionTitle, sectionData]) => {
     const validFields = Object.entries(sectionData || {}).filter(
-      ([, value]) => value !== undefined && value !== null && value !== "" && value !== 0
+      ([, value]) => value !== undefined && value !== null && value !== "" && value !== 0 && value !== "0"
     );
     if (validFields.length > 0) {
       acc[sectionTitle] = Object.fromEntries(validFields);

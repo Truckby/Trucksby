@@ -47,9 +47,10 @@ const DetailPage = () => {
       "Rear Axle Weight": formatNumberWithCommas(data?.backAxleWeight),
       'Gross Vehicle Weight': formatNumberWithCommas(data?.grossVehicleWeight),
       'Axle': data?.typeofRearAxles,
-
     },
   };
+
+  console.log(sampleData, 'sampleData');
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto px-4 lg:px-0'>

@@ -27,8 +27,6 @@ const ToggleAutoRenew = async (req, res, next) => {
 
         const userSubscription = await Subscription.findOne({ user: userId });
 
-        console.log(userSubscription,'userSubscription')
-
         if (!userSubscription || !userSubscription.subscriptions.length) {
             return res.status(404).json({ message: 'No subscription found for user.' });
         }
@@ -42,12 +40,8 @@ const ToggleAutoRenew = async (req, res, next) => {
             cancel_at_period_end: latestSubscription.autoRenew,
         });
 
-        console.log(canceledSubscription, 'canceledSubscription')
-
         // Update the local subscription record
         latestSubscription.autoRenew = !latestSubscription.autoRenew;
-
-        console.log(latestSubscription,'latestSubscription')
 
         await userSubscription.save();
 

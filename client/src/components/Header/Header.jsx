@@ -64,7 +64,7 @@ export default function Header() {
         {/* Logo + Nav */}
         <div className="flex items-center gap-6">
           <Link to="/">
-            <img src={logo} alt="Logo" width={109} height={80} />
+            <img src={logo} alt="Logo" width={80} height={65} />
           </Link>
 
           {/* Desktop Nav */}

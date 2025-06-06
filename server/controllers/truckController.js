@@ -1,4 +1,5 @@
 const truckService = require('../services/truckService');
+const emailService = require('../services/emailService');
 const nodemailer = require('nodemailer');
 const subscriptionService = require('../services/subscriptionService');
 const Product = require('../models/prooductModel');
@@ -105,36 +106,21 @@ const getAllTrucks = async (req, res, next) => {
 const sendMessage = async (req, res) => {
   const { email, message, sellerEmail, vehicleName } = req.body;
 
-  if (!email || !message || !sellerEmail ) {
+  if (!email || !message || !sellerEmail) {
     return res.status(400).json({ success: false, message: 'Missing fields' });
   }
 
   try {
-    // Setup transporter
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SENDER_EMAIL,
-        pass: process.env.SENDER_EMAIL_PASSWORD,
-      },
-    });
+    const subject = 'New Contact Message from Buyer';
+    const emailHtml = `
+      <p><strong>From:</strong> ${email}</p>
+      <p><strong>Vehicle Name:</strong> ${vehicleName || 'N/A'}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message}</p>
+    `;
+    const bcc = process.env.CLIENT_EMAIL;
 
-    // Email options
-    const mailOptions = {
-      from: email,
-      to: sellerEmail,
-      bcc: process.env.CLIENT_EMAIL, // Add BCC recipient
-      subject: 'New Contact Message from Buyer',
-      html: `
-        <p><strong>From:</strong> ${email}</p>
-        <p><strong>Vehicle Name:</strong> ${vehicleName || 'N/A'}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
-    };
-
-    // Send mail
-    await transporter.sendMail(mailOptions);
+    await emailService.sendEmail(sellerEmail, subject, null, emailHtml, null, bcc);
 
     res.json({ success: true, message: 'Email sent successfully' });
   } catch (error) {

@@ -106,7 +106,7 @@ export default function Footer() {
               </Link>
             </div>
             <div className="text-center text-[#FFFFFF] text-xs mt-6">
-              © Copyright {new Date().getFullYear()} - Trucksby
+              © Copyright {new Date().getFullYear()} - Truckby
             </div>
           </div>
         </div>

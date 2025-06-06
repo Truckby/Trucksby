@@ -30,7 +30,7 @@ const planSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true
-        }
+        },
     },
     {
         _id: false
@@ -74,6 +74,10 @@ const subscriptionsArraySchema = new mongoose.Schema(
             type: String,
             enum: ['active', 'refunded'],
             default: 'active'
+        },
+        autoRenew: {
+            type: Boolean,
+            default: true,
         }
     },
     {

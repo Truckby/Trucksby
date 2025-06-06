@@ -1,3 +1,4 @@
+import { formatNumberWithCommas } from '../../../utils/extra';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
 import { useLocation } from 'react-router';
@@ -16,10 +17,10 @@ const DetailPage = () => {
       Year: data?.modelYear,
       'Make': data?.vehicleManufacturer,
       Model: data?.engineModel,
-      Mileage: data?.mileage.toLocaleString(),
+      Mileage: formatNumberWithCommas(data?.mileage),
       VIN: data?.vin,
       Condition: data?.condition,
-      Hours: data?.hours.toLocaleString(),
+      Hours: formatNumberWithCommas(data?.hours),
     },
     "Contact Information": {
       name: data?.name,
@@ -34,7 +35,7 @@ const DetailPage = () => {
       Suspension: data?.suspension,
       "Engine Manufacturer": data?.engineManufacturer,
       "Engine Model": data?.engineModel,
-      "Engine Horsepower": data?.hoursPower.toLocaleString(),
+      "Engine Horsepower": formatNumberWithCommas(data?.hoursPower),
     },
     Powertrain: {
       "Transmission Manufacturer": data?.transmissionManufacturer,
@@ -42,9 +43,9 @@ const DetailPage = () => {
       'no of Speeds': data?.noofSpeeds,
     },
     Chassis: {
-      "Front Axle Weight": data?.frontAxleWeight.toLocaleString(),
-      "Rear Axle Weight": data?.backAxleWeight.toLocaleString(),
-      'Gross Vehicle Weight': data?.grossVehicleWeight.toLocaleString(),
+      "Front Axle Weight": formatNumberWithCommas(data?.frontAxleWeight),
+      "Rear Axle Weight": formatNumberWithCommas(data?.backAxleWeight),
+      'Gross Vehicle Weight': formatNumberWithCommas(data?.grossVehicleWeight),
       'Axle': data?.typeofRearAxles,
 
     },

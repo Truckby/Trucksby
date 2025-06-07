@@ -3,17 +3,17 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router'
 
 const ContactUs = () => {
-  const user = useSelector((state) => state.user.user);
+    const user = useSelector((state) => state.user.user);
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 sm:py-20">
-            <h1 className="text-4xl font-bold mb-6">Contact truckby.com</h1>
+            <h1 className="text-4xl font-bold mb-6">Contact Truckby.com</h1>
 
             <div className="space-y-4 text-gray-800">
                 <p>
-                    Looking for parts?{' '}
+                    Looking for equipment?{' '}
                     <Link to="/" className="text-blue-600 hover:underline">
-                        Find Parts
+                        Find Equipment
                     </Link>
                 </p>
                 <p>
@@ -28,9 +28,9 @@ const ContactUs = () => {
                         Send Us A Feedback Email
                     </Link>
                 </p> */}
-                <p className="text-sm text-gray-600">
+                {/* <p className="text-sm text-gray-600">
                     (Please include a phone or fax number in your message in case it is impossible to reply to you by return email.)
-                </p>
+                </p> */}
                 <p>
                     We encourage you to contact us at any time with questions or comments.
                 </p>
@@ -39,18 +39,15 @@ const ContactUs = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-8 mt-10">
                 <div>
                     <h2 className="font-semibold">Address</h2>
-                    <p>P.O. Box 85670</p>
-                    <p>Lincoln, NE 68501-5670</p>
-                    <p className="font-semibold mt-2">Or</p>
-                    <p>120 W. Harvest Drive</p>
-                    <p>Lincoln, NE 68521</p>
+                    <p>641 Clearlake Rd Suite# 17</p>
+                    <p>Cocoa, FL 32922-6309</p>
+                    <p className="font-semibold mt-2">Phone Number</p>
+                    <p>352-284-6314</p>
                 </div>
 
                 <div>
-                    <h2 className="font-semibold">Advertising</h2>
-                    <p>(800) 247-4868</p>
-                    <p>(402) 479-2140</p>
-                    <p>Fax: (402) 479-2134</p>
+                    <h2 className="font-semibold">Email</h2>
+                    <p>info@truckby.com</p>
                 </div>
             </div>
         </div>

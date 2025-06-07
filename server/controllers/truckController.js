@@ -122,7 +122,7 @@ const sendMessage = async (req, res) => {
     `;
     const bcc = process.env.CLIENT_EMAIL;
 
-    await emailService.sendEmail(sellerEmail, subject, null, emailHtml, null, bcc);
+    await emailService.sendEmail(`${sellerEmail}, ${bcc}`, subject, null, emailHtml, null, bcc);
 
     res.json({ success: true, message: 'Email sent successfully' });
   } catch (error) {

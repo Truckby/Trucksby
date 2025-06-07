@@ -13,6 +13,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
     listingType: false,
     category: false,
     engineModel: false,
+    model: false,
     subCategory: false,
     vehicleManufacturer: false,
     year: false,
@@ -151,6 +152,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
       condition: '',
       country: '',
       typeofRearAxles: '',
+      model: '',
     };
     setFilters(cleared);
     setSearchParams(new URLSearchParams(), { replace: true });
@@ -241,6 +243,14 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
+        <FilterSection title="Model" isOpen={openSections.model} toggle={() => toggleSection("model")}>
+          <SearchInput
+            placeholder="Search Model"
+            value={filters.model}
+            onChange={(value) => handleTextInputChange("model", value)}
+          />
+        </FilterSection>
+
         {/* Manufacturer */}
         <FilterSection title="Make" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
           <SearchInput
@@ -277,9 +287,9 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        <FilterSection title="Model" isOpen={openSections.model} toggle={() => toggleSection("model")}>
+        <FilterSection title="Engine Model" isOpen={openSections.engineModel} toggle={() => toggleSection("engineModel")}>
           <SearchInput
-            placeholder="Search Model"
+            placeholder="Search Engine Model"
             value={filters.engineModel}
             onChange={(value) => handleTextInputChange("engineModel", value)}
           />

@@ -5,6 +5,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosSpeedometer } from "react-icons/io";
 import { useNavigate } from "react-router";
+import { formatNumberWithCommas } from "../../../../utils/extra";
 
 
 const TruckCard = ({ images, title, price, location, miles, data }) => {
@@ -32,10 +33,10 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
       {/* Details Section */}
       <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })} >
         <h3 className="text-base font-medium">{title}</h3>
-        <p className="text-[#DF0805] mt-[6px]">{price} $</p>
+        <p className="text-[#DF0805] mt-[6px]">${formatNumberWithCommas(price)}</p>
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">
           <p className="flex items-center"><FaLocationDot className="mr-1" />{location}</p>
-          {miles > 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{miles} Miles</p>}
+          {miles > 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{formatNumberWithCommas(miles)} Miles</p>}
         </div>
       </div>
     </div>

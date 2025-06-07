@@ -52,6 +52,8 @@ const truckSchema = yup.object().shape({
   vehicleManufacturer: yup.string().trim().optional(),
   hours: yup.string().trim().optional(),
   vin: yup.string().trim().optional(),
+  model: yup.string().trim().required('Model is required'),
+  unitNumber: yup.string().trim().optional(),
   condition: yup.string().trim()
     .oneOf(['New', 'Used', 'Salvaged'], 'Invalid condition')
     .optional(),

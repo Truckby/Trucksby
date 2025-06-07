@@ -53,6 +53,7 @@ const FilterPage = () => {
       vehicleManufacturer: params.vehicleManufacturer || '',
       typeofRearAxles: params.typeofRearAxles || '',
       engineModel: params.engineModel || '',
+      model: params.model || '',
     };
   });
 

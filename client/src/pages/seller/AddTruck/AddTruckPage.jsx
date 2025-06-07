@@ -66,6 +66,8 @@ const AddTruckPage = () => {
       country: oldTruckData?.country || "",
       state: oldTruckData?.state || "",
       images: oldTruckData?.images || [],
+      model: oldTruckData?.model || "",
+      unitNumber: oldTruckData?.unitNumber || "",
     },
     validationSchema: Yup.object({
       vehicleName: Yup.string().required("Listing Title is required"),
@@ -80,6 +82,7 @@ const AddTruckPage = () => {
       condition: Yup.string().required("Condition is required"),
       vehicleManufacturer: Yup.string().required("Make is required"),
       modelYear: Yup.string().required("Model year is required"),
+      model: Yup.string().required("Model is required"),
       vehiclePrice: Yup.string().required("Price is required"),
       description: Yup.string().required("Description is required"),
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
@@ -569,14 +572,29 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="engineModel">Model</label>
+                <label className="label" htmlFor="model">Model *</label>
                 <input
                   type="text"
-                  name='engineModel'
+                  name='model'
                   placeholder="Enter your Model"
                   className="input"
                   onChange={formik.handleChange}
-                  value={formik.values.engineModel}
+                  value={formik.values.model}
+                />
+                {formik.errors.model && formik.touched.model && (
+                  <div className="text-red-500 text-sm">{formik.errors.model}</div>
+                )}
+              </div>
+
+              <div className='mb-9'>
+                <label className="label" htmlFor="unitNumber">Unit Number</label>
+                <input
+                  type="text"
+                  name='unitNumber'
+                  placeholder="Enter your Unit Number"
+                  className="input"
+                  onChange={formik.handleChange}
+                  value={formik.values.unitNumber}
                 />
               </div>
 
@@ -659,6 +677,18 @@ const AddTruckPage = () => {
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.hoursPower}
+                />
+              </div>
+
+               <div className='mb-9'>
+                <label className="label" htmlFor="engineModel">Engine Model</label>
+                <input
+                  type="text"
+                  name='engineModel'
+                  placeholder="Enter your Engine Model"
+                  className="input"
+                  onChange={formik.handleChange}
+                  value={formik.values.engineModel}
                 />
               </div>
             </div>

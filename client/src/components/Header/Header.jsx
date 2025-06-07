@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import logo from "../../assets/images/logo.svg";
+import React, { useState, useEffect, useRef } from "react";
+import logo from "../../assets/images/logo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import profile from '../../assets/images/profile.svg'
+import profile from '../../assets/images/person.png'
 import { useDispatch, useSelector } from "react-redux";
 import { FaAngleDown } from "react-icons/fa6";
 import { HideLoading, ShowLoading } from "../../redux/loaderSlice";
@@ -13,9 +13,9 @@ import Cookies from 'js-cookie';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const user = useSelector((state) => state.user.user);
-  console.log("User: ", user);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef(null); // Ref for the dropdown
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,11 +23,26 @@ export default function Header() {
     setIsProfileOpen((prev) => !prev);
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const navLinks = [
     { name: "Home", to: "/", protected: false },
     { name: "Listing", to: "/seller/listing", protected: true },
     { name: "Plans", to: "/seller/plans", protected: true },
     { name: "Privacy", to: "/privacy", protected: false },
+    { name: "Contact Us", to: "/contact-us", protected: false },
   ];
 
   const handleLogout = async () => {
@@ -49,7 +64,7 @@ export default function Header() {
         {/* Logo + Nav */}
         <div className="flex items-center gap-6">
           <Link to="/">
-            <img src={logo} alt="Logo" width={109} height={80} />
+            <img src={logo} alt="Logo" width={80} height={65} />
           </Link>
 
           {/* Desktop Nav */}
@@ -110,30 +125,47 @@ export default function Header() {
             </>
           }
 
-          {user?.email && <div onClick={toggleProfileDropdown} className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center">
-            <img src={user?.image || profile} alt="profile" className="w-[33px] h-[33px] rounded-full object-cover ml-2.5" />
-            <span className="ml-2.5">
-              {user?.userName ? user.userName.split('@')[0].slice(0, 10) : 'Guest'}
-            </span>
+          {user?.email && (
+            <div
+              ref={dropdownRef} // Attach ref to the dropdown container
+              onClick={toggleProfileDropdown}
+              className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center"
+            >
+              <img
+                src={user?.image || profile}
+                alt="profile"
+                className="w-[33px] h-[33px] rounded-full object-cover ml-2.5"
+              />
+              <span className="ml-2.5">
+                {user?.userName
+                  ? user.userName.split("@")[0].slice(0, 10)
+                  : "Guest"}
+              </span>
 
-            <div className="ml-auto">
-              <FaAngleDown />
-            </div>
-
-            {isProfileOpen && (
-              <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
-                <ul>
-                  <li onClick={() => navigate(`/${user.role}/profile`)} className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Profile</li>
-                  <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Billing</li>
-                  <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Settings</li>
-                  <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200">
-                    Log out
-                  </li>
-                </ul>
+              <div className="ml-auto">
+                <FaAngleDown />
               </div>
-            )}
-          </div>
-          }
+
+              {isProfileOpen && (
+                <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
+                  <ul>
+                    <li
+                      onClick={() => navigate(`/${user.role}/profile`)}
+                      className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200"
+                    >
+                      Profile
+                    </li>
+                    <li
+                      onClick={handleLogout}
+                      className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200"
+                    >
+                      Log out
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Toggle Button */}
@@ -200,8 +232,6 @@ export default function Header() {
                 <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
                   <ul>
                     <li onClick={() => navigate(`/${user.role}/profile`)} className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Profile</li>
-                    <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Billing</li>
-                    <li className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Settings</li>
                     <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200">
                       Log out
                     </li>

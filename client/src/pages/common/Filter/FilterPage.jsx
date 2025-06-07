@@ -28,6 +28,7 @@ const FilterPage = () => {
     return {
       listingType: params.listingType || '',
       truckCategory: params.truckCategory || '',
+      truckSubCategory: params.truckSubCategory || '',
       country: params.country || '',
       searchText: params.searchText || '',
       transmissionManufacturer: params.transmissionManufacturer || '',
@@ -51,6 +52,8 @@ const FilterPage = () => {
       condition: params.condition || '',
       vehicleManufacturer: params.vehicleManufacturer || '',
       typeofRearAxles: params.typeofRearAxles || '',
+      engineModel: params.engineModel || '',
+      model: params.model || '',
     };
   });
 

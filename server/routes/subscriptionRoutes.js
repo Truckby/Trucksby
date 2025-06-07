@@ -11,4 +11,9 @@ router.get(
     controller.GetUserSubscriptionInfo
 );
 
+router.put('/toggleAutoRenew',
+    authMiddleware.authenticateRequest,
+    controller.ToggleAutoRenew
+)
+
 module.exports = router;

@@ -4,6 +4,7 @@ import { FaChevronUp } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { CountryDropdown } from "react-country-region-selector";
 import { useSearchParams } from 'react-router-dom';
+import { truckSubCategories } from "../../../../data/Content";
 
 const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,6 +12,9 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
   const [openSections, setOpenSections] = useState({
     listingType: false,
     category: false,
+    engineModel: false,
+    model: false,
+    subCategory: false,
     vehicleManufacturer: false,
     year: false,
     mileage: false,
@@ -148,6 +152,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
       condition: '',
       country: '',
       typeofRearAxles: '',
+      model: '',
     };
     setFilters(cleared);
     setSearchParams(new URLSearchParams(), { replace: true });
@@ -230,10 +235,26 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        {/* Manufacturer */}
-        <FilterSection title="Vehicle Manufacturer" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
+        <FilterSection title="SubCategory" isOpen={openSections.subCategory} toggle={() => toggleSection("subCategory")}>
+          <SelectBox
+            options={truckSubCategories[filters.truckCategory] || []}
+            value={filters.truckSubCategory}
+            onChange={(value) => handleCheckboxChange("truckSubCategory", value)}
+          />
+        </FilterSection>
+
+        <FilterSection title="Model" isOpen={openSections.model} toggle={() => toggleSection("model")}>
           <SearchInput
-            placeholder="Search Vehicle Manufacturer"
+            placeholder="Search Model"
+            value={filters.model}
+            onChange={(value) => handleTextInputChange("model", value)}
+          />
+        </FilterSection>
+
+        {/* Manufacturer */}
+        <FilterSection title="Make" isOpen={openSections.vehicleManufacturer} toggle={() => toggleSection("vehicleManufacturer")}>
+          <SearchInput
+            placeholder="Search Make"
             value={filters.vehicleManufacturer}
             onChange={(value) => handleTextInputChange("vehicleManufacturer", value)}
           />
@@ -266,6 +287,14 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
+        <FilterSection title="Engine Model" isOpen={openSections.engineModel} toggle={() => toggleSection("engineModel")}>
+          <SearchInput
+            placeholder="Search Engine Model"
+            value={filters.engineModel}
+            onChange={(value) => handleTextInputChange("engineModel", value)}
+          />
+        </FilterSection>
+
         {/* Horsepower */}
         <FilterSection title="Horsepower" isOpen={openSections.horsepower} toggle={() => toggleSection("horsepower")}>
           <RangeInput
@@ -291,7 +320,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        <FilterSection title="Type of Axle" isOpen={openSections.typeofRearAxles} toggle={() => toggleSection("typeofRearAxles")}>
+        <FilterSection title="Axle" isOpen={openSections.typeofRearAxles} toggle={() => toggleSection("typeofRearAxles")}>
           <SelectBox
             options={["Single Axle", "Regular Tandem", "Tri Axle", 'Quad Axle', 'Other']}
             value={filters.typeofRearAxles}
@@ -307,7 +336,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        <FilterSection title="Back Axle Weight" isOpen={openSections.BackAxleWeight} toggle={() => toggleSection("BackAxleWeight")}>
+        <FilterSection title="Rear Axle Weight" isOpen={openSections.BackAxleWeight} toggle={() => toggleSection("BackAxleWeight")}>
           <RangeInput
             minValue={filters.minBackAxleWeight}
             maxValue={filters.maxBackAxleWeight}

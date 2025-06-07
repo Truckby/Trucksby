@@ -1,13 +1,15 @@
 const transporter = require('../configs/nodemailer.config');
 
-const sendEmail = async (to, subject, text, html) => {
+const sendEmail = async (to, subject, text, html, cc, bcc) => {
     try {
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to,
             subject,
             ...(text && { text }),
-            ...(html && { html })
+            ...(html && { html }),
+            ...(cc && { cc }),
+            ...(bcc && { bcc })
         };
 
         const info = await transporter.sendMail(mailOptions);

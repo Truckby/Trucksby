@@ -9,6 +9,22 @@ import subscriptionService from "../../../services/subscriptionService";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import './style.css';
 
+const ToggleSwitch = ({ checked, onChange }) => (
+  <button
+    type="button"
+    onClick={onChange}
+    className={`w-12 cursor-pointer h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${checked ? 'bg-green-500' : 'bg-gray-300'
+      }`}
+    aria-pressed={checked}
+  >
+    <span
+      className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ${checked ? 'translate-x-6' : ''
+        }`}
+    />
+  </button>
+);
+
+
 const SellerProfile = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -33,6 +49,8 @@ const SellerProfile = () => {
     subscriptionId: '',
     amount: null
   })
+
+  const [autoRenew, setAutoRenew] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -107,6 +125,7 @@ const SellerProfile = () => {
         const response = await subscriptionService.getUserSubscriptionInfo();
         if (response.info) {
           setInfo(response.info);
+          setAutoRenew(response.info.autoRenew ?? false); // Set autoRenew from backend
         }
       } catch (error) {
         message.error(error.response.data.error);
@@ -117,6 +136,21 @@ const SellerProfile = () => {
 
     getSubscriptionInfo();
   }, []);
+
+  // Handler for toggling autoRenew
+  const handleAutoRenewToggle = async () => {
+    try {
+      dispatch(ShowLoading());
+      // Call your backend API to toggle autoRenew
+      await subscriptionService.ToggleAutoRenew();
+      setAutoRenew((prev) => !prev);
+      toast.success("Auto Renew status updated");
+    } catch (error) {
+      toast.error("Failed to update Auto Renew");
+    } finally {
+      dispatch(HideLoading());
+    }
+  };
 
   return (
     <div className='py-[65px]'>
@@ -148,10 +182,18 @@ const SellerProfile = () => {
 
           <div>
             {info.status && (
-              <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-sm border border-green-300 max-w-xs w-full text-center sm:text-left mt-4 sm:mt-0">
-                <p className="text-sm font-semibold">Active Plan:</p>
-                <p className="text-base font-bold">{info.planName}</p>
-              </div>
+              <>
+                <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-sm border border-green-300 max-w-xs w-full text-center sm:text-left mt-4 sm:mt-0">
+                  <p className="text-sm font-semibold">Active Plan:</p>
+                  <p className="text-base font-bold">{info.planName}</p>
+                </div>
+
+                <div className="flex items-center mt-4">
+                  <span className="mr-2 font-medium">Auto Renew</span>
+                  <ToggleSwitch checked={autoRenew} onChange={handleAutoRenewToggle} />
+                </div>
+
+              </>
             )}
           </div>
         </div>

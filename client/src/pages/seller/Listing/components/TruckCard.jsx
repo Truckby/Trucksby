@@ -3,6 +3,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import image from '../../../../assets/images/card.svg'
 import { IoSpeedometer } from "react-icons/io5";
 import { useNavigate } from "react-router";
+import { formatNumberWithCommas } from "../../../../utils/extra";
 
 
 export default function TruckCard({ data, handleDeleteClick }) {
@@ -13,7 +14,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
       <img
         src={data?.images[0] || image}
         alt="Equipment"
-        className=" w-full md:w-[255px] object-cover"
+        className=" w-full md:w-[255px] md:h-[230px] object-cover"
       />
 
       <div className="p-3 sm:p-[26px] flex flex-col w-full">
@@ -30,7 +31,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
           </div> */}
         </div>
 
-        <p className="text-[#DF0805] text-lg font-semibold mt-4">{data?.vehiclePrice} $</p>
+        <p className="text-[#DF0805] text-lg font-semibold mt-4">${formatNumberWithCommas(data?.vehiclePrice)}</p>
 
         <div className="flex items-center  text-sm mt-4">
           {data?.country && <FaMapMarkerAlt className="mr-1" />}
@@ -40,7 +41,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
               <span className="ml-[30px] mr-1">
                 <IoSpeedometer />{" "}
               </span>
-              <span>{data?.mileage} Miles</span>
+              <span>{formatNumberWithCommas(data?.mileage)} Miles</span>
             </>
           )}
         </div>

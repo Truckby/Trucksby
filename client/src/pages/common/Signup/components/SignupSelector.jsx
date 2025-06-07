@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import BuyerSignupForm from "./BuyerSignupForm";
 import SellerSignupForm from "./SellerSignupForm";
 import { BsFillPersonFill } from "react-icons/bs";
-import logo from "../../../../assets/images/login_logo.svg"; // update the path as needed
+import logo from "../../../../assets/images/login_logo.png"; // update the path as needed
 import { Link, useSearchParams } from "react-router";
 
 export default function SignupSelector() {

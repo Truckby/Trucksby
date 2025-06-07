@@ -100,12 +100,15 @@ const getUserSubscriptionInfo = async (userId) => {
         return sub.endDate >= now && sub.status === 'active';
     });
 
+    console.log(subscription,'subscription')
+
     if (activeSubscription) {
         status = true;
         subscriptionId = activeSubscription.subscriptionId;
         planName = activeSubscription.planInfo.name;
         productId = activeSubscription.planInfo.productId;
         amount = activeSubscription.planInfo.amount;
+        autoRenew = activeSubscription.autoRenew;
     }
 
     return {
@@ -113,7 +116,8 @@ const getUserSubscriptionInfo = async (userId) => {
         subscriptionId,
         planName,
         productId,
-        amount
+        amount,
+        autoRenew
     };
 };
 

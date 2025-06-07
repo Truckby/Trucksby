@@ -38,6 +38,10 @@ const SellerSignupForm = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password')], 'Passwords must match')
       .required('Confirm Password is required'),
+    companyName: Yup.string().required('Company Name is required'), // New field
+    phone: Yup.string()
+      .matches(/^\d+$/, 'Phone must be a valid number')
+      .required('Phone is required'), // New field
   });
 
   const formik = useFormik({
@@ -50,26 +54,28 @@ const SellerSignupForm = () => {
       email: '',
       password: '',
       confirmPassword: '',
+      companyName: '', // New field
+      phone: '', // New field
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       let imageUrl = '';
-      setLoading(true)
+      setLoading(true);
       // Handle image upload if an image is selected
       if (image) {
         try {
           const imgForm = new FormData();
-          imgForm.append("images", image);
+          imgForm.append('images', image);
           const res = await uploadImg(imgForm);
 
           if (res?.success && res?.urls?.length > 0) {
             imageUrl = res.urls[0]; // Get the URL of the uploaded image
           } else {
-            toast.error("Image upload failed");
+            toast.error('Image upload failed');
             return;
           }
         } catch (error) {
-          toast.error("Error uploading image");
+          toast.error('Error uploading image');
           return;
         }
       }
@@ -83,6 +89,8 @@ const SellerSignupForm = () => {
         city: values.city,
         email: values.email,
         password: values.password,
+        companyName: values.companyName, // New field
+        phone: Number(values.phone), // New field
         image: imageUrl,
       };
 
@@ -98,7 +106,7 @@ const SellerSignupForm = () => {
         toast.error(error?.response?.data?.error || 'Registration failed');
         console.error('Registration error:', error);
       }
-      setLoading(false)
+      setLoading(false);
     },
 
   });
@@ -192,7 +200,7 @@ const SellerSignupForm = () => {
             <input
               type="text"
               name="city"
-              placeholder="City"
+              placeholder="Location"
               value={formik.values.city}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -219,6 +227,38 @@ const SellerSignupForm = () => {
 
             {formik.touched.email && formik.errors.email && (
               <p className="text-red-500 text-sm">{formik.errors.email}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <input
+              type="text"
+              name="companyName"
+              placeholder="Company Name"
+              value={formik.values.companyName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="p-4 block w-full border rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
+            />
+            {formik.touched.companyName && formik.errors.companyName && (
+              <p className="text-red-500 text-sm">{formik.errors.companyName}</p>
+            )}
+          </div>
+
+          <div>
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone"
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="p-4 block w-full border rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
+            />
+            {formik.touched.phone && formik.errors.phone && (
+              <p className="text-red-500 text-sm">{formik.errors.phone}</p>
             )}
           </div>
         </div>

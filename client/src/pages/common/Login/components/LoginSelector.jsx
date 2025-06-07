@@ -1,5 +1,5 @@
 import LoginForm from "./LoginForm";
-import logo from "../../../../assets/images/login_logo.svg"; // ✅ Update this path to your actual image location
+import logo from "../../../../assets/images/login_logo.png"; // ✅ Update this path to your actual image location
 import { Link } from "react-router";
 
 const LoginSelector = () => {

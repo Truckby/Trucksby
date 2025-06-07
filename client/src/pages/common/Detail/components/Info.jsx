@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import truckService from '../../../../services/truckService';
 import toast from 'react-hot-toast';
 import { PiAddressBookTabsFill } from "react-icons/pi";
+import { formatPhoneNumber } from '../../../../utils/extra';
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,8 @@ const Info = ({ data }) => {
     const payload = {
       email: email,
       message: message,
-      sellerEmail: data?.email
+      sellerEmail: data?.email,
+      vehicleName: data?.vehicleName
     };
 
     dispatch(ShowLoading());
@@ -78,7 +80,9 @@ const Info = ({ data }) => {
 
           {/* Mileage & Location */}
           <div className="flex justify-between  text-sm mb-4">
-            <p className="text-[#DF0805] text-lg sm:text-[32px] font-bold">{data?.vehiclePrice} $</p>
+            <p className="text-[#DF0805] text-lg sm:text-[32px] font-bold">
+              ${data?.vehiclePrice?.toLocaleString()}
+            </p>
 
             <p className="flex items-center gap-1 text-sm">
               <FaMapMarkerAlt />
@@ -88,7 +92,7 @@ const Info = ({ data }) => {
 
           {/* Seller Info */}
           <div className="bg-white p-5 mt-10 rounded-[10px]">
-            <p className="font-semibold text-lg mb-2">Sellers Info</p>
+            <p className="font-semibold text-lg mb-2">Contact Information</p>
 
             <div className="flex items-center gap-2 text-gray-700">
               <FaUser />
@@ -102,7 +106,7 @@ const Info = ({ data }) => {
 
             {data?.phone && <div className="flex items-center gap-2 text-gray-700 mt-2">
               <FaPhone />
-              <span>{data?.phone}</span>
+              <span>{formatPhoneNumber(data?.phone)}</span>
             </div>}
 
             <div className='flex flex-col sm:flex-row justify-between'>

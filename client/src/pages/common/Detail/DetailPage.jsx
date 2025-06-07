@@ -1,3 +1,4 @@
+import { formatNumberWithCommas, formatPhoneNumber } from '../../../utils/extra';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
 import { useLocation } from 'react-router';
@@ -14,16 +15,17 @@ const DetailPage = () => {
       'Listing Type': data?.listingType,
       'Country': data?.country,
       Year: data?.modelYear,
-      'Vehicle Manufacturer': data?.vehicleManufacturer,
-      Model: data?.engineModel,
-      Mileage: data?.mileage,
+      'Make': data?.vehicleManufacturer,
+      Model: data?.model,
+      'Unit Number': data?.unitNumber,
+      Mileage: formatNumberWithCommas(data?.mileage),
       VIN: data?.vin,
       Condition: data?.condition,
+      Hours: formatNumberWithCommas(data?.hours),
     },
-    "Personal Info": {
+    "Contact Information": {
       name: data?.name,
-      email: data?.email,
-      phone: data?.phone,
+      phone: formatPhoneNumber(data?.phone),
       address: data?.address,
       'Company Name': data?.companyName,
     },
@@ -32,9 +34,10 @@ const DetailPage = () => {
       Steering: data?.steering,
       Color: data?.color,
       Suspension: data?.suspension,
+      'Engine Model': data?.engineModel,
       "Engine Manufacturer": data?.engineManufacturer,
       "Engine Model": data?.engineModel,
-      "Engine Horsepower": data?.hoursPower,
+      "Engine Horsepower": formatNumberWithCommas(data?.hoursPower),
     },
     Powertrain: {
       "Transmission Manufacturer": data?.transmissionManufacturer,
@@ -42,13 +45,14 @@ const DetailPage = () => {
       'no of Speeds': data?.noofSpeeds,
     },
     Chassis: {
-      "Front Axle Weight": data?.frontAxleWeight,
-      "Back Axle Weight": data?.backAxleWeight,
-      'Gross Vehicle Weight': data?.grossVehicleWeight,
-      'Type of Axle': data?.typeofRearAxles,
-
+      "Front Axle Weight": formatNumberWithCommas(data?.frontAxleWeight),
+      "Rear Axle Weight": formatNumberWithCommas(data?.backAxleWeight),
+      'Gross Vehicle Weight': formatNumberWithCommas(data?.grossVehicleWeight),
+      'Axle': data?.typeofRearAxles,
     },
   };
+
+  console.log(sampleData, 'sampleData');
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto px-4 lg:px-0'>
@@ -63,7 +67,7 @@ const DetailPage = () => {
         </div>
 
         <div className='block lg:hidden'>
-          <DetailInfo data={sampleData} />
+          <DetailInfo data={sampleData} images={data.images} />
         </div>
       </div>
     </div>

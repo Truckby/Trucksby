@@ -6,7 +6,7 @@ import {
   FaTelegramPlane,
   FaInstagram,
 } from "react-icons/fa";
-import logo from "../../assets/images/footer_logo.svg";
+import logo from "../../assets/images/footer_logo.png";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import truckService from "../../services/truckService";
@@ -76,7 +76,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <nav className="flex mb-6 lg:mb-0 space-x-10 sm:space-x-12 justify-center items-center text-[#FFFFFF] text-sm">
-            <Link to={"/home"} className="hover:text-white">
+            <Link to={"/"} className="hover:text-white">
               Home
             </Link>
             {user?.role === "seller" && (
@@ -97,21 +97,16 @@ export default function Footer() {
           {/* Socials */}
           <div className="mb-6 lg:mb-0 lg:w-[260px] flex flex-col items-center lg:items-end">
             <div className="flex space-x-4 text-[#FFFFFF] mt-6 md:mt-0">
-              <Link to={"/"} className="hover:text-white">
+              <Link target="_blank" to={"https://www.facebook.com/profile.php?id=61576747834064&mibextid=LQQJ4d"} className="hover:text-white">
                 <FaFacebookF size={18} />
               </Link>
-              <Link to={"/"} className="hover:text-white">
+
+              <Link target="_blank" to={"https://www.instagram.com/truckbyapp?igsh=NTc4MTIwNjQ2YQ=="} className="hover:text-white">
                 <FaInstagram size={18} />
-              </Link>
-              <Link to={"/"} className="hover:text-white">
-                <FaXTwitter size={18} />
-              </Link>
-              <Link to={"/"} className="hover:text-white">
-                <FaYoutube size={18} />
               </Link>
             </div>
             <div className="text-center text-[#FFFFFF] text-xs mt-6">
-              © Copyright {new Date().getFullYear()} - Trucksby
+              © Copyright {new Date().getFullYear()} - Truckby
             </div>
           </div>
         </div>

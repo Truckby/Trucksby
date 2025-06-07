@@ -11,12 +11,14 @@ import { useLocation, useNavigate } from 'react-router';
 import { uploadImg } from '../../../services/image';
 import { FaTimes } from 'react-icons/fa';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
+import { truckCategory, truckSubCategories } from '../../../data/Content';
 
 const AddTruckPage = () => {
   const location = useLocation();
   const oldTruckData = location.state;
   const [previewImages, setPreviewImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // Add this useEffect to handle existing images
@@ -26,6 +28,8 @@ const AddTruckPage = () => {
     }
   }, [oldTruckData]);
 
+
+
   const formik = useFormik({
     initialValues: {
       vehicleName: oldTruckData?.vehicleName || "",
@@ -33,11 +37,11 @@ const AddTruckPage = () => {
       truckCategory: oldTruckData?.truckCategory || "",
       truckSubCategory: oldTruckData?.truckSubCategory || "",
       listingType: oldTruckData?.listingType || "",
-      name: oldTruckData?.name || "",
-      phone: oldTruckData?.phone || "",
-      email: oldTruckData?.email || "",
-      companyName: oldTruckData?.companyName || "",
-      address: oldTruckData?.address || "",
+      name: oldTruckData?.name || user?.name || "",
+      phone: oldTruckData?.phone || user?.phone || "",
+      email: oldTruckData?.email || user?.email || "",
+      companyName: oldTruckData?.companyName || user?.companyName || "",
+      address: oldTruckData?.address || user?.city || "",
       modelYear: oldTruckData?.modelYear || "",
       mileage: oldTruckData?.mileage || null,
       vehicleManufacturer: oldTruckData?.vehicleManufacturer || "",
@@ -62,9 +66,11 @@ const AddTruckPage = () => {
       country: oldTruckData?.country || "",
       state: oldTruckData?.state || "",
       images: oldTruckData?.images || [],
+      model: oldTruckData?.model || "",
+      unitNumber: oldTruckData?.unitNumber || "",
     },
     validationSchema: Yup.object({
-      vehicleName: Yup.string().required("Vehicle name is required"),
+      vehicleName: Yup.string().required("Listing Title is required"),
       name: Yup.string().required("Name is required"),
       companyName: Yup.string().required("Company name is required"),
       phone: Yup.string().required("Phone number is required"),
@@ -74,9 +80,10 @@ const AddTruckPage = () => {
       truckCategory: Yup.string().required("Category is required"),
       truckSubCategory: Yup.string().required("Subcategory is required"),
       condition: Yup.string().required("Condition is required"),
-      vehicleManufacturer: Yup.string().required("Vehicle manufacturer is required"),
+      vehicleManufacturer: Yup.string().required("Make is required"),
       modelYear: Yup.string().required("Model year is required"),
-      vehiclePrice: Yup.string().required("Vehicle price is required"),
+      model: Yup.string().required("Model is required"),
+      vehiclePrice: Yup.string().required("Price is required"),
       description: Yup.string().required("Description is required"),
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
     }),
@@ -181,128 +188,6 @@ const AddTruckPage = () => {
 
   };
 
-  const truckCategory = [
-    'Trucks',
-    'Trailers',
-    'Construction Equipment',
-    'Logging Equipment',
-    'Farm Equipment',
-    'Aggregate and Mining Equipment',
-    'Lifting Equipment',
-    'Industrial Equipment',
-    'RVs',
-    'Others'
-  ];
-
-
-  const truckSubCategories = {
-    "Trucks": [
-      "Ambulances", "Attenuator Trucks", "Beverage Trucks", "Boom & Bucket Trucks", "Bridge Inspection Trucks",
-      "Buses", "Cab & Chassis Trucks", "Cable Reel Loader Trucks", "Cabover Sleepers", "Cabover Trucks",
-      "Car Carrier Trucks", "Cargo Vans", "Chemical & Acid Trucks", "Chipper Trucks", "Concrete Pump Trucks",
-      "Conveyor Trucks", "Crane Trucks", "Curtain Side Trucks", "Day Cab Semi Trucks", "Delivery / Moving / Straight / Box Trucks",
-      "Digger Derrick Trucks", "Drilling Rigs", "Dump Trucks", "Emergency Vehicles", "Equipment Carrier Trucks",
-      "Expeditor / Hot Shot Trucks", "Farm & Grain Trucks", "Fire Trucks", "Flatbed Dump Trucks", "Flatbed Trucks",
-      "Food Trucks", "Forestry Bucket Trucks", "Fuel & Lube Trucks", "Garbage Trucks", "Gasoline / Fuel Trucks",
-      "Glider Kits", "Grapple Trucks", "Hauler Trucks", "Heavy Expanded Mobility Tactical Trucks (HEMTT)", "Hooklift Trucks",
-      "Hot Oil / Asphalt Distributor Trucks", "Landscape Trucks", "Lift Trucks", "Logging Trucks", "Mechanic / Utility / Service Trucks",
-      "Medium Tactical Vehicles (MTV)", "Military Trucks", "Mixer / Ready Mix / Concrete Trucks", "Oil Field Trucks", "Other Trucks",
-      "Passenger Vans", "Pickup Trucks", "Plow / Spreader Trucks", "Pole Trucks", "Propane Trucks",
-      "Railroad Trucks", "Recycling Trucks", "Refrigerated Trucks", "Roll Off Dumpsters", "Roll Off Trucks",
-      "Rollback Tow Trucks", "Salvage Trucks", "Service Vans", "Sewer / Septic Trucks", "Sleeper Semi Trucks",
-      "Stake Bed Trucks", "Step Vans", "Sweeper Trucks", "Tanker Trucks", "Transfer Trucks",
-      "Truck Bodies / Boxes / Beds", "Vacuum Trucks", "Water Trucks", "Winch Trucks", "Wrecker Tow Trucks",
-      "Yard Spotter Trucks"
-    ],
-    "Trailers": [
-      "Asphalt Tack Wagons / Distributor Trailers", "ATV Trailers", "Beavertail Trailers", "Belt Trailers", "Beverage Trailers",
-      "Blade Trailers", "Cable Reel Trailers", "Car Hauler Trailers", "Chassis Trailer", "Chip Trailers",
-      "Conestoga / Curtain Side Trailers", "Container Trailers", "Dolly Trailers", "Double Drop Trailers", "Drop Deck Trailers",
-      "Drop Frame Trailers", "Dry Van Trailers", "Dump Trailers", "Dump Trailers (Semi Truck)", "Enclosed Cargo Trailers",
-      "Equipment Transport Trailers", "Farm Trailers", "Feed Trailers", "Fiber Splicing Trailers", "Fire Trailers",
-      "Flatbed Trailers", "Flip Axles", "Fuel Trailers (Bumper-Pull)", "Gooseneck Trailers", "Header Trailers",
-      "Hopper / Grain Trailers", "Horse Trailers", "Jeeps & Boosters", "Landscape Trailers", "Live Floor Trailers",
-      "Livestock Trailers", "Log Trailers", "Lowboy Trailers", "Military Trailers", "Office Trailers",
-      "Oil Field Trailers", "Open Top Trailers", "Pintle Trailers", "Pole Trailers", "Pump Trailers",
-      "Pup Trailers", "Refrigerated Trailers", "Refuse Trailers", "Roll Off Dumpsters", "Roll Off Trailers",
-      "Shipping / Roll Off / Storage Containers", "Solar Trailers", "Specialty Trailers", "Storage Trailers", "Super B Trains",
-      "Tag Trailers", "Tank Trailers", "Asphalt / Hot Oil Tank Trailers", "Chemical & Acid Tank Trailers", "Crude Oil Tank Trailers",
-      "Dry Bulk & Pneumatic Tank Trailers", "Food Grade Tank Trailers", "Fuel Tanker Trailers", "Industrial Gas Tank Trailers", "Non Code Tank Trailers",
-      "Storage Pig Trailers", "Vacuum Tank Trailers", "Waste / Sludge Tank Trailers", "Water Tank Trailers"
-    ],
-    "Construction Equipment": [
-      "Air Compressors", "Articulated Trucks", "Asphalt / Cement / Hot Mix Silos", "Asphalt Chip Spreaders", "Asphalt Crack Sealers",
-      "Asphalt Equipment", "Asphalt Heaters", "Asphalt Patchers", "Asphalt Pavers", "Asphalt Tack Wagons / Distributor Trailers",
-      "Backhoes", "Cable Reel Trailers", "Cold Planers / Milling Machines", "Concrete / Cement / Mortar Mixers", "Concrete / Pavement Breakers",
-      "Concrete Buggies", "Concrete Equipment", "Concrete Finishers", "Concrete Grinders", "Concrete Pavers / Spreaders / Slipform Pavers",
-      "Concrete Pumps", "Concrete Saws", "Crawler Carriers", "Crawler Loaders", "Curb Machines",
-      "Demolition Equipment", "Directional Drills (HDD)", "Dismantled / Parting Out Heavy Equipment", "Dozers", "Drill Rods",
-      "Drilling Equipment", "Drilling Rigs", "Dumpers", "Dust Control Solutions", "Excavators",
-      "Generator Sets", "HDD Guidance Systems", "Light Towers", "Long Reach Excavators", "Material Transfer Vehicles",
-      "Mini Excavators", "Miscellaneous Equipment", "Motor Graders", "Mud Systems", "Off-Highway Trucks",
-      "Padfoot Rollers", "Pavement Marking / Road Striping Equipment", "Pile Drivers", "Pipelayers", "Plate Compactors",
-      "Pneumatic Tired Rollers", "Road Reclaimers & Soil Stabilizers", "Road Wideners", "Scrapers", "Skid Steers",
-      "Skip Loaders", "Smooth Drum Rollers", "Sweepers", "Telehandlers", "Towable Heaters",
-      "Traffic Control / Arrow / Message Boards", "Trench Boxes / Shields", "Trenchers / Boring Machines / Cable Plows", "Vacuum Excavators", "Walk / Tow Behind Compactors",
-      "Water Equipment", "Water Towers", "Water Trucks", "Water Wagons", "Wheel Dozers",
-      "Wheel Loaders", "Wheeled Excavators"
-    ],
-    "Logging Equipment": [
-      "Air Curtain Burners", "Assorted Forestry Equipment", "Chip Trailers", "Chipper Trucks", "Delimbers",
-      "Feller Bunchers", "Felling Heads", "Fire Trailers", "Firewood Processors", "Forestry Brush Cutters",
-      "Forestry Bucket Trucks", "Forestry Dozers", "Forestry Harvesting Heads", "Forestry Mulchers", "Forwarders",
-      "Grapple Trucks", "Harvesters", "Horizontal Grinders", "Knuckleboom Loaders", "Live Floor Trailers",
-      "Log Forks", "Log Grapples", "Log Loaders", "Log Splitters", "Log Trailers",
-      "Logging Trucks", "Motorized Carriages", "Mulcher Attachments", "Portable Debarkers", "Processor Machines",
-      "Road Builders (Excavators)", "Skidders", "Slasher Saws", "Stump Grinders", "Tree Jacks",
-      "Tree Shears", "Tree Spades", "Tree Trimming Machines", "Tub Grinders", "Winch Assist Systems",
-      "Wood Chippers", "Yarders"
-    ],
-    "Farm Equipment": [
-      "Applicators / Sprayers / Spreaders", "Assorted Ag Equipment", "Bale Grabbers", "Bale Spears", "Box Blades & Scrapers",
-      "Chemical Applicators", "Combine Attachments", "Combine Headers", "Combines", "Cotton Pickers",
-      "Drones", "Farm & Garden Fencing", "Farm & Grain Trucks", "Farm Trailers", "Feed Trailers",
-      "Forage Harvesters", "Grain Handling / Storage Equipment", "Harvesting Equipment", "Hay & Forage Equipment", "Header Trailers",
-      "Hitches", "Irrigation Equipment", "Land Levelers", "Livestock & Manure Equipment", "Nut And Tree Equipment",
-      "Planting Equipment", "Precision Ag Equipment", "Skid Steers", "Skip Loaders", "Tillage Equipment",
-      "Tractors", "Tree Trimming Machines", "Vineyard Equipment"
-    ],
-    "Aggregate and Mining Equipment": [
-      "Asphalt / Cement / Hot Mix Silos", "Asphalt Plants", "Assorted Aggregate & Mining Equipment", "Bag Houses", "Ball Mills",
-      "Bark & Mulch Blowers", "Blasthole Drills", "Cold Feeders", "Concrete Batch Plants", "Conveyors",
-      "Crushing Plants", "Dust Collectors", "Dust Control Solutions", "Feeders", "Grizzly Screens",
-      "Hoppers", "Hydrocyclones", "Loadout Bunkers", "Log Washers", "Metal Melting Furnaces",
-      "Mineral Jigs", "Mud Systems", "Off-Highway Trucks", "Pugmill Systems", "Rip Rap Plants",
-      "Sandscrews", "Screening Plants", "Separators", "Slurry Pumps", "Trommel Screens",
-      "Truck Unloaders", "Underground Equipment", "Underground Mining Loaders", "Underground Mining Trucks", "Wash Plants"
-    ],
-    "Lifting Equipment": [
-      "All Terrain Cranes", "Boom & Bucket Trucks", "Boom Lifts", "Bridge Cranes", "Carry Deck Cranes",
-      "Container Handlers", "Crane Trucks", "Cranes", "Crawler Cranes / Draglines", "Forestry Bucket Trucks",
-      "Forklifts", "Gantry Cranes", "Lattice Boom Truck Cranes", "Man Lifts", "Material Lifts",
-      "Rough Terrain Cranes", "Scissor Lifts", "Telehandlers", "Telescopic Boom Truck Cranes", "Tower Cranes",
-      "Towable Boom Lifts"
-    ],
-    "Industrial Equipment": [
-      "Above Ground Storage Tanks", "Aircrafts", "Assorted Industrial Equipment", "Barges", "Commercial Trash Compactors",
-      "Crawler Carriers", "Dust Control Solutions", "Electrical Distribution Equipment", "Floor Scrubbers", "Floor Strippers",
-      "Floor Sweepers", "Fusion Machines", "Generator Sets", "Golf / Utility Carts", "Helicopters",
-      "Hydraulic Power Units", "Industrial Blowers", "Industrial Heaters", "Industrial Ovens", "Industrial Paper Shredders",
-      "Industrial Power Units", "Industrial Spray Painting Equipment", "Landfill Compactors", "Light Towers", "Locomotives",
-      "Machine Presses", "Manufacturing Equipment", "Pavement Marking / Road Striping Equipment", "Plasma Cutting Machines", "Pumps",
-      "Rail / Ballast Equipment", "Roll Off Dumpsters", "Shipping / Roll Off / Storage Containers", "Snow Removal Equipment", "Solar Trailers",
-      "Sweepers", "Tanks", "Tire / Wheel Balancer Machines", "Tow Tractors / Tow Tugs", "Towable Heaters",
-      "Traffic Control / Arrow / Message Boards", "Tree Trimming Machines", "Truck Scales", "Vacuum Excavators", "Vehicle Lift Systems",
-      "Vertical Milling Machines", "Wastewater Treatment Equipment", "Water Equipment", "Water Towers", "Welding Machines",
-      "Well Service Pumps"
-    ],
-    "RVs": [
-      "Motorhomes", "Towables Rv's", "Travel Trailers", "Trailer Bodies", "Transfer Trailers",
-      "Utility Trailers", "Wellsite Trailers", "Toy Haulers"
-    ]
-  }
-
-
   return (
     <div className='py-[65px]'>
       <div className='max-w-[1147px] mx-auto bg-white rounded-[20px] md:px-[79px] md:py-[65px] p-4 shadow'>
@@ -313,11 +198,11 @@ const AddTruckPage = () => {
           <div className=''>
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vehicleName">Vehicle Name *</label>
+                <label className="label" htmlFor="vehicleName">Listing Title *</label>
                 <input
                   type="text"
                   name="vehicleName"
-                  placeholder="Enter your vehicle name"
+                  placeholder="Enter your Listing Title"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vehicleName}
@@ -328,7 +213,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="vehiclePrice">Vehicle Price *</label>
+                <label className="label" htmlFor="vehiclePrice">Price *</label>
                 <input
                   type="number"
                   name='vehiclePrice'
@@ -517,7 +402,7 @@ const AddTruckPage = () => {
           </div>
 
           {/* Personal Info */}
-          <h3 className="mt-9 bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Personal Info</h3>
+          <h3 className="mt-9 bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Contact Information</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
               <label className="label" htmlFor="name">Name *</label>
@@ -582,7 +467,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="address">Address</label>
+              <label className="label" htmlFor="address">Location</label>
               <input
                 type="text"
                 name='address'
@@ -628,11 +513,11 @@ const AddTruckPage = () => {
 
             <div className='grid md:grid-cols-2 md:space-x-[31px]'>
               <div className='mb-9'>
-                <label className="label" htmlFor="vehicleManufacturer">Vehicle Manufacturer *</label>
+                <label className="label" htmlFor="vehicleManufacturer">Make *</label>
                 <input
                   type="text"
                   name='vehicleManufacturer'
-                  placeholder="Enter Vehicle Manufacturer"
+                  placeholder="Enter Make"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vehicleManufacturer}
@@ -661,7 +546,7 @@ const AddTruckPage = () => {
                 <input
                   type="text"
                   name='vin'
-                  placeholder="Enter your Vehicle Name"
+                  placeholder="Enter your Listing Title"
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.vin}
@@ -685,6 +570,34 @@ const AddTruckPage = () => {
                   <div className="text-red-500 text-sm">{formik.errors.condition}</div>
                 )}
               </div>
+
+              <div className='mb-9'>
+                <label className="label" htmlFor="model">Model *</label>
+                <input
+                  type="text"
+                  name='model'
+                  placeholder="Enter your Model"
+                  className="input"
+                  onChange={formik.handleChange}
+                  value={formik.values.model}
+                />
+                {formik.errors.model && formik.touched.model && (
+                  <div className="text-red-500 text-sm">{formik.errors.model}</div>
+                )}
+              </div>
+
+              <div className='mb-9'>
+                <label className="label" htmlFor="unitNumber">Unit Number</label>
+                <input
+                  type="text"
+                  name='unitNumber'
+                  placeholder="Enter your Unit Number"
+                  className="input"
+                  onChange={formik.handleChange}
+                  value={formik.values.unitNumber}
+                />
+              </div>
+
             </div>
           </div>
 
@@ -754,18 +667,6 @@ const AddTruckPage = () => {
                 />
               </div>
 
-              <div className='mb-9'>
-                <label className="label" htmlFor="engineModel">Engine Model</label>
-                <input
-                  type="text"
-                  name='engineModel'
-                  placeholder="Enter your Engine Model"
-                  className="input"
-                  onChange={formik.handleChange}
-                  value={formik.values.engineModel}
-                />
-              </div>
-
 
               <div className='mb-9'>
                 <label className="label" htmlFor="hoursPower">Horse Power</label>
@@ -776,6 +677,18 @@ const AddTruckPage = () => {
                   className="input"
                   onChange={formik.handleChange}
                   value={formik.values.hoursPower}
+                />
+              </div>
+
+               <div className='mb-9'>
+                <label className="label" htmlFor="engineModel">Engine Model</label>
+                <input
+                  type="text"
+                  name='engineModel'
+                  placeholder="Enter your Engine Model"
+                  className="input"
+                  onChange={formik.handleChange}
+                  value={formik.values.engineModel}
                 />
               </div>
             </div>
@@ -818,7 +731,7 @@ const AddTruckPage = () => {
             </div>
 
             <div className='mb-9'>
-              <label className="label" htmlFor="noofSpeeds">No of Speeds</label>
+              <label className="label" htmlFor="noofSpeeds">Number  of Speeds</label>
               <input
                 type="text"
                 name='noofSpeeds'
@@ -847,7 +760,7 @@ const AddTruckPage = () => {
           <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Chassis</h3>
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="typeofRearAxles">Type of Axle</label>
+              <label className="label" htmlFor="typeofRearAxles">Axle</label>
               <select
                 name="typeofRearAxles"
                 className="input"
@@ -881,7 +794,7 @@ const AddTruckPage = () => {
 
           <div className='grid md:grid-cols-2 md:space-x-[31px]'>
             <div className='mb-9'>
-              <label className="label" htmlFor="backAxleWeight">Back Axle Weight</label>
+              <label className="label" htmlFor="backAxleWeight">Rear Axle Weight</label>
               <input
                 type="number"
                 name='backAxleWeight'

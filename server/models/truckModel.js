@@ -20,7 +20,8 @@ const truckSchema = new mongoose.Schema(
             type: [String],
             default: [],
         },
-
+        model: { type: String, trim: true },
+        unitNumber: { type: String, trim: true },
         // Seller Contact Info
         name: { type: String, trim: true },
         phone: { type: Number, trim: true },

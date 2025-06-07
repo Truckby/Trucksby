@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import truckService from '../../../../services/truckService';
 import toast from 'react-hot-toast';
 import { PiAddressBookTabsFill } from "react-icons/pi";
+import { formatPhoneNumber } from '../../../../utils/extra';
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ const Info = ({ data }) => {
 
             {data?.phone && <div className="flex items-center gap-2 text-gray-700 mt-2">
               <FaPhone />
-              <span>{data?.phone}</span>
+              <span>{formatPhoneNumber(data?.phone)}</span>
             </div>}
 
             <div className='flex flex-col sm:flex-row justify-between'>

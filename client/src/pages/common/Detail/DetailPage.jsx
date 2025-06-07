@@ -1,4 +1,4 @@
-import { formatNumberWithCommas } from '../../../utils/extra';
+import { formatNumberWithCommas, formatPhoneNumber } from '../../../utils/extra';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
 import { useLocation } from 'react-router';
@@ -25,7 +25,7 @@ const DetailPage = () => {
     },
     "Contact Information": {
       name: data?.name,
-      phone: data?.phone,
+      phone: formatPhoneNumber(data?.phone),
       address: data?.address,
       'Company Name': data?.companyName,
     },

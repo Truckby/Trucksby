@@ -49,7 +49,8 @@ const DetailInfo = ({ data, images = [] }) => {
   return (
     <div>
       {/* Carousel Section */}
-      {images?.length > 0 && (
+      <div className="hidden lg:block">
+        {images?.length > 0 && (
         <Carousel showThumbs={false} infiniteLoop autoPlay>
           {images.map((img, index) => (
             <div key={index}>
@@ -63,6 +64,7 @@ const DetailInfo = ({ data, images = [] }) => {
         </Carousel>
       )}
 
+      </div>
       {/* Vehicle Details Section */}
       <div>
         {Object.keys(filteredSections).length > 0 ? (

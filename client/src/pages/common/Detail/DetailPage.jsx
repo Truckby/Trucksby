@@ -1,3 +1,4 @@
+import { Carousel } from 'react-responsive-carousel';
 import { formatNumberWithCommas, formatPhoneNumber } from '../../../utils/extra';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
@@ -55,9 +56,25 @@ const DetailPage = () => {
   console.log(sampleData, 'sampleData');
 
   return (
-    <div className='pb-10 max-w-[1300px] mx-auto px-4 lg:px-0'>
+    <div className='pb-10 max-w-[1300px] mx-auto px-4 pt-10 lg:pt-20 lg:px-0'>
 
-      <div className='grid lg:grid-cols-2 mt-20 lg:mx-4'>
+      <div className='block lg:hidden'>
+        {data?.images?.length > 0 && (
+          <Carousel showThumbs={false} infiniteLoop autoPlay>
+            {data?.images.map((img, index) => (
+              <div key={index}>
+                <img
+                  src={img}
+                  alt={`image - ${index + 1}`}
+                  className="w-auto h-[300px] sm:h-[465px] object-cover rounded-[15px]"
+                />
+              </div>
+            ))}
+          </Carousel>
+        )}
+      </div>
+
+      <div className='grid lg:grid-cols-2 lg:mx-4'>
         <div className='hidden lg:block'>
           <DetailInfo data={sampleData} images={data.images} />
         </div>

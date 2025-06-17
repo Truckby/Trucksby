@@ -175,8 +175,7 @@ const AddTruckPage = () => {
 
     // Update Formik's images field so validation passes
     formik.setFieldValue('images', files);
-  };
-
+  }; 
 
 
   const handleRemoveImage = (index) => {

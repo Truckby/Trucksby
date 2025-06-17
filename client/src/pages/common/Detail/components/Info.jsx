@@ -54,7 +54,7 @@ const Info = ({ data }) => {
 
   return (
     <div>
-      <div className='lg:pl-20'>
+      <div className=' mt-5 lg:mt-0 lg:pl-20'>
         <div className='flex justify-between'>
           <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'>{data?.vehicleName}</h2>
 

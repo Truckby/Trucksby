@@ -49,6 +49,13 @@ export default function TruckCard({ data, handleDeleteClick }) {
 
         <div className="flex mt-4">
           <button
+            onClick={() => navigate("/detail", { state: data })}
+            className="bg-black text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3 hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
+            aria-label="Edit truck details"
+          >
+            View
+          </button>
+          <button
             onClick={() => navigate('/seller/edit-truck', { state: data })}
             className="bg-[#DF0805] text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3 hover:bg-[#BF0602] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
             aria-label="Edit truck details"

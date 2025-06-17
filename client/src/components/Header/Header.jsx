@@ -39,7 +39,7 @@ export default function Header() {
 
   const navLinks = [
     { name: "Home", to: "/", protected: false },
-    { name: "Listing", to: "/seller/listing", protected: true },
+    { name: "Listings", to: "/seller/listing", protected: true },
     { name: "Plans", to: "/seller/plans", protected: true },
     { name: "Privacy", to: "/privacy", protected: false },
     { name: "Contact Us", to: "/contact-us", protected: false },

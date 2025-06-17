@@ -175,7 +175,7 @@ const AddTruckPage = () => {
 
     // Update Formik's images field so validation passes
     formik.setFieldValue('images', files);
-  }; 
+  };
 
 
   const handleRemoveImage = (index) => {
@@ -679,7 +679,7 @@ const AddTruckPage = () => {
                 />
               </div>
 
-               <div className='mb-9'>
+              <div className='mb-9'>
                 <label className="label" htmlFor="engineModel">Engine Model</label>
                 <input
                   type="text"
@@ -690,22 +690,6 @@ const AddTruckPage = () => {
                   value={formik.values.engineModel}
                 />
               </div>
-            </div>
-
-            <div className="mb-9">
-              <label className="label" htmlFor="description">Description *</label>
-              <textarea
-                id="description"
-                name="description"
-                placeholder="Enter your Description"
-                className="w-full p-2 shadow rounded-md resize-none"
-                rows={7}
-                onChange={formik.handleChange}
-                value={formik.values.description}
-              />
-              {formik.errors.description && formik.touched.description && (
-                <div className="text-red-500 text-sm">{formik.errors.description}</div>
-              )}
             </div>
 
 
@@ -821,6 +805,23 @@ const AddTruckPage = () => {
                 <div className="text-red-500 text-sm">{formik.errors.grossVehicleWeight}</div>
               )}
             </div>
+          </div>
+
+          <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Description</h3>
+          <div className="mb-9">
+            <label className="label" htmlFor="description">Description *</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Enter your Description"
+              className="w-full p-2 shadow rounded-md resize-none"
+              rows={7}
+              onChange={formik.handleChange}
+              value={formik.values.description}
+            />
+            {formik.errors.description && formik.touched.description && (
+              <div className="text-red-500 text-sm">{formik.errors.description}</div>
+            )}
           </div>
 
           <button

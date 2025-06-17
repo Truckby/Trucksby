@@ -166,6 +166,8 @@ const AddTruckPage = () => {
 
   });
 
+  console.log(formik.errors, 'formik.errors')
+
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -186,6 +188,18 @@ const AddTruckPage = () => {
     formik.setFieldValue('images', updatedImageUrls);
 
   };
+
+  const handleSubmit = async () => {
+    const errors = await formik.validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      toast.error("Please fill out all required fields");
+      return;
+    }
+
+    formik.handleSubmit();
+  };
+
 
   return (
     <div className='py-[65px]'>
@@ -826,6 +840,7 @@ const AddTruckPage = () => {
 
           <button
             type="submit"
+            onClick={handleSubmit}
             className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto"
             disabled={formik.isSubmitting}
           >

@@ -169,15 +169,37 @@ const AddTruckPage = () => {
   console.log(formik.errors, 'formik.errors')
 
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setSelectedFiles(files);
-    const previews = files.map(file => URL.createObjectURL(file));
-    setPreviewImages(previews);
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  const maxSize = 6 * 1024 * 1024; // 6MB
+  const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
 
-    // Update Formik's images field so validation passes
-    formik.setFieldValue('images', files);
-  };
+  const validFiles = [];
+  const previews = [];
+
+  files.forEach(file => {
+    if (!validImageTypes.includes(file.type)) {
+      toast.error(`${file.name} is not a valid image format`);
+      return;
+    }
+
+    if (file.size > maxSize) {
+      toast.error(`${file.name} must be less than 6MB`);
+      return;
+    }
+
+    validFiles.push(file);
+    previews.push(URL.createObjectURL(file));
+  });
+
+
+  setSelectedFiles(validFiles);
+  setPreviewImages(previews);
+
+  // Update Formik's images field
+  formik.setFieldValue('images', validFiles);
+};
+
 
 
   const handleRemoveImage = (index) => {
@@ -382,7 +404,8 @@ const AddTruckPage = () => {
                     <p className="text-gray-500 mt-2 font-medium">
                       Drag or Click to upload media
                     </p>
-                    <p className="text-sm text-gray-400">(Upload images)</p>
+                    <p className="text-sm text-gray-400">(Upload image under 6MB)</p>
+                    <p className="text-sm text-gray-400">(Upload images upto 20)</p>
                   </div>
                   {/* Show image previews */}
                   {previewImages.length > 0 && (

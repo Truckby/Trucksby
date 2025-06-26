@@ -8,6 +8,7 @@ export default defineConfig({
     react()
   ],
   build: {
+    outDir: './temp_build',
     rollupOptions: {
       output: {
         manualChunks(id) {

@@ -54,7 +54,7 @@ jobs:
         with:
           path: |
             /var/www/Trucksby/client/node_modules
-            /root/.npm
+            ~/.npm
           key: ${{ runner.os }}-node-client-${{ hashFiles('client/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-client-
@@ -78,7 +78,7 @@ jobs:
         with:
           path: |
             /var/www/Trucksby/server/node_modules
-            /root/.npm
+            ~/.npm
           key: ${{ runner.os }}-node-server-${{ hashFiles('server/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-server-

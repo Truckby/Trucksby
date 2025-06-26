@@ -37,7 +37,6 @@ const DetailPage = () => {
       Suspension: data?.suspension,
       'Engine Model': data?.engineModel,
       "Engine Manufacturer": data?.engineManufacturer,
-      "Engine Model": data?.engineModel,
       "Engine Horsepower": formatNumberWithCommas(data?.hoursPower),
     },
     Powertrain: {
@@ -51,6 +50,9 @@ const DetailPage = () => {
       'Gross Vehicle Weight': formatNumberWithCommas(data?.grossVehicleWeight),
       'Axle': data?.typeofRearAxles,
     },
+    Description: {
+      "Description": data?.description
+    }
   };
 
   console.log(sampleData, 'sampleData');

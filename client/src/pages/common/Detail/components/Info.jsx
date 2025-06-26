@@ -63,7 +63,7 @@ const Info = ({ data }) => {
           </button> */}
         </div>
 
-        <p className='text-lg'>{data?.description}</p>
+        {/* <p className='text-lg'>{data?.description}</p> */}
 
         <div className="mt-6 pt-6 border-t">
           {/* Price Section */}

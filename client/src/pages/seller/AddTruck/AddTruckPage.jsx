@@ -166,16 +166,39 @@ const AddTruckPage = () => {
 
   });
 
+  console.log(formik.errors, 'formik.errors')
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setSelectedFiles(files);
-    const previews = files.map(file => URL.createObjectURL(file));
-    setPreviewImages(previews);
 
-    // Update Formik's images field so validation passes
-    formik.setFieldValue('images', files);
-  };
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  const maxSize = 6 * 1024 * 1024; // 6MB
+  const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+
+  const validFiles = [];
+  const previews = [];
+
+  files.forEach(file => {
+    if (!validImageTypes.includes(file.type)) {
+      toast.error(`${file.name} is not a valid image format`);
+      return;
+    }
+
+    if (file.size > maxSize) {
+      toast.error(`${file.name} must be less than 6MB`);
+      return;
+    }
+
+    validFiles.push(file);
+    previews.push(URL.createObjectURL(file));
+  });
+
+
+  setSelectedFiles(validFiles);
+  setPreviewImages(previews);
+
+  // Update Formik's images field
+  formik.setFieldValue('images', validFiles);
+};
 
 
 
@@ -187,6 +210,18 @@ const AddTruckPage = () => {
     formik.setFieldValue('images', updatedImageUrls);
 
   };
+
+  const handleSubmit = async () => {
+    const errors = await formik.validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      toast.error("Please fill out all required fields");
+      return;
+    }
+
+    formik.handleSubmit();
+  };
+
 
   return (
     <div className='py-[65px]'>
@@ -369,7 +404,8 @@ const AddTruckPage = () => {
                     <p className="text-gray-500 mt-2 font-medium">
                       Drag or Click to upload media
                     </p>
-                    <p className="text-sm text-gray-400">(Upload images)</p>
+                    <p className="text-sm text-gray-400">(Upload image under 6MB)</p>
+                    <p className="text-sm text-gray-400">(Upload images upto 20)</p>
                   </div>
                   {/* Show image previews */}
                   {previewImages.length > 0 && (
@@ -680,7 +716,7 @@ const AddTruckPage = () => {
                 />
               </div>
 
-               <div className='mb-9'>
+              <div className='mb-9'>
                 <label className="label" htmlFor="engineModel">Engine Model</label>
                 <input
                   type="text"
@@ -691,22 +727,6 @@ const AddTruckPage = () => {
                   value={formik.values.engineModel}
                 />
               </div>
-            </div>
-
-            <div className="mb-9">
-              <label className="label" htmlFor="description">Description *</label>
-              <textarea
-                id="description"
-                name="description"
-                placeholder="Enter your Description"
-                className="w-full p-2 shadow rounded-md resize-none"
-                rows={7}
-                onChange={formik.handleChange}
-                value={formik.values.description}
-              />
-              {formik.errors.description && formik.touched.description && (
-                <div className="text-red-500 text-sm">{formik.errors.description}</div>
-              )}
             </div>
 
 
@@ -824,8 +844,26 @@ const AddTruckPage = () => {
             </div>
           </div>
 
+          <h3 className="bg-[#DF0805] text-white text-lg sm:text-2xl mb-10 h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">Description</h3>
+          <div className="mb-9">
+            <label className="label" htmlFor="description">Description *</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Enter your Description"
+              className="w-full p-2 shadow rounded-md resize-none"
+              rows={7}
+              onChange={formik.handleChange}
+              value={formik.values.description}
+            />
+            {formik.errors.description && formik.touched.description && (
+              <div className="text-red-500 text-sm">{formik.errors.description}</div>
+            )}
+          </div>
+
           <button
             type="submit"
+            onClick={handleSubmit}
             className="bg-[#DF0805] text-white rounded-[10px] cursor-pointer mt-4 h-[48px] md:h-[54px] w-[180px] md:w-[214px] flex justify-center items-center ml-auto"
             disabled={formik.isSubmitting}
           >

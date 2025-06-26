@@ -13,7 +13,7 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-router.post("/upload", upload.array("images", 10), async (req, res) => {
+router.post("/upload", upload.array("images", 20), async (req, res) => {
     try {
       const files = req.files;
       if (!files || files.length === 0) {

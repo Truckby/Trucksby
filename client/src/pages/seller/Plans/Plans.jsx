@@ -85,7 +85,14 @@ const Plans = () => {
 
     return (
         <div className='my-16 p-8 sm:p-16 max-w-[1147px] mx-auto shadow rounded-[20px] bg-white'>
-            <h3 className='text-[24px] sm:text-[32px] font-bold pb-10'>Select a plan according to your needs</h3>
+            <h3 className='text-[24px] sm:text-[32px] font-bold pb-10 flex items-center flex-wrap gap-2'>
+                Select a plan according to your needs
+                <span className="text-sm text-gray-500 font-normal relative top-[3px]">
+                    (* Please contact sales for more than 50 listings)
+                </span>
+            </h3>
+
+
 
             <div className="overflow-x-auto">
                 {products?.length > 0 &&

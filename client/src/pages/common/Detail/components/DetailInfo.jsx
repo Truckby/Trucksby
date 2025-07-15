@@ -1,11 +1,21 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { FaSuitcase } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 // Info Row Component
 const InfoRow = ({ label, value }) => (
   <div className="flex justify-between text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
-    <span className="font-medium capitalize">{label}</span>
+    {(label === "Company Name" || label === "address") ? (
+      <span className="font-medium capitalize flex items-center gap-2">
+        {label === "Company Name" && <FaSuitcase size={15} className="text-[#1E1E1E]" />}
+        {label === "address" && <FaMapMarkerAlt size={15} className="text-[#1E1E1E]" />}
+        {label}
+      </span>
+    ) : (
+      <span className="font-medium capitalize">{label}</span>
+    )}
     <span>{value}</span>
   </div>
 );
@@ -51,26 +61,38 @@ const DetailInfo = ({ data, images = [] }) => {
       {/* Carousel Section */}
       <div className="hidden lg:block">
         {images?.length > 0 && (
-        <Carousel showThumbs={false} infiniteLoop autoPlay>
-          {images.map((img, index) => (
-            <div key={index}>
-              <img
-                src={img}
-                alt={`image - ${index + 1}`}
-                className="w-auto h-[300px] sm:h-[465px] object-cover rounded-[15px]"
-              />
-            </div>
-          ))}
-        </Carousel>
-      )}
+          <Carousel showThumbs={false} infiniteLoop autoPlay>
+            {images.map((img, index) => (
+              <div key={index}>
+                <img
+                  src={img}
+                  alt={`image - ${index + 1}`}
+                  className="w-auto h-[300px] sm:h-[465px] object-cover rounded-[15px]"
+                />
+              </div>
+            ))}
+          </Carousel>
+        )}
 
       </div>
       {/* Vehicle Details Section */}
       <div>
         {Object.keys(filteredSections).length > 0 ? (
-          Object.entries(filteredSections).map(([section, sectionData], index) => (
-            <Section key={index} title={section} data={sectionData} />
-          ))
+          Object.entries(filteredSections).map(([section, sectionData], index) =>
+            section === "Description" ? (
+              <div key={index}>
+                <div className="bg-[#DF0805] text-white text-lg sm:text-2xl mt-5 sm:mt-10 h-[40px] sm:h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">
+                  {section}
+                </div>
+                <div className="flex text-left text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
+                  <span className="font-medium capitalize"> </span>
+                  <span>{Object.values(sectionData)[0]}</span>
+                </div>
+              </div>
+            ) : (
+              <Section key={index} title={section} data={sectionData} />
+            )
+          )
         ) : (
           <div className="text-center py-10 text-gray-500">No vehicle details available.</div>
         )}

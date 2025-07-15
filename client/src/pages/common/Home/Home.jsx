@@ -145,7 +145,7 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row w-full xl:w-[587px] flex-nowrap rounded-[10px] items-center mt-6 shadow">
             {/* <input type="text" placeholder="Equipment Make or Model" className="p-3 outline-none h-[60px] w-[100px] md:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
             <select
-              className="p-3 w-full lg:w-[120px] border-r border-[#F6F6F6] h-[60px] outline-none border-l"
+              className="p-3 w-full lg:w-[150px] border-r border-[#F6F6F6] h-[60px] outline-none border-l"
               value={listingType}
               onChange={(e) => setListingType(e.target.value)}
             >
@@ -156,7 +156,7 @@ const Home = () => {
             </select>
 
             <select
-              className="p-3 w-full lg:w-[120px] outline-none h-[60px]"
+              className="p-3 w-full lg:w-[130px] outline-none h-[60px]"
               value={truckCategory}
               onChange={(e) => settruckCategory(e.target.value)}
             >
@@ -167,7 +167,7 @@ const Home = () => {
             </select>
 
             <select
-              className="p-3 w-full lg:w-[120px] outline-none h-[60px]"
+              className="p-3 w-full lg:w-[140px] outline-none h-[60px]"
               value={truckSubCategory}
               onChange={(e) => setTruckSubCategory(e.target.value)}
             >
@@ -183,7 +183,7 @@ const Home = () => {
               defaultOptionLabel="All Countries"
               value={searchCountry}
               onChange={(val) => setSearchCountry(val)}
-              className='p-3 outline-none h-[60px] w-full md:min-w-[170px] md:w-auto  rounded-l-[10px]'
+              className='p-3 outline-none h-[60px] w-full md:min-w-[140px] md:w-auto  rounded-l-[10px]'
             />
 
             <button

@@ -1,4 +1,4 @@
-const User = require('../models/userModel');
+const User = require("../models/userModel");
 const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
 

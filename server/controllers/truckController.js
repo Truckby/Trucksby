@@ -3,6 +3,9 @@ const emailService = require('../services/emailService');
 const nodemailer = require('nodemailer');
 const subscriptionService = require('../services/subscriptionService');
 const Product = require('../models/prooductModel');
+const User = require("../models/userModel");
+const Truck = require("../models/truckModel");
+const mongoose = require('mongoose');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
@@ -113,8 +116,9 @@ const sendMessage = async (req, res) => {
   }
 
   try {
-    const subject = 'New Contact Message from Buyer';
+    const subject = 'New Lead From TruckBy.com';
     const emailHtml = `
+    <h1 style="color: #DF0805;">New Lead from Truckby.com</h1>
       <p><strong>From:</strong> ${email}</p>
       <p><strong>Vehicle Name:</strong> ${vehicleName || 'N/A'}</p>
       <p><strong>Message:</strong></p>
@@ -141,12 +145,15 @@ const subscribeToNewsletter = async (req, res) => {
   try {
     // Setup transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      secure: false,
       auth: {
         user: process.env.SENDER_EMAIL,
         pass: process.env.SENDER_EMAIL_PASSWORD,
       },
     });
+
 
     // Email options
     const mailOptions = {
@@ -240,6 +247,48 @@ const deleteTruck = async (req, res, next) => {
   }
 };
 
+const getUserInventory = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+
+    const query = { userId };
+    const skip = (page - 1) * limit;
+
+    const trucks = await Truck.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    const total = await Truck.countDocuments(query);
+
+    const user = await User.findById(userId, {
+      name: 1,
+      phone: 1,
+      city: 1,
+      country: 1,
+      companyName: 1,
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found!' });
+    }
+
+    res.status(200).json({
+      user,
+      trucks,
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    console.error("Error in getUserInventory:", err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+
 module.exports = {
   subscribeToNewsletter,
   sendMessage,
@@ -249,4 +298,5 @@ module.exports = {
   addTruck,
   updateTruck,
   deleteTruck,
+  getUserInventory
 };

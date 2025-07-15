@@ -12,34 +12,47 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
   const navigate = useNavigate()
   return (
     <div className="sm:mr-[75px] mr-4 rounded-[10px] shadow mx-auto w-[240px] m-2 mb-8 bg-white cursor-pointer">
-      {/* Carousel Section */}
-      <div className="relative">
-        <Carousel showThumbs={false} infiniteLoop autoPlay>
+      <div className="relative h-[170px] overflow-hidden rounded-t-[10px]">
+        <Carousel showThumbs={false} infiniteLoop showStatus={false}>
           {images.map((img, index) => (
-            <div key={index} onClick={() => navigate("/detail", { state: data })} >
+            <div key={index} onClick={() => navigate("/detail", { state: data })}>
               <img
                 src={img}
                 alt={`${title} - ${index + 1}`}
-                className="w-[255px] h-[170px] object-cover rounded-t-[10px]"
+                className="w-full h-full object-cover"
               />
             </div>
           ))}
         </Carousel>
-        {/* <button className="absolute top-2 right-2 bg-white p-2 rounded-[6px] z-50 cursor-pointer shadow">
-          <FaRegHeart className="text-gray-600" size={18} />
-        </button> */}
       </div>
 
-      {/* Details Section */}
-      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })} >
-        <h3 className="text-base font-medium">{title}</h3>
-        <p className="text-[#DF0805] mt-[6px]">${formatNumberWithCommas(price)}</p>
+      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })}>
+        <h3
+          className="text-base font-medium overflow-hidden text-ellipsis whitespace-nowrap"
+          title={title}
+        >
+          {title?.toUpperCase()}
+        </h3>
+
+        <p className="text-[#DF0805] mt-[6px]">
+          {price === 0 ? "Contact for Price" : `$${formatNumberWithCommas(price)}`}
+        </p>
+
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">
-          <p className="flex items-center"><FaLocationDot className="mr-1" />{location}</p>
-          {miles != 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{formatNumberWithCommas(miles)} Miles</p>}
+          <p className="flex items-center max-w-[110px] overflow-hidden text-ellipsis whitespace-nowrap">
+            <FaLocationDot className="mr-1 shrink-0" />{location}
+          </p>
+          {miles !== 0 && (
+            <p className="flex items-center">
+              <IoIosSpeedometer className="mr-1" />
+              {formatNumberWithCommas(miles)} Miles
+            </p>
+          )}
         </div>
       </div>
     </div>
+
+
   );
 };
 

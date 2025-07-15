@@ -19,7 +19,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
 
       <div className="p-3 sm:p-[26px] flex flex-col w-full">
         <div className="flex md:flex-row flex-col md:items-center md:justify-between">
-          <h2 className="text-2xl font-bold">{data?.vehicleName}</h2>
+          <h2 className="text-2xl font-bold">{data?.vehicleName.toUpperCase()}</h2>
 
 
           {/* <div className="flex mt-4 md:mt-0 items-center text-[12px]">
@@ -31,7 +31,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
           </div> */}
         </div>
 
-        <p className="text-[#DF0805] text-lg font-semibold mt-4">${formatNumberWithCommas(data?.vehiclePrice)}</p>
+        <p className="text-[#DF0805] text-lg font-semibold mt-4">{data?.vehiclePrice === 0 ? "Contact For Price" : `$${formatNumberWithCommas(data?.vehiclePrice)}`}</p>
 
         <div className="flex items-center  text-sm mt-4">
           {data?.country && <FaMapMarkerAlt className="mr-1" />}

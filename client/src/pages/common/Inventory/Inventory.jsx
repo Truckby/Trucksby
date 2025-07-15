@@ -7,6 +7,7 @@ import { ShowLoading, HideLoading } from '../../../redux/loaderSlice';
 import truckService from '../../../services/truckService';
 import logo from '../../../assets/images/logo.png';
 import InventoryTruckCard from './components/InventoryTruckCard';
+import InventoryFallback from './components/InventoryFallback';
 
 const Inventory = () => {
     const { userId } = useParams();
@@ -16,6 +17,16 @@ const Inventory = () => {
     const [trucks, setTrucks] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+    const isValidUserId = /^[0-9a-fA-F]{24}$/.test(userId);
+
+
+    useEffect(() => {
+        if (userId && isValidUserId) {
+            fetchInventory();
+        }
+    }, [userId, page]);
+
 
 
     const fetchInventory = async (currentPage = 1) => {
@@ -39,6 +50,7 @@ const Inventory = () => {
         }
     };
 
+
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
@@ -54,11 +66,10 @@ const Inventory = () => {
     };
 
 
-    useEffect(() => {
-        if (userId) {
-            fetchInventory();
-        }
-    }, [userId, page]);
+    if (!isValidUserId) {
+        return <InventoryFallback />;
+    }
+
 
     if (!sellerInfo) {
         return <div className="text-center py-10 text-gray-500">Loading seller information...</div>;
@@ -75,9 +86,13 @@ const Inventory = () => {
                         <p><strong>Location:</strong> {sellerInfo.address}</p>
                         <p>
                             <strong>Phone:</strong>{" "}
-                            <a href={`tel:${sellerInfo.phone}`} className="text-blue-600">{sellerInfo.phone}</a>
+                            {sellerInfo.phone ? (
+                                <span>{sellerInfo.phone}</span>
+                            ) : (
+                                <span className="text-red-600">N/A</span>
+                            )}
                         </p>
-                        <p><strong>Contact:</strong> {sellerInfo.contactName}</p>
+                        <p><strong>Contact Name:</strong> {sellerInfo.contactName}</p>
                     </div>
                 </div>
 

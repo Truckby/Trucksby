@@ -16,6 +16,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   const user = useSelector((state) => state.user.user);
+  const userId = user?._id;
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
 
@@ -89,6 +90,11 @@ export default function Footer() {
             {user?.role === "seller" && (
               <Link to={"/seller/plans"} className="hover:text-white">
                 Plans
+              </Link>
+            )}
+            {user?.role === "seller" && (
+              <Link to={`/inventory/${userId}`} className="hover:text-white">
+                Inventory
               </Link>
             )}
             <Link to={"/privacy"} className="hover:text-white">

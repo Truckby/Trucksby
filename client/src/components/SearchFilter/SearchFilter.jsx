@@ -16,14 +16,14 @@ const SearchFilter = ({ filters, setFilters }) => {
 
     return (
         <div>
-            <div className='flex flex-col lg:flex-row justify-between items-center mt-9 lg:mx-4 gap-4'>
-                <div className="flex flex-col sm:flex-row sm:w-[587px]  rounded-[10px] items-center shadow">
+            <div className='flex flex-col flex-wrap justify-center lg:flex-row items-center mt-9 lg:mx-4 gap-4'>
+                <div className="flex flex-col sm:flex-row sm:w-[587px]  rounded-[10px] items-center shadow md:w-[640px]">
                     {/* <input type="text" placeholder="Truck Make or Model" className="p-3 outline-none h-[60px] w-full sm:min-w-[250px] md:w-auto  rounded-l-[10px]" /> */}
 
                     <select
                         value={filters.listingType}
                         onChange={(e) => setFilters(prev => ({ ...prev, listingType: e.target.value }))}
-                        className="p-3 w-full lg:w-[120px] border-r border-[#F6F6F6] h-[60px] outline-none border-l ">
+                        className="p-3 w-full  md:w-[140px] border-r border-[#F6F6F6] h-[60px] outline-none border-l ">
                         <option value={''}>Listing Type</option>
                         <option value={'For Sale'}>For Sale</option>
                         <option value={'For Lease'}>For Lease</option>
@@ -42,7 +42,7 @@ const SearchFilter = ({ filters, setFilters }) => {
 
 
                     <select
-                        className="p-3 w-full lg:w-[120px] outline-none h-[60px]"
+                        className="p-3 w-full  md:w-[150px] outline-none h-[60px]"
                         value={filters.truckSubCategory}
                         onChange={(e) => setFilters(prev => ({ ...prev, truckSubCategory: e.target.value }))}
                     >
@@ -68,13 +68,13 @@ const SearchFilter = ({ filters, setFilters }) => {
                 </div>
 
                 {/* Search Input */}
-                <div className="relative w-full mt-4 lg:mt-0 sm:w-[587px]">
+                <div className="relative w-full mt-4 lg:mt-0 sm:w-[587px] md:w-[640px]">
                     <input
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         type="text"
                         placeholder="Search for Equipment"
-                        className="p-3 outline-none h-[60px] w-full lg:w-[587px] shadow rounded-[10px]"
+                        className="p-3 outline-none h-[60px] w-full md:w-[640px] shadow rounded-[10px]"
                     />
                     <span className='absolute top-5 right-5'>
                         <FaSearch fontSize={20} color='#8E8E8E' />

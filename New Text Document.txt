@@ -7,7 +7,7 @@ New features:
 
 
 Changes:
-- In contact us: link mailto: on mail. --
+
 
 
 
@@ -31,6 +31,7 @@ Done:
 - subscription to newsletter is giving error.
 - Add a note: please contact sales for more than 50 listings*  (on Plans)
 - inventory view, to share like truckpaper https://www.truckpaper.com/listings/for-sale/supermixers-orlando-florida/trucks-and-trailers?LocationID=350013493804
+- In contact us: link mailto: on mail. --
 
 
 

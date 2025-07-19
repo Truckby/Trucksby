@@ -7,16 +7,16 @@ import { IoIosSpeedometer } from "react-icons/io";
 import { useNavigate } from "react-router";
 import { formatNumberWithCommas } from "../../../../utils/extra";
 
-
 const TruckCard = ({ images, title, price, location, miles, data }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   return (
-    <div className=" rounded-[10px] shadow w-[240px] m-2 mb-8 bg-white cursor-pointer">
+    <div className="rounded-[10px] shadow w-[240px] m-2 mb-8 bg-white cursor-pointer">
       {/* Carousel Section */}
       <div className="relative">
-        <Carousel showThumbs={false} infiniteLoop autoPlay>
+        <Carousel showThumbs={false} infiniteLoop>
           {images.map((img, index) => (
-            <div key={index} onClick={() => navigate("/detail", { state: data })} >
+            <div key={index} onClick={() => navigate("/detail", { state: data })}>
               <img
                 src={img}
                 alt={`${title} - ${index + 1}`}
@@ -31,12 +31,29 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
       </div>
 
       {/* Details Section */}
-      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })} >
-        <h3 className="text-base font-medium">{title}</h3>
-        <p className="text-[#DF0805] mt-[6px]">${formatNumberWithCommas(price)}</p>
+      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })}>
+        <h3
+          className="text-base font-medium overflow-hidden text-ellipsis whitespace-nowrap"
+          title={title}
+        >
+          {title?.toUpperCase()}
+        </h3>
+
+        <p className="text-[#DF0805] mt-[6px]">
+          {price === 0 ? "Contact for Price" : `$${formatNumberWithCommas(price)}`}
+        </p>
+
         <div className="flex items-center justify-between text-black text-[12px] mt-[18px]">
-          <p className="flex items-center"><FaLocationDot className="mr-1" />{location}</p>
-          {miles > 0 && <p className="flex items-center"><IoIosSpeedometer className="mr-1" />{formatNumberWithCommas(miles)} Miles</p>}
+          <p className="flex items-center max-w-[110px] overflow-hidden text-ellipsis whitespace-nowrap">
+            <FaLocationDot className="mr-1 shrink-0" />
+            {location}
+          </p>
+          {miles > 0 && (
+            <p className="flex items-center">
+              <IoIosSpeedometer className="mr-1" />
+              {formatNumberWithCommas(miles)} Miles
+            </p>
+          )}
         </div>
       </div>
     </div>

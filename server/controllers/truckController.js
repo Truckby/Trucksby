@@ -1,11 +1,9 @@
 const truckService = require('../services/truckService');
 const emailService = require('../services/emailService');
-const nodemailer = require('nodemailer');
 const subscriptionService = require('../services/subscriptionService');
 const Product = require('../models/prooductModel');
 const User = require("../models/userModel");
 const Truck = require("../models/truckModel");
-const mongoose = require('mongoose');
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
@@ -143,36 +141,18 @@ const subscribeToNewsletter = async (req, res) => {
   }
 
   try {
-    // Setup transporter
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: Number(process.env.EMAIL_PORT),
-      secure: false,
-      auth: {
-        user: process.env.SENDER_EMAIL,
-        pass: process.env.SENDER_EMAIL_PASSWORD,
-      },
-    });
-
-
-    // Email options
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: process.env.CLIENT_EMAIL, // your email to receive the notification
-      subject: 'New Newsletter Subscription',
-      html: `
-        <p>A new user has subscribed to the newsletter:</p>
-        <p><strong>Email:</strong> ${email}</p>
-      `,
-    };
-
-    // Send mail
-    await transporter.sendMail(mailOptions);
+    await emailService.sendEmail(
+      process.env.CLIENT_EMAIL,
+      'New Newsletter Subscription',
+      null,
+      `<p>A new user has subscribed to the newsletter:</p>
+       <p><strong>Email:</strong> ${email}</p>`
+    );
 
     res.json({ success: true, message: 'Newsletter Subscription successful. Thank you!' });
   } catch (error) {
     console.error('Error sending subscription email:', error);
-    res.status(500).json({ success: false, message: 'Newsletter Subscription failed' });
+    res.status(error.code || 500).json({ success: false, message: error.message || 'Newsletter Subscription failed' });
   }
 };
 

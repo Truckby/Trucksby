@@ -103,7 +103,7 @@ const Info = ({ data }) => {
             </div>
 
             {data?.address && <div className="flex items-center gap-2 text-gray-700 mt-2">
-              <PiAddressBookTabsFill />
+              <FaMapMarkerAlt />
               <span>{data?.address}</span>
             </div>}
 

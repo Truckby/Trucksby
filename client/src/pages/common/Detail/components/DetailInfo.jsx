@@ -3,14 +3,18 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaSuitcase } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 
 // Info Row Component
 const InfoRow = ({ label, value }) => (
   <div className="flex justify-between text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
-    {(label === "Company Name" || label === "address") ? (
+    {(label === "Company Name" || label === "address" || label === "phone" || label === "name") ? (
       <span className="font-medium capitalize flex items-center gap-2">
         {label === "Company Name" && <FaSuitcase size={15} className="text-[#1E1E1E]" />}
         {label === "address" && <FaMapMarkerAlt size={15} className="text-[#1E1E1E]" />}
+        {label === "phone" && <FaPhone size={15} className="text-[#1E1E1E]" />}
+        {label === "name" && <FaUser size={15} className="text-[#1E1E1E]" />}
         {label}
       </span>
     ) : (
@@ -61,7 +65,7 @@ const DetailInfo = ({ data, images = [] }) => {
       {/* Carousel Section */}
       <div className="hidden lg:block">
         {images?.length > 0 && (
-          <Carousel showThumbs={false} infiniteLoop autoPlay>
+          <Carousel showThumbs={false} infiniteLoop>
             {images.map((img, index) => (
               <div key={index}>
                 <img

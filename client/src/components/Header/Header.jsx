@@ -16,6 +16,7 @@ export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null); // Ref for the dropdown
   const user = useSelector((state) => state.user.user);
+  const userId = user?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -42,6 +43,7 @@ export default function Header() {
     { name: "Listings", to: "/seller/listing", protected: true },
     { name: "Plans", to: "/seller/plans", protected: true },
     { name: "Privacy", to: "/privacy", protected: false },
+    { name: "Inventory", to: `/inventory/${userId}`, protected: true },
     { name: "Contact Us", to: "/contact-us", protected: false },
   ];
 

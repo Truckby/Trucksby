@@ -1,8 +1,9 @@
 const truckService = require('../services/truckService');
 const emailService = require('../services/emailService');
-const nodemailer = require('nodemailer');
 const subscriptionService = require('../services/subscriptionService');
 const Product = require('../models/prooductModel');
+const User = require("../models/userModel");
+const Truck = require("../models/truckModel");
 
 const fetchAllTrucks = async (req, res, next) => {
   try {
@@ -113,8 +114,9 @@ const sendMessage = async (req, res) => {
   }
 
   try {
-    const subject = 'New Contact Message from Buyer';
+    const subject = 'New Lead From TruckBy.com';
     const emailHtml = `
+    <h1 style="color: #DF0805;">New Lead from Truckby.com</h1>
       <p><strong>From:</strong> ${email}</p>
       <p><strong>Vehicle Name:</strong> ${vehicleName || 'N/A'}</p>
       <p><strong>Message:</strong></p>
@@ -139,33 +141,18 @@ const subscribeToNewsletter = async (req, res) => {
   }
 
   try {
-    // Setup transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SENDER_EMAIL,
-        pass: process.env.SENDER_EMAIL_PASSWORD,
-      },
-    });
-
-    // Email options
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: process.env.CLIENT_EMAIL, // your email to receive the notification
-      subject: 'New Newsletter Subscription',
-      html: `
-        <p>A new user has subscribed to the newsletter:</p>
-        <p><strong>Email:</strong> ${email}</p>
-      `,
-    };
-
-    // Send mail
-    await transporter.sendMail(mailOptions);
+    await emailService.sendEmail(
+      process.env.CLIENT_EMAIL,
+      'New Newsletter Subscription',
+      null,
+      `<p>A new user has subscribed to the newsletter:</p>
+       <p><strong>Email:</strong> ${email}</p>`
+    );
 
     res.json({ success: true, message: 'Newsletter Subscription successful. Thank you!' });
   } catch (error) {
     console.error('Error sending subscription email:', error);
-    res.status(500).json({ success: false, message: 'Newsletter Subscription failed' });
+    res.status(error.code || 500).json({ success: false, message: error.message || 'Newsletter Subscription failed' });
   }
 };
 
@@ -240,6 +227,48 @@ const deleteTruck = async (req, res, next) => {
   }
 };
 
+const getUserInventory = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+
+    const query = { userId };
+    const skip = (page - 1) * limit;
+
+    const trucks = await Truck.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    const total = await Truck.countDocuments(query);
+
+    const user = await User.findById(userId, {
+      name: 1,
+      phone: 1,
+      city: 1,
+      country: 1,
+      companyName: 1,
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found!' });
+    }
+
+    res.status(200).json({
+      user,
+      trucks,
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    console.error("Error in getUserInventory:", err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+
 module.exports = {
   subscribeToNewsletter,
   sendMessage,
@@ -249,4 +278,5 @@ module.exports = {
   addTruck,
   updateTruck,
   deleteTruck,
+  getUserInventory
 };

@@ -152,9 +152,11 @@ const updateTruck = async (id, data) => {
   return await Truck.findByIdAndUpdate(id, data, { new: true, runValidators: true });
 };
 
+
 const deleteTruck = async (id) => {
   return await Truck.findByIdAndDelete(id);
 };
+
 
 module.exports = {
   getAllTrucksWithFilter,

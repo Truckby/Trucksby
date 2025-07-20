@@ -47,7 +47,11 @@ const ContactUs = () => {
 
                 <div>
                     <h2 className="font-semibold">Email</h2>
-                    <p>info@truckby.com</p>
+                    <p>
+                        <a href="mailto:info@truckby.com" className="text-blue-600 underline">
+                            info@truckby.com
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>

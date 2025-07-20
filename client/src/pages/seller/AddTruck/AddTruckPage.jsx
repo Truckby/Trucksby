@@ -12,6 +12,11 @@ import { uploadImg } from '../../../services/image';
 import { FaTimes } from 'react-icons/fa';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import { truckCategory, truckSubCategories } from '../../../data/Content';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+} from "@hello-pangea/dnd";
 
 const AddTruckPage = () => {
   const location = useLocation();
@@ -169,36 +174,36 @@ const AddTruckPage = () => {
   console.log(formik.errors, 'formik.errors')
 
 
-const handleFileChange = (e) => {
-  const files = Array.from(e.target.files);
-  const maxSize = 6 * 1024 * 1024; // 6MB
-  const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const maxSize = 6 * 1024 * 1024; // 6MB
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
 
-  const validFiles = [];
-  const previews = [];
+    const validFiles = [];
+    const previews = [];
 
-  files.forEach(file => {
-    if (!validImageTypes.includes(file.type)) {
-      toast.error(`${file.name} is not a valid image format`);
-      return;
-    }
+    files.forEach(file => {
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(`${file.name} is not a valid image format`);
+        return;
+      }
 
-    if (file.size > maxSize) {
-      toast.error(`${file.name} must be less than 6MB`);
-      return;
-    }
+      if (file.size > maxSize) {
+        toast.error(`${file.name} must be less than 6MB`);
+        return;
+      }
 
-    validFiles.push(file);
-    previews.push(URL.createObjectURL(file));
-  });
+      validFiles.push(file);
+      previews.push(URL.createObjectURL(file));
+    });
 
 
-  setSelectedFiles(validFiles);
-  setPreviewImages(previews);
+    setSelectedFiles(validFiles);
+    setPreviewImages(previews);
 
-  // Update Formik's images field
-  formik.setFieldValue('images', validFiles);
-};
+    // Update Formik's images field
+    formik.setFieldValue('images', validFiles);
+  };
 
 
 
@@ -221,6 +226,22 @@ const handleFileChange = (e) => {
 
     formik.handleSubmit();
   };
+
+  const handleImageDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const reorderedImages = Array.from(previewImages);
+    const [moved] = reorderedImages.splice(result.source.index, 1);
+    reorderedImages.splice(result.destination.index, 0, moved);
+
+    setPreviewImages(reorderedImages);
+
+    const reorderedFormikImages = Array.from(formik.values.images);
+    const [movedFile] = reorderedFormikImages.splice(result.source.index, 1);
+    reorderedFormikImages.splice(result.destination.index, 0, movedFile);
+    formik.setFieldValue("images", reorderedFormikImages);
+  };
+
 
 
   return (
@@ -248,7 +269,7 @@ const handleFileChange = (e) => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="vehiclePrice">Price *</label>
+                <label className="label" htmlFor="vehiclePrice">{`Price *`}<span className='text-sm text-gray-500 font-normal'>(If the price is set to $0, it will display "Contact for Pricing")</span></label>
                 <input
                   type="number"
                   name='vehiclePrice'
@@ -407,26 +428,52 @@ const handleFileChange = (e) => {
                     <p className="text-sm text-gray-400">(Upload image under 6MB)</p>
                     <p className="text-sm text-gray-400">(Upload images upto 20)</p>
                   </div>
+
+
                   {/* Show image previews */}
                   {previewImages.length > 0 && (
-                    <div className="flex flex-wrap gap-4 mt-4">
-                      {previewImages.map((image, index) => (
-                        <div key={index} className="relative w-24 h-24">
-                          <img
-                            src={image}
-                            alt={`preview-${index}`}
-                            className="w-full h-full object-cover rounded-md"
-                          />
-                          <button
-                            type="button"
-                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                            onClick={() => handleRemoveImage(index)}
+                    <DragDropContext onDragEnd={handleImageDragEnd}>
+                      <Droppable droppableId="images-droppable" direction="horizontal">
+                        {(provided) => (
+                          <div
+                            className="flex flex-wrap gap-4 mt-4"
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
                           >
-                            <FaTimes size={12} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                            {previewImages.map((image, index) => (
+                              <Draggable
+                                key={`image-${index}`}
+                                draggableId={`image-${index}`}
+                                index={index}
+                              >
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className="relative w-24 h-24"
+                                  >
+                                    <img
+                                      src={typeof image === "string" ? image : URL.createObjectURL(image)}
+                                      alt={`preview-${index}`}
+                                      className="w-full h-full object-cover rounded-md"
+                                    />
+                                    <button
+                                      type="button"
+                                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                                      onClick={() => handleRemoveImage(index)}
+                                    >
+                                      <FaTimes size={12} />
+                                    </button>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   )}
 
                 </label>

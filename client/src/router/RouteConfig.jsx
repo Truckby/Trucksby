@@ -12,6 +12,7 @@ import DetailPage from '../pages/common/Detail/DetailPage.jsx';
 import FilterPage from '../pages/common/Filter/FilterPage.jsx';
 import Listing from '../pages/seller/Listing/Listing.jsx';
 import ContactUs from '../pages/common/ContactUs/ContactUs.jsx';
+import Inventory from '../pages/common/Inventory/Inventory.jsx';
 
 const routes = [
   //seller
@@ -30,6 +31,7 @@ const routes = [
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true, showHeader: true, showFooter: true },
   { path: "/privacy", element: <PrivacyPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/contact-us", element: <ContactUs />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
+  { path: "/inventory/:userId", element: <Inventory />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "*", element: <NotFound />, protected: false, authRedirect: false, showHeader: false, showFooter: false },
 ];
 

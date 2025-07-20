@@ -9,6 +9,7 @@ import truckService from '../../../../services/truckService';
 import toast from 'react-hot-toast';
 import { PiAddressBookTabsFill } from "react-icons/pi";
 import { formatPhoneNumber } from '../../../../utils/extra';
+import { formatNumberWithCommas } from '../../../../utils/extra';
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ const Info = ({ data }) => {
             <p className="text-lg font-medium">Price</p>
             {data.mileage ?
               <p className="flex items-center gap-2 text-sm">
-                <span><IoIosSpeedometer /></span> {data?.mileage} Miles
+                <span><IoIosSpeedometer /></span> {data?.mileage && `${formatNumberWithCommas(data.mileage)}`} Miles
               </p>
               :
               ''
@@ -81,7 +82,9 @@ const Info = ({ data }) => {
           {/* Mileage & Location */}
           <div className="flex justify-between  text-sm mb-4">
             <p className="text-[#DF0805] text-lg sm:text-[32px] font-bold">
-              ${data?.vehiclePrice?.toLocaleString()}
+              {data?.vehiclePrice && data.vehiclePrice !== 0
+                ? `$${data.vehiclePrice.toLocaleString()}`
+                : 'Contact for Price'}
             </p>
 
             <p className="flex items-center gap-1 text-sm">
@@ -100,7 +103,7 @@ const Info = ({ data }) => {
             </div>
 
             {data?.address && <div className="flex items-center gap-2 text-gray-700 mt-2">
-              <PiAddressBookTabsFill />
+              <FaMapMarkerAlt />
               <span>{data?.address}</span>
             </div>}
 
@@ -121,7 +124,7 @@ const Info = ({ data }) => {
                 onClick={() => setShowPopup(true)}
                 className="mt-3 gap-2 flex items-center cursor-pointer font-medium w-[141px] h-[36px] justify-center bg-[#DF0805]  text-white py-2 rounded-[10px] transition"
               >
-                Contact Us
+                Contact Seller
                 <FaMessage />
               </button>
             </div>

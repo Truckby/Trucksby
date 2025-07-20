@@ -15,6 +15,9 @@ router.post('/news-letter', truckController.subscribeToNewsletter);
 
 router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
 
+router.get('/inventory/:userId', truckController.getUserInventory);
+
+
 router.post('/', validationMiddleware.validateRequest(truckSchemas.truckSchema), authMiddleware.authenticateRequest, truckController.addTruck);
 
 router.put('/:id', authMiddleware.authenticateRequest, truckController.updateTruck);
@@ -22,4 +25,3 @@ router.put('/:id', authMiddleware.authenticateRequest, truckController.updateTru
 router.delete('/:id', authMiddleware.authenticateRequest, truckController.deleteTruck);
 
 module.exports = router;
- 

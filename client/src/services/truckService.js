@@ -29,7 +29,7 @@ const truckService = {
         }
     },
 
-        newsLetter: async (payload) => {
+    newsLetter: async (payload) => {
         try {
             const response = await axiosInstance.post(`${BASE_URL}/news-letter`, payload, {
                 headers: {
@@ -100,6 +100,20 @@ const truckService = {
             throw error;
         }
     },
+
+    getUserInventory: async (userId, page = 1, limit = 10) => {
+        try {
+            const response = await axiosInstance.get(
+                `${BASE_URL}/inventory/${userId}?page=${page}&limit=${limit}`
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+
+
 };
 
 export default truckService;

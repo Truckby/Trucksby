@@ -44,7 +44,7 @@ export default function InventoryTruckCard({ data }) {
 
                 <p className="text-[#DF0805] font-semibold text-sm">
                     {data?.vehiclePrice === 0
-                        ? "CALL FOR PRICE"
+                        ? "Contact for Price"
                         : `$${formatNumberWithCommas(data.vehiclePrice)}`}
                 </p>
 

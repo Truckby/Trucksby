@@ -39,6 +39,8 @@ const SellerProfile = () => {
     gender: user?.gender || "",
     country: user?.country || "",
     city: user?.city || "",
+    phone: user?.phone || "",
+    companyName: user?.companyName || "",
     image: user?.image || "",
   });
 
@@ -117,6 +119,7 @@ const SellerProfile = () => {
       dispatch(HideLoading());
     }
   };
+
 
   useEffect(() => {
     const getSubscriptionInfo = async () => {
@@ -266,6 +269,30 @@ const SellerProfile = () => {
                 className="input"
                 onChange={handleChange}
                 value={formData.userName}
+              />
+            </div>
+
+            <div>
+              <label className="label">Phone</label>
+              <input
+                type="text"
+                name="phone"
+                placeholder="Enter your Phone Number"
+                className="input"
+                onChange={handleChange}
+                value={formData.phone}
+              />
+            </div>
+
+            <div>
+              <label className="label">Company Name</label>
+              <input
+                type="text"
+                name="companyName"
+                placeholder="Enter your Company Name"
+                className="input"
+                onChange={handleChange}
+                value={formData.companyName}
               />
             </div>
 

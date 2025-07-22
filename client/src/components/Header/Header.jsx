@@ -38,6 +38,7 @@ export default function Header() {
     };
   }, []);
 
+
   const navLinks = [
     { name: "Home", to: "/", protected: false },
     { name: "Listings", to: "/seller/listing", protected: true },
@@ -47,11 +48,17 @@ export default function Header() {
     { name: "Contact Us", to: "/contact-us", protected: false },
   ];
 
+  const openUserProfile = () => {
+    navigate(`/${user.role}/profile`)
+    setIsMenuOpen(false);
+  }
+
   const handleLogout = async () => {
     dispatch(ShowLoading());
     try {
       await userService.logoutUser({});
       Cookies.remove('truck-jwt-token');
+      setIsMenuOpen(false);
       dispatch(setLoggedOut());
       dispatch(clearUser());
     } catch (error) {
@@ -129,7 +136,7 @@ export default function Header() {
 
           {user?.email && (
             <div
-              ref={dropdownRef} // Attach ref to the dropdown container
+              ref={dropdownRef}
               onClick={toggleProfileDropdown}
               className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center"
             >
@@ -184,27 +191,46 @@ export default function Header() {
         isMenuOpen && (
           <div className="md:hidden bg-white px-4 pb-4 transition-all duration-500 delay-100 ease-in-out">
             <nav className="flex flex-col space-y-2">
-              {navLinks.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `block py-2 border-b transition-colors w-fit ${isActive
-                      ? "text-[#DF0805] border-[#DF0805]"
-                      : "text-gray-700 hover:text-[#DF0805] border-transparent"
-                    }`
-                  }
-                >
-                  {item.name}
-                </NavLink>
-              ))}
+              {navLinks.map((item) =>
+                item.protected ? (
+                  user && (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `block py-2 border-b transition-colors w-fit ${isActive
+                          ? "text-[#DF0805] border-[#DF0805]"
+                          : "text-gray-700 hover:text-[#DF0805] border-transparent"
+                        }`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  )
+                ) : (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `block py-2 border-b transition-colors w-fit ${isActive
+                        ? "text-[#DF0805] border-[#DF0805]"
+                        : "text-gray-700 hover:text-[#DF0805] border-transparent"
+                      }`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                )
+              )}
             </nav>
             <div className="mt-4 flex flex-col space-y-2">
               {!user?.email && (
                 <>
                   <Link
                     to="/login"
+                    onClick={() => setIsMenuOpen(false)}
                     className="w-full px-4 py-2 text-center text-black font-medium rounded-lg border border-black transition duration-200 hover:bg-[#DF0805] hover:text-white hover:border-[#DF0805]"
                   >
                     Sign In
@@ -212,6 +238,7 @@ export default function Header() {
 
                   <Link
                     to="/signup?type=seller"
+                    onClick={() => setIsMenuOpen(false)}
                     className="w-full px-4 py-2 text-center bg-[#DF0805] text-white font-medium rounded-lg"
                   >
                     Sell Your Truck
@@ -220,27 +247,28 @@ export default function Header() {
               )}
             </div>
 
-            {user?.email && <div onClick={toggleProfileDropdown} className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center">
-              <img src={user?.image || profile} alt="profile" className="w-[33px] h-[33px] rounded-full object-cover ml-2.5" />
-              <span className="ml-2.5">
-                {user?.userName ? user.userName.split('@')[0].slice(0, 10) : 'Guest'}
-              </span>
+            {user?.email &&
+              <div ref={dropdownRef} onClick={toggleProfileDropdown} className="h-[48px] cursor-pointer relative pr-4 flex shadow bg-white rounded-[10px] w-[200px] items-center">
+                <img src={user?.image || profile} alt="profile" className="w-[33px] h-[33px] rounded-full object-cover ml-2.5" />
+                <span className="ml-2.5">
+                  {user?.userName ? user.userName.split('@')[0].slice(0, 10) : 'Guest'}
+                </span>
 
-              <div className="ml-auto">
-                <FaAngleDown />
-              </div>
-
-              {isProfileOpen && (
-                <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
-                  <ul>
-                    <li onClick={() => navigate(`/${user.role}/profile`)} className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Profile</li>
-                    <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200">
-                      Log out
-                    </li>
-                  </ul>
+                <div className="ml-auto">
+                  <FaAngleDown />
                 </div>
-              )}
-            </div>
+
+                {isProfileOpen && (
+                  <div className="absolute right-0 top-10 mt-2 w-[200px] bg-white border border-gray-200 transform delay-500 rounded-[10px] shadow-lg p-4 z-50">
+                    <ul>
+                      <li onClick={openUserProfile} className="py-1 text-sm cursor-pointer flex items-center hover:bg-red-200">Profile</li>
+                      <li onClick={handleLogout} className="py-1 text-sm cursor-pointer flex items-center text-red-500 hover:bg-red-200">
+                        Log out
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             }
           </div>
         )

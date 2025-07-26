@@ -88,7 +88,7 @@ const Plans = () => {
             <h3 className='text-[24px] sm:text-[32px] font-bold pb-10 flex items-center flex-wrap gap-2'>
                 Select a plan according to your needs
                 <span className="text-sm text-gray-500 font-normal relative top-[3px]">
-                    (* Please contact sales for more than 50 listings)
+                    (Please contact sales for more than 50 listings)
                 </span>
             </h3>
 

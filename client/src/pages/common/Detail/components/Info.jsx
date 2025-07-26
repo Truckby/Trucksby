@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { PiAddressBookTabsFill } from "react-icons/pi";
 import { formatPhoneNumber } from '../../../../utils/extra';
 import { formatNumberWithCommas } from '../../../../utils/extra';
+import { BiSolidBriefcase } from "react-icons/bi";
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -110,6 +111,11 @@ const Info = ({ data }) => {
             {data?.phone && <div className="flex items-center gap-2 text-gray-700 mt-2">
               <FaPhone />
               <span>{formatPhoneNumber(data?.phone)}</span>
+            </div>}
+
+            {data?.companyName && <div className="flex items-center gap-2 text-gray-700 mt-2">
+              <BiSolidBriefcase />
+              <span>{formatPhoneNumber(data?.companyName)}</span>
             </div>}
 
             <div className='flex flex-col sm:flex-row justify-between'>

@@ -37,8 +37,10 @@ const Inventory = () => {
                 id: user._id,
                 name: user.companyName || user.name,
                 address: `${user.city}, ${user.country}`,
-                phone: user.phone,
+                phone: user?.phone,
+                companyName: user?.companyName,
                 contactName: user.name,
+                image: user?.image,
             });
             setTrucks(trucks);
             setTotalPages(totalPages);
@@ -80,10 +82,27 @@ const Inventory = () => {
             {/* Seller Info Card */}
             <div className="bg-white shadow-md rounded-lg border border-gray-200 p-6 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 md:space-x-6">
                 <div className="flex items-start space-x-4">
-                    <img src={logo} alt="Seller Logo" className="w-20 h-20 object-contain rounded-md border border-gray-300" />
+                    <img src={sellerInfo?.image} alt="Seller Logo" className="w-20 h-20 object-contain rounded-md border border-gray-300" />
                     <div className="space-y-1 text-sm">
-                        <h2 className="text-xl font-semibold">{sellerInfo.name}</h2>
-                        <p><strong>Location:</strong> {sellerInfo.address}</p>
+                        <h2 className="text-xl font-semibold">
+                            {sellerInfo.name}
+                        </h2>
+                        <p>
+                            <strong>Company Name:</strong>{" "}
+                            {sellerInfo.companyName ? (
+                                <span>{sellerInfo.companyName}</span>
+                            ) : (
+                                <span className="text-red-600">N/A</span>
+                            )}
+                        </p>
+                        <p>
+                            <strong>Location:</strong>{" "}
+                            {sellerInfo.address ? (
+                                <span>{sellerInfo.address}</span>
+                            ) : (
+                                <span className="text-red-600">N/A</span>
+                            )}
+                        </p>
                         <p>
                             <strong>Phone:</strong>{" "}
                             {sellerInfo.phone ? (
@@ -92,7 +111,14 @@ const Inventory = () => {
                                 <span className="text-red-600">N/A</span>
                             )}
                         </p>
-                        <p><strong>Contact Name:</strong> {sellerInfo.contactName}</p>
+                        <p>
+                            <strong>Contact Name:</strong>{" "}
+                            {sellerInfo.contactName ? (
+                                <span>{sellerInfo.contactName}</span>
+                            ) : (
+                                <span className="text-red-600">N/A</span>
+                            )}
+                        </p>
                     </div>
                 </div>
 

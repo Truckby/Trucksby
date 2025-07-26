@@ -1,25 +1,11 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { FaSuitcase } from "react-icons/fa";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
 
 // Info Row Component
 const InfoRow = ({ label, value }) => (
   <div className="flex justify-between text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
-    {(label === "Company Name" || label === "address" || label === "phone" || label === "name") ? (
-      <span className="font-medium capitalize flex items-center gap-2">
-        {label === "Company Name" && <FaSuitcase size={15} className="text-[#1E1E1E]" />}
-        {label === "address" && <FaMapMarkerAlt size={15} className="text-[#1E1E1E]" />}
-        {label === "phone" && <FaPhone size={15} className="text-[#1E1E1E]" />}
-        {label === "name" && <FaUser size={15} className="text-[#1E1E1E]" />}
-        {label}
-      </span>
-    ) : (
-      <span className="font-medium capitalize">{label}</span>
-    )}
+    <span className="font-medium capitalize">{label}</span>
     <span>{value}</span>
   </div>
 );
@@ -49,16 +35,23 @@ const Section = ({ title, data }) => {
 
 // DetailInfo Component
 const DetailInfo = ({ data, images = [] }) => {
-  // Filter out entire sections with no valid values
-  const filteredSections = Object.entries(data || {}).reduce((acc, [sectionTitle, sectionData]) => {
-    const validFields = Object.entries(sectionData || {}).filter(
-      ([, value]) => value !== undefined && value !== null && value !== "" && value !== 0 && value !== "0"
-    );
-    if (validFields.length > 0) {
-      acc[sectionTitle] = Object.fromEntries(validFields);
-    }
-    return acc;
-  }, {});
+  const filteredSections = Object.entries(data || {}).reduce(
+    (acc, [sectionTitle, sectionData]) => {
+      const validFields = Object.entries(sectionData || {}).filter(
+        ([, value]) =>
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          value !== 0 &&
+          value !== "0"
+      );
+      if (validFields.length > 0) {
+        acc[sectionTitle] = Object.fromEntries(validFields);
+      }
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div>
@@ -77,8 +70,8 @@ const DetailInfo = ({ data, images = [] }) => {
             ))}
           </Carousel>
         )}
-
       </div>
+
       {/* Vehicle Details Section */}
       <div>
         {Object.keys(filteredSections).length > 0 ? (
@@ -88,9 +81,15 @@ const DetailInfo = ({ data, images = [] }) => {
                 <div className="bg-[#DF0805] text-white text-lg sm:text-2xl mt-5 sm:mt-10 h-[40px] sm:h-[54px] pl-3 sm:pl-6 items-center flex font-semibold rounded-[5px]">
                   {section}
                 </div>
-                <div className="flex text-left text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
-                  <span className="font-medium capitalize"> </span>
-                  <span>{Object.values(sectionData)[0]}</span>
+                <div className="text-left text-[#1E1E1E] font-medium pt-3 sm:pt-6 pb-3 sm:pb-[22px] sm:text-lg border-b">
+                  <ul className="list-disc ml-6 space-y-1">
+                    {sectionData["Description"]
+                      ?.split(/[\n,;•\-]+/)
+                      .map((point, idx) => {
+                        const trimmed = point.trim();
+                        return trimmed && <li key={idx}>{trimmed}</li>;
+                      })}
+                  </ul>
                 </div>
               </div>
             ) : (
@@ -98,7 +97,9 @@ const DetailInfo = ({ data, images = [] }) => {
             )
           )
         ) : (
-          <div className="text-center py-10 text-gray-500">No vehicle details available.</div>
+          <div className="text-center py-10 text-gray-500">
+            No vehicle details available.
+          </div>
         )}
       </div>
     </div>

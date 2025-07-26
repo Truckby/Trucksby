@@ -248,6 +248,7 @@ const getUserInventory = async (req, res) => {
       city: 1,
       country: 1,
       companyName: 1,
+      image: 1
     });
 
     if (!user) {

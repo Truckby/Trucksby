@@ -269,7 +269,7 @@ const AddTruckPage = () => {
               </div>
 
               <div className='mb-9'>
-                <label className="label" htmlFor="vehiclePrice">{`Price *`}<span className='text-sm text-gray-500 font-normal'>(If the price is set to $0, it will display "Contact for Pricing")</span></label>
+                <label className="label" htmlFor="vehiclePrice">{`Price *`}<span className='text-sm text-gray-500 font-normal'>(If the price is set to $0, it will display "Contact for Price")</span></label>
                 <input
                   type="number"
                   name='vehiclePrice'

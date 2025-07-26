@@ -100,6 +100,9 @@ export default function Footer() {
             <Link to={"/privacy"} className="hover:text-white">
               Privacy
             </Link>
+            <Link to={"/contact-us"} className="hover:text-white">
+              Contact Us
+            </Link>
           </nav>
 
           {/* Socials */}

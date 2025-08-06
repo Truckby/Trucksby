@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { ShowLoading, HideLoading } from '../../../redux/loaderSlice';
 import truckService from '../../../services/truckService';
-import logo from '../../../assets/images/logo.png';
+import { formatPhoneNumber } from '../../../utils/extra';
 import InventoryTruckCard from './components/InventoryTruckCard';
 import InventoryFallback from './components/InventoryFallback';
 
@@ -36,7 +36,7 @@ const Inventory = () => {
             setSellerInfo({
                 id: user._id,
                 name: user.companyName || user.name,
-                address: `${user.city}, ${user.country}`,
+                address: `${user.city}, ${user.country === 'United States' ? user.state + "," : ''} ${user.country}`,
                 phone: user?.phone,
                 companyName: user?.companyName,
                 contactName: user.name,
@@ -85,16 +85,8 @@ const Inventory = () => {
                     <img src={sellerInfo?.image} alt="Seller Logo" className="w-20 h-20 object-contain rounded-md border border-gray-300" />
                     <div className="space-y-1 text-sm">
                         <h2 className="text-xl font-semibold">
-                            {sellerInfo.name}
+                            {sellerInfo?.companyName.toUpperCase()}
                         </h2>
-                        <p>
-                            <strong>Company Name:</strong>{" "}
-                            {sellerInfo.companyName ? (
-                                <span>{sellerInfo.companyName}</span>
-                            ) : (
-                                <span className="text-red-600">N/A</span>
-                            )}
-                        </p>
                         <p>
                             <strong>Location:</strong>{" "}
                             {sellerInfo.address ? (
@@ -106,15 +98,7 @@ const Inventory = () => {
                         <p>
                             <strong>Phone:</strong>{" "}
                             {sellerInfo.phone ? (
-                                <span>{sellerInfo.phone}</span>
-                            ) : (
-                                <span className="text-red-600">N/A</span>
-                            )}
-                        </p>
-                        <p>
-                            <strong>Contact Name:</strong>{" "}
-                            {sellerInfo.contactName ? (
-                                <span>{sellerInfo.contactName}</span>
+                                <span>{formatPhoneNumber(sellerInfo.phone)}</span>
                             ) : (
                                 <span className="text-red-600">N/A</span>
                             )}

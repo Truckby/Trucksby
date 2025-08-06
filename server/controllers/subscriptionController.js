@@ -8,7 +8,7 @@ const GetUserSubscriptionInfo = async (req, res, next) => {
         const userId = req.user?.id;
         const info = await subscriptionService.getUserSubscriptionInfo(userId);
         let productData;
-        console.log(info.productId, 'info')
+        // console.log(info.productId, 'info')
 
         if (info.productId) {
             productData = await Product.findOne({ productId: info.productId });
@@ -16,7 +16,7 @@ const GetUserSubscriptionInfo = async (req, res, next) => {
 
         res.status(200).json({ info, productData });
     } catch (error) {
-        console.log(error, 'GetUserSubscriptionInfo')
+        // console.log(error, 'GetUserSubscriptionInfo')
         next(error);
     }
 };
@@ -47,7 +47,7 @@ const ToggleAutoRenew = async (req, res, next) => {
 
         res.status(200).json({ canceledSubscription });
     } catch (error) {
-        console.log(error, 'ToggleAutoRenew');
+        // console.log(error, 'ToggleAutoRenew');
         next(error);
     }
 };

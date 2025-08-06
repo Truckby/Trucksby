@@ -101,7 +101,7 @@ const getAllTrucks = async (req, res, next) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.log(error, 'error')
+    // console.log(error, 'error')
     next(error);
   }
 };
@@ -172,7 +172,7 @@ const addTruck = async (req, res, next) => {
     const userId = req.user?.id;
 
     const info = await subscriptionService.getUserSubscriptionInfo(userId);
-    console.log(info, 'info');
+    // console.log(info, 'info');
 
     if (!info || !info.planName) {
       return res.status(400).json({ message: 'Subscription information not found' });
@@ -247,6 +247,7 @@ const getUserInventory = async (req, res) => {
       phone: 1,
       city: 1,
       country: 1,
+      state: 1,
       companyName: 1,
       image: 1
     });

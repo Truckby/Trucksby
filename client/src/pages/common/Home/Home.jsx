@@ -59,7 +59,7 @@ const Home = () => {
       dispatch(HideLoading());
     }
   };
-  console.log(listData, 'listData')
+  // console.log(listData, 'listData')
 
   useEffect(() => {
     fetchAllTrucks()
@@ -171,7 +171,7 @@ const Home = () => {
               value={truckSubCategory}
               onChange={(e) => setTruckSubCategory(e.target.value)}
             >
-              <option value="">SubCategory</option>
+              <option value="">Subcategory</option>
               {truckCategory &&
                 truckSubCategories[truckCategory]?.map((category, index) => (
                   <option key={index} value={category}>{category}</option>

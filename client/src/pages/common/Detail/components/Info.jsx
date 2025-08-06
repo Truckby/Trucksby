@@ -34,7 +34,7 @@ const Info = ({ data }) => {
     dispatch(ShowLoading());
     try {
       const response = await truckService.sendMessage(payload);
-      console.log("Response from server:", response);
+      // console.log("Response from server:", response);
       setEmail('');
       setMessage('');
       toast.success("Message sent successfully!");
@@ -52,13 +52,13 @@ const Info = ({ data }) => {
     setMessage('');
   };
 
-  console.log(data, 'data in info')
+  // console.log(data, 'data in info')
 
   return (
     <div>
       <div className=' mt-5 lg:mt-0 lg:pl-20'>
         <div className='flex justify-between'>
-          <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'>{data?.vehicleName}</h2>
+          <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'>{data?.vehicleName.toUpperCase()}</h2>
 
           {/* <button className="bg-white p-4 rounded-[10px] h-fit w-fit shadow">
             <FaRegHeart className="#1E1E1E" size={25} />
@@ -73,10 +73,15 @@ const Info = ({ data }) => {
             <p className="text-lg font-medium">Price</p>
             {data.mileage ?
               <p className="flex items-center gap-2 text-sm">
-                <span><IoIosSpeedometer /></span> {data?.mileage && `${formatNumberWithCommas(data.mileage)}`} Miles
+                <span><IoIosSpeedometer /></span> {data?.mileage !== null && `${formatNumberWithCommas(data.mileage)}`} Miles
               </p>
               :
-              ''
+              <p className='flex items-center text-sm gap-2'>
+                <span>
+                  <IoIosSpeedometer />
+                </span>
+                <span className='text-[#DF0805] font-semibold'>N/A</span>
+              </p>
             }
           </div>
 
@@ -108,31 +113,33 @@ const Info = ({ data }) => {
               <span>{data?.address}</span>
             </div>}
 
-            {data?.phone && <div className="flex items-center gap-2 text-gray-700 mt-2">
-              <FaPhone />
-              <span>{formatPhoneNumber(data?.phone)}</span>
-            </div>}
+            <div className="flex flex-col">
+              {data?.phone && (
+                <div className="flex items-center gap-2 text-gray-700 mt-2">
+                  <FaPhone />
+                  <span>{formatPhoneNumber(data?.phone)}</span>
+                </div>
+              )}
 
-            {data?.companyName && <div className="flex items-center gap-2 text-gray-700 mt-2">
-              <BiSolidBriefcase />
-              <span>{formatPhoneNumber(data?.companyName)}</span>
-            </div>}
 
-            <div className='flex flex-col sm:flex-row justify-between'>
-              {/* <div className="flex items-center gap-2 text-gray-700 mt-2">
-                <FaEnvelope />
-                <span>{data?.email}</span>
-              </div> */}
+              <div className="flex items-center justify-between gap-2 text-gray-700 mt-2">
+                {data?.companyName && (
+                  <div className="flex items-center gap-2">
+                    <BiSolidBriefcase />
+                    <span>{data?.companyName}</span>
+                  </div>)}
 
-              <div></div>
+                <div>
+                  <button
+                    onClick={() => setShowPopup(true)}
+                    className="gap-2 flex items-center cursor-pointer font-medium w-[141px] h-[36px] justify-center bg-[#DF0805] text-white py-2 rounded-[10px] transition text-nowrap "
+                  >
+                    Contact Seller
+                    <FaMessage />
+                  </button>
+                </div>
+              </div>
 
-              <button
-                onClick={() => setShowPopup(true)}
-                className="mt-3 gap-2 flex items-center cursor-pointer font-medium w-[141px] h-[36px] justify-center bg-[#DF0805]  text-white py-2 rounded-[10px] transition"
-              >
-                Contact Seller
-                <FaMessage />
-              </button>
             </div>
 
           </div>

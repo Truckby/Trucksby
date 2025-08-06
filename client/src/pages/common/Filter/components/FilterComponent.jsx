@@ -235,7 +235,7 @@ const FilterComponent = ({ onFilterChange, filters, setFilters }) => {
           />
         </FilterSection>
 
-        <FilterSection title="SubCategory" isOpen={openSections.subCategory} toggle={() => toggleSection("subCategory")}>
+        <FilterSection title="Subcategory" isOpen={openSections.subCategory} toggle={() => toggleSection("subCategory")}>
           <SelectBox
             options={truckSubCategories[filters.truckCategory] || []}
             value={filters.truckSubCategory}

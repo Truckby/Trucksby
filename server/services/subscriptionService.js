@@ -5,7 +5,7 @@ const addSubscription = async (data) => {
 
     try {
         const { user, customerId, subscriptionInfo } = data;
-        console.log(user, customerId, subscriptionInfo, 'addSubscription')
+        // console.log(user, customerId, subscriptionInfo, 'addSubscription')
         const existingUserSubscription = await Subscription.findOne({ user });
         if (!existingUserSubscription) {
             const newSubscription = await Subscription.create({
@@ -13,17 +13,17 @@ const addSubscription = async (data) => {
                 customerId,
                 subscriptions: [subscriptionInfo]
             });
-            console.log(newSubscription, 'newSubscription')
+            // console.log(newSubscription, 'newSubscription')
         }
         else {
-            console.log(existingUserSubscription, 'existingUserSubscription')
+            // console.log(existingUserSubscription, 'existingUserSubscription')
 
             existingUserSubscription.customerId = customerId;
             existingUserSubscription.subscriptions.push(subscriptionInfo);
             await existingUserSubscription.save();
         }
     } catch (error) {
-        console.log(error, 'addSubscriptionError')
+        // console.log(error, 'addSubscriptionError')
         const newError = new Error(`Unable to add subscription!`);
         newError.code = 400;
         throw newError;
@@ -69,7 +69,7 @@ const getUserSubscriptionStatus = async (userId) => {
         status = ['Lost'];
     }
 
-    console.log(paymentStatus,'paymentStatus');
+    // console.log(paymentStatus,'paymentStatus');
 
     return {
         status: status,
@@ -100,7 +100,7 @@ const getUserSubscriptionInfo = async (userId) => {
         return sub.endDate >= now && sub.status === 'active';
     });
 
-    console.log(subscription,'subscription')
+    // console.log(subscription,'subscription')
 
     if (activeSubscription) {
         status = true;

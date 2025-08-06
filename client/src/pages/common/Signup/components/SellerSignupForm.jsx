@@ -8,6 +8,7 @@ import userService from '../../../../services/userService';
 import toast from 'react-hot-toast';
 import { uploadImg } from '../../../../services/image';
 import { useNavigate } from 'react-router';
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
 const SellerSignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +31,11 @@ const SellerSignupForm = () => {
     userName: Yup.string().required('Username is required'),
     gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
+    state: Yup.string().when('country', (country, schema) =>
+      country === 'United States'
+        ? schema.required('State is required when country is United States')
+        : schema.notRequired()
+    ),//New field
     city: Yup.string().required('City is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
@@ -50,6 +56,7 @@ const SellerSignupForm = () => {
       userName: '',
       gender: '',
       country: '',
+      state: '',// new field
       city: '',
       email: '',
       password: '',
@@ -86,6 +93,7 @@ const SellerSignupForm = () => {
         userName: values.userName,
         gender: values.gender,
         country: values.country,
+        state: values.state,// new field
         city: values.city,
         email: values.email,
         password: values.password,
@@ -122,7 +130,7 @@ const SellerSignupForm = () => {
           )}
         </div>
         <label className="cursor-pointer bg-gray-200 text-gray-700 py-2 px-4 mt-2 rounded-md text-sm">
-          Upload Image
+          Upload Company Logo
           <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
         </label>
       </div>
@@ -180,22 +188,33 @@ const SellerSignupForm = () => {
           </div>
 
           <div>
-            <input
-              type="text"
-              name="country"
-              placeholder="Country"
+            <CountryDropdown
               value={formik.values.country}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="p-4 block w-full border rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
+              onChange={(val) => {
+                formik.setFieldValue('country', val);
+                formik.setFieldValue('state', ''); // Reset state when country changes
+              }}
+              className='p-4 block w-full border rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]'
             />
-            {formik.touched.country && formik.errors.country && (
-              <p className="text-red-500 text-sm">{formik.errors.country}</p>
+            {formik.errors.country && formik.touched.country && (
+              <div className="text-red-500 text-sm">{formik.errors.country}</div>
             )}
           </div>
+
+
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className='grid grid-cols-2 gap-4'>
+          <div>
+            <RegionDropdown
+              defaultOptionLabel={formik.values.country == 'United States' ? "Select-State" : "State not Required"}
+              country={formik.values.country}
+              value={formik.values.state}
+              onChange={(val) => formik.setFieldValue('state', val)}
+              className='p-4 block w-full border rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]'
+              disabled={formik.values.country !== 'United States'}
+            />
+          </div>
           <div>
             <input
               type="text"
@@ -210,6 +229,12 @@ const SellerSignupForm = () => {
               <p className="text-red-500 text-sm">{formik.errors.city}</p>
             )}
           </div>
+
+
+        </div>
+
+
+        <div className="grid grid-cols-2 gap-4">
 
           <div className="relative">
             <div className="relative">
@@ -229,9 +254,7 @@ const SellerSignupForm = () => {
               <p className="text-red-500 text-sm">{formik.errors.email}</p>
             )}
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
           <div>
             <input
               type="text"
@@ -247,6 +270,11 @@ const SellerSignupForm = () => {
             )}
           </div>
 
+        </div>
+
+
+        <div className="grid grid-cols-2 gap-4">
+
           <div>
             <input
               type="text"
@@ -261,9 +289,8 @@ const SellerSignupForm = () => {
               <p className="text-red-500 text-sm">{formik.errors.phone}</p>
             )}
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
+
           <div className="relative">
             <div className="relative">
               <BiSolidLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />

@@ -5,7 +5,7 @@ const ScrollToTop = () => {
     const location = useLocation();
 
     useLayoutEffect(() => {
-        console.log("Scroll triggered on route change:", location.pathname);
+        // console.log("Scroll triggered on route change:", location.pathname);
 
         const header = document.querySelector("header");
         const offset = header?.offsetHeight || 80;

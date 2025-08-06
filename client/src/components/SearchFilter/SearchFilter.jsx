@@ -46,7 +46,7 @@ const SearchFilter = ({ filters, setFilters }) => {
                         value={filters.truckSubCategory}
                         onChange={(e) => setFilters(prev => ({ ...prev, truckSubCategory: e.target.value }))}
                     >
-                        <option value="">SubCategory</option>
+                        <option value="">Subcategory</option>
                         {filters.truckCategory &&
                             truckSubCategories[filters.truckCategory]?.map((category, index) => (
                                 <option key={index} value={category}>{category}</option>

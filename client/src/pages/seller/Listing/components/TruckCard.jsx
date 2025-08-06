@@ -36,12 +36,12 @@ export default function TruckCard({ data, handleDeleteClick }) {
         <div className="flex items-center  text-sm mt-4">
           {data?.country && <FaMapMarkerAlt className="mr-1" />}
           {data?.country && <span>{data?.country}</span>}
-          {data?.mileage && (
+          {data?.mileage !== null && (
             <>
               <span className="ml-[30px] mr-1">
                 <IoSpeedometer />{" "}
               </span>
-              <span>{formatNumberWithCommas(data?.mileage)} Miles</span>
+              <span className="text-[#DF0805] text-lg font-semibold ">{data?.mileage == 0 ? "N/A" : `${formatNumberWithCommas(data?.mileage)} Miles`}</span>
             </>
           )}
         </div>

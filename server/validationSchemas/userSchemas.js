@@ -10,6 +10,7 @@ const registerSchema = yup.object().shape({
   password: yup.string().trim().required('Password is required'),
   city: yup.string().trim().optional(),
   country: yup.string().trim().optional(),
+  state: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
   image: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
@@ -57,6 +58,7 @@ const updateUserSchema = yup.object().shape({
   image: yup.string().trim().optional(),
   city: yup.string().trim().optional(),
   country: yup.string().trim().optional(),
+  state: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
   phone: yup.number(),
@@ -72,7 +74,7 @@ const searchUsersSchema = yup.object().shape({
   limit: yup.number().positive('Limit must be positive').required('Limit is required'),
   searchQuery: yup.string().trim(),
   status: yup.string().trim(),
-  
+
 });
 
 const changeUserPasswordSchema = yup.object().shape({

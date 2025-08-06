@@ -8,6 +8,7 @@ import { uploadImg } from "../../../services/image";
 import subscriptionService from "../../../services/subscriptionService";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import './style.css';
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
 const ToggleSwitch = ({ checked, onChange }) => (
   <button
@@ -38,6 +39,7 @@ const SellerProfile = () => {
     email: user?.email || "",
     gender: user?.gender || "",
     country: user?.country || "",
+    state: user?.state || "",
     city: user?.city || "",
     phone: user?.phone || "",
     companyName: user?.companyName || "",
@@ -234,15 +236,39 @@ const SellerProfile = () => {
             </div>
 
             {/* Country */}
-            <div>
+
+            <div className='mb-9'>
               <label className="label">Country</label>
-              <input
-                type="text"
-                name="country"
-                placeholder="Enter your country"
-                className="input"
-                onChange={handleChange}
+              <CountryDropdown
                 value={formData.country}
+                onChange={(val) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    country: val,
+                    state: "" // reset when country changes
+                  }))
+                }
+                className='input'
+              />
+              {error.country && (
+                <div className="text-red-500 text-sm">{error.country}</div>
+              )}
+            </div>
+
+            <div className="mb-9">
+              <label className="label">State/Region</label>
+              <RegionDropdown
+                defaultOptionLabel={formData.country == 'United States' ? "Select-State" : "Not Available for Selected Country"}
+                country={formData.country}
+                value={formData.state}
+                onChange={(val) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    state: val
+                  }))
+                }
+                className='input'
+                disabled={formData.country !== 'United States'}
               />
             </div>
 

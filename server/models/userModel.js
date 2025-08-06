@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-    
     userName: {
       type: String,
       trim: true
@@ -30,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    state: {
+      type: String,
+      trim: true,
+    },
     phone: {
       type: Number,
       trim: true
@@ -46,7 +49,7 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       default: 'male',
-      enum: ['male', 'female','other']
+      enum: ['male', 'female', 'other']
     },
     role: {
       type: String,

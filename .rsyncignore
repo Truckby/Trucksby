@@ -8,7 +8,6 @@ server/node_modules/
 server/configs/.env
 
 # Common to all environments
-.git/
 *.log
 *.tmp
 *.swp

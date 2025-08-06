@@ -42,7 +42,7 @@ const Listing = () => {
       dispatch(HideLoading());
     }
   };
-  console.log(listData, 'listData')
+  // console.log(listData, 'listData')
 
   useEffect(() => {
     fetchAllTrucks(page)
@@ -55,7 +55,7 @@ const Listing = () => {
 
   const handleConfirmDelete = async () => {
     if (!deleteTruckId) return;
-    console.log(deleteTruckId)
+    // console.log(deleteTruckId)
     dispatch(ShowLoading());
     try {
       await truckService.deleteTruck(deleteTruckId);

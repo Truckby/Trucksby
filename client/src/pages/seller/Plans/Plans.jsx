@@ -32,11 +32,11 @@ const Plans = () => {
     const dispatch = useDispatch();
 
     const getSubscriptionInfo = async () => {
-        console.log('Old ID: ', oldProductId);
+        // console.log('Old ID: ', oldProductId);
         try {
             const response = await subscriptionService.getUserSubscriptionInfo();
             if (response.info) {
-                console.log('Info: ', response.info);
+                // console.log('Info: ', response.info);
                 setInfo(response.info);
                 if (oldProductId && oldProductId === response.info.productId) {
                     await new Promise(resolve => setTimeout(resolve, 3000));
@@ -73,7 +73,7 @@ const Plans = () => {
         try {
             const response = await stripeService.createCheckoutSession({ priceId });
             if (response.url) {
-                console.log('URL: ', response.url);
+                // console.log('URL: ', response.url);
                 window.location.href = response.url;
             }
         } catch (error) {

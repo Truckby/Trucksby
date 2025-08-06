@@ -12,7 +12,7 @@ const normalizePath = (path) => {
 };
 
 const verifyAuthorization = (role) => {
-    console.log('Verifying...', role);
+    // console.log('Verifying...', role);
     const currentPath = normalizePath(window.location.pathname);
     // if (role === 'user' && currentPath === '/success') {
     //     return true;

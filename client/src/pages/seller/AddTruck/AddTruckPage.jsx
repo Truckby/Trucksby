@@ -171,7 +171,7 @@ const AddTruckPage = () => {
 
   });
 
-  console.log(formik.errors, 'formik.errors')
+  // console.log(formik.errors, 'formik.errors')
 
 
   const handleFileChange = (e) => {

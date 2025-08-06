@@ -55,7 +55,7 @@ const DetailPage = () => {
     }
   };
 
-  console.log(sampleData, 'sampleData');
+  // console.log(sampleData, 'sampleData');
 
   return (
     <div className='pb-10 max-w-[1300px] mx-auto px-4 pt-10 lg:pt-20 lg:px-0'>

@@ -76,7 +76,7 @@ const FilterPage = () => {
 
       // Set only filtered search params
       setSearchParams(filteredParams, { replace: true });
-      console.log(combinedFilters, 'combinedFilters')
+      // console.log(combinedFilters, 'combinedFilters')
 
       const response = await truckService.getAllTrucksWithFilter(combinedFilters);
       setListData(response?.trucks || []);

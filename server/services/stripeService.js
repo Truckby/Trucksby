@@ -11,7 +11,7 @@ const fetchProductInfo = async (productId) => {
             error.code = 404;
             throw error;
         }
-        // console.log('Product: ', product);
+        // // console.log('Product: ', product);
 
         if (!product.active) {
             const error = new Error('Product is not active!');
@@ -49,8 +49,8 @@ const fetchProductInfo = async (productId) => {
             //     nickname: price.nickname,
             // })),
         };
-        // console.log('Product Info: ', productInfo);
-        // console.log('Recurring: ', productInfo.prices[0].recurring);
+        // // console.log('Product Info: ', productInfo);
+        // // console.log('Recurring: ', productInfo.prices[0].recurring);
         return productInfo;
     } catch (err) {
         if (err.code && !isNaN(err.code)) {
@@ -122,10 +122,10 @@ const constructEvent = async (sig, data) => {
 };
 
 const handlePaymentSucceededEvent = async (event) => {
-    console.log(event.data, 'handle event data')
+    // console.log(event.data, 'handle event data')
     try {
         const invoice = event.data.object;
-        // console.log('Invoice: ', invoice);
+        // // console.log('Invoice: ', invoice);
         const customerId = invoice.customer;
 
         const userId = await commonService.fetchUserId({ stripeCustomerId: customerId });
@@ -138,7 +138,7 @@ const handlePaymentSucceededEvent = async (event) => {
             invoice.lines.data[0]?.parent?.subscription_item_details?.subscription ||
             null;
 
-        console.log(invoice.lines.data[0], 'invoice lines data')
+        // console.log(invoice.lines.data[0], 'invoice lines data')
         const productId = invoice.lines.data[0].pricing.price_details.product;
         const { name, description } = await stripe.products.retrieve(productId);
 
@@ -171,7 +171,7 @@ const handlePaymentSucceededEvent = async (event) => {
         };
         return data;
     } catch (error) {
-        console.log("Success Event Error: ", error);
+        // console.log("Success Event Error: ", error);
         const newError = new Error(`Unable to fetch info from event!`);
         newError.code = 400;
         throw newError;

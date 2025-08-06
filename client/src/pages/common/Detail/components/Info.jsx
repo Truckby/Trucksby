@@ -34,7 +34,7 @@ const Info = ({ data }) => {
     dispatch(ShowLoading());
     try {
       const response = await truckService.sendMessage(payload);
-      console.log("Response from server:", response);
+      // console.log("Response from server:", response);
       setEmail('');
       setMessage('');
       toast.success("Message sent successfully!");
@@ -52,7 +52,7 @@ const Info = ({ data }) => {
     setMessage('');
   };
 
-  console.log(data, 'data in info')
+  // console.log(data, 'data in info')
 
   return (
     <div>

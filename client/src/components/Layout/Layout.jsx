@@ -14,7 +14,7 @@ const Layout = ({ showHeader, showFooter, children }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("Layout effect")
+        // console.log("Layout effect")
         if (isAuth && !user) {
             dispatch(fetchUserInfo());
         }

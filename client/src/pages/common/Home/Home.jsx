@@ -59,7 +59,7 @@ const Home = () => {
       dispatch(HideLoading());
     }
   };
-  console.log(listData, 'listData')
+  // console.log(listData, 'listData')
 
   useEffect(() => {
     fetchAllTrucks()

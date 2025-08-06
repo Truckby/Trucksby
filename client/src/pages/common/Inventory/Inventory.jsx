@@ -36,7 +36,7 @@ const Inventory = () => {
             setSellerInfo({
                 id: user._id,
                 name: user.companyName || user.name,
-                address: `${user.city}, ${user.country === 'United States' ? `${user.country},` : user.country} ${user.country === 'United States' ? user.state : ''}`,
+                address: `${user.city}, ${user.country === 'United States' ? user.state + "," : ''} ${user.country}`,
                 phone: user?.phone,
                 companyName: user?.companyName,
                 contactName: user.name,

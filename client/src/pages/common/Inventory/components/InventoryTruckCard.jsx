@@ -56,7 +56,7 @@ export default function InventoryTruckCard({ data }) {
                         </div>
                     )}
                     {data?.mileage !== null && (
-                        <p className="flex items-center gap-2">
+                        <p className="flex items-center gap-3">
                             <IoSpeedometer />{" "}
                             <span className="text-[#DF0805] text-sm font-semibold ">{data?.mileage == 0 ? "N/A" : `${formatNumberWithCommas(data?.mileage)} Miles`}</span>
                         </p>

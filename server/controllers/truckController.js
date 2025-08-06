@@ -247,6 +247,7 @@ const getUserInventory = async (req, res) => {
       phone: 1,
       city: 1,
       country: 1,
+      state: 1,
       companyName: 1,
       image: 1
     });

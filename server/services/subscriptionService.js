@@ -86,7 +86,8 @@ const getUserSubscriptionInfo = async (userId) => {
             subscriptionId: '',
             planName: '',
             productId: '',
-            amount: null
+            amount: null,
+            autoRenew: false
         };
     }
     const now = new Date();
@@ -94,7 +95,8 @@ const getUserSubscriptionInfo = async (userId) => {
     let subscriptionId = '';
     let planName = '';
     let productId = '';
-
+    let amount = null;
+    let autoRenew = false;
 
     const activeSubscription = subscription.subscriptions.find(sub => {
         return sub.endDate >= now && sub.status === 'active';

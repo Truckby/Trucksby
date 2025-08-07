@@ -83,7 +83,7 @@ const Listing = () => {
 
 
       } catch (error) {
-        message.error(error.response.data.error);
+        toast.error(error.response.data.error);
       } finally {
         dispatch(HideLoading());
       }

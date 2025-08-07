@@ -10,6 +10,7 @@ import userService from "../../services/userService";
 import { clearUser } from "../../redux/userSlice";
 import { setLoggedOut } from "../../redux/logoutSlice";
 import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,7 +63,7 @@ export default function Header() {
       dispatch(setLoggedOut());
       dispatch(clearUser());
     } catch (error) {
-      message.error(error.response.data);
+      toast.error(error.response.data);
     }
     dispatch(HideLoading());
   };

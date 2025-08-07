@@ -133,7 +133,7 @@ const SellerProfile = () => {
           setAutoRenew(response.info.autoRenew ?? false); // Set autoRenew from backend
         }
       } catch (error) {
-        message.error(error.response.data.error);
+        toast.error(error.response.data.error);
       } finally {
         dispatch(HideLoading());
       }

@@ -10,6 +10,7 @@ import userService from "../../services/userService";
 import { clearUser } from "../../redux/userSlice";
 import { setLoggedOut } from "../../redux/logoutSlice";
 import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,9 +43,9 @@ export default function Header() {
   const navLinks = [
     { name: "Home", to: "/", protected: false },
     { name: "Listings", to: "/seller/listing", protected: true },
+    { name: "Inventory", to: `/inventory/${userId}`, protected: true },
     { name: "Plans", to: "/seller/plans", protected: true },
     { name: "Privacy", to: "/privacy", protected: false },
-    { name: "Inventory", to: `/inventory/${userId}`, protected: true },
     { name: "Contact Us", to: "/contact-us", protected: false },
   ];
 
@@ -62,7 +63,7 @@ export default function Header() {
       dispatch(setLoggedOut());
       dispatch(clearUser());
     } catch (error) {
-      message.error(error.response.data);
+      toast.error(error.response.data);
     }
     dispatch(HideLoading());
   };

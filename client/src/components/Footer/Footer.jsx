@@ -88,13 +88,13 @@ export default function Footer() {
               </Link>
             )}
             {user?.role === "seller" && (
-              <Link to={"/seller/plans"} className="hover:text-white">
-                Plans
+              <Link to={`/inventory/${userId}`} className="hover:text-white">
+                Inventory
               </Link>
             )}
             {user?.role === "seller" && (
-              <Link to={`/inventory/${userId}`} className="hover:text-white">
-                Inventory
+              <Link to={"/seller/plans"} className="hover:text-white">
+                Plans
               </Link>
             )}
             <Link to={"/privacy"} className="hover:text-white">

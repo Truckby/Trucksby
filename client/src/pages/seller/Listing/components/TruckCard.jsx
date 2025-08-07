@@ -41,7 +41,11 @@ export default function TruckCard({ data, handleDeleteClick }) {
               <span className="ml-[30px] mr-1">
                 <IoSpeedometer />{" "}
               </span>
-              <span className="text-[#DF0805] text-lg font-semibold ">{data?.mileage == 0 ? "N/A" : `${formatNumberWithCommas(data?.mileage)} Miles`}</span>
+              {data?.mileage == 0 ?
+                <span>N/A</span>
+                :
+                <span>{formatNumberWithCommas(data?.mileage)} Miles</span>
+              }
             </>
           )}
         </div>

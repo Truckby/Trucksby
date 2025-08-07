@@ -85,7 +85,7 @@ const Inventory = () => {
                     <img src={sellerInfo?.image} alt="Seller Logo" className="w-20 h-20 object-contain rounded-md border border-gray-300" />
                     <div className="space-y-1 text-sm">
                         <h2 className="text-xl font-semibold">
-                            {sellerInfo?.companyName.toUpperCase()}
+                            {sellerInfo?.companyName?.toUpperCase()}
                         </h2>
                         <p>
                             <strong>Location:</strong>{" "}

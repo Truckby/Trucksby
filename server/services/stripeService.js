@@ -104,6 +104,7 @@ const createCheckoutSession = async (priceId, stripeCustomerId, CLIENT_URL) => {
         );
         return session.url;
     } catch (error) {
+        console.log("Stripe Checkout Error: ", error);
         const newError = new Error('Unable to create checkout session!');
         newError.code = 400;
         throw newError;

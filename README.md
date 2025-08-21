@@ -153,7 +153,7 @@ client/   # React frontend (Vite)
     pages/           # Page-level components (common, seller)
     redux/           # Redux slices and store
     services/        # API and utility services
-    assets/          # Images, videos, styles
+    assets/          # Images, videos
 server/   # Node.js backend (Express, MongoDB)
   controllers/       # Route controllers
   models/            # Mongoose models

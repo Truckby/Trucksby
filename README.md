@@ -46,7 +46,7 @@ Trucksby is a full-stack web application for managing and showcasing truck inven
 
 - **Buyer/User:** Can browse trucks, view details, and contact sellers.
 - **Seller:** Can manage their own truck inventory, profile, and subscription plan.
-- **Admin:** (Optional) Can manage all users, trucks, and platform settings.
+- **Admin:** (Optional) Can manage all users, trucks, and platform settings .
 
 ---
 

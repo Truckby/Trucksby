@@ -27,7 +27,7 @@ const routes = [
   { path: "/", element: <Home />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/login", element: <Login />, protected: false, authRedirect: true, showHeader: true, showFooter: true },
   { path: "/filter", element: <FilterPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
-  { path: "/detail", element: <DetailPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
+  { path: "/detail/:id", element: <DetailPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true, showHeader: true, showFooter: true },
   { path: "/privacy", element: <PrivacyPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/contact-us", element: <ContactUs />, protected: false, authRedirect: false, showHeader: true, showFooter: true },

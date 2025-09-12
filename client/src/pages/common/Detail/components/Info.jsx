@@ -52,13 +52,13 @@ const Info = ({ data }) => {
     setMessage('');
   };
 
-  // console.log(data, 'data in info')
+  /* console.log(data, 'data in info') */
 
   return (
     <div>
       <div className=' mt-5 lg:mt-0 lg:pl-20'>
         <div className='flex justify-between'>
-          <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'>{data?.vehicleName.toUpperCase()}</h2>
+          <h2 style={{ fontFamily: 'Oswald' }} className=' text-2xl sm:text-[48px] font-bold'> {data?.vehicleName ? data.vehicleName.toUpperCase() : ""}</h2>
 
           {/* <button className="bg-white p-4 rounded-[10px] h-fit w-fit shadow">
             <FaRegHeart className="#1E1E1E" size={25} />
@@ -71,18 +71,18 @@ const Info = ({ data }) => {
           {/* Price Section */}
           <div className="mb-3 flex justify-between">
             <p className="text-lg font-medium">Price</p>
-            {data.mileage ?
+            {data?.mileage ? (
               <p className="flex items-center gap-2 text-sm">
-                <span><IoIosSpeedometer /></span> {data?.mileage !== null && `${formatNumberWithCommas(data.mileage)}`} Miles
+                <span><IoIosSpeedometer /></span>
+                {data.mileage !== null && `${formatNumberWithCommas(data.mileage)}`} Miles
               </p>
-              :
+            ) : (
               <p className='flex items-center text-sm gap-2'>
-                <span>
-                  <IoIosSpeedometer />
-                </span>
+                <span><IoIosSpeedometer /></span>
                 <span className='text-[#DF0805] font-semibold'>N/A</span>
               </p>
-            }
+            )}
+
           </div>
 
           {/* Mileage & Location */}

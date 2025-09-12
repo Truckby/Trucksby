@@ -53,7 +53,7 @@ export default function TruckCard({ data, handleDeleteClick }) {
 
         <div className="flex mt-4">
           <button
-            onClick={() => navigate("/detail", { state: data })}
+            onClick={() => navigate(`/detail/${data._id}`, { state: data })}
             className="bg-black text-white w-[162px] h-[39px] cursor-pointer flex justify-center items-center rounded-md mr-3 hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
             aria-label="Edit truck details"
           >

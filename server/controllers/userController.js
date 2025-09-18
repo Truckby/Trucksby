@@ -16,14 +16,19 @@ const Register = async (req, res, next) => {
 
 const Login = async (req, res, next) => {
   try {
+    const clientType = req.headers['x-client-type'];
     const data = { ...req.body };
-    const { accessToken, refreshToken } = await userService.loginUser(data);
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'Strict'
-    });
-    res.status(200).json({ token: accessToken });
+    const { accessToken, refreshToken, user } = await userService.loginUser(data);
+    if (clientType === "native") {
+      res.status(200).json({ accessToken, refreshToken, user });
+    } else {
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict'
+      });
+      res.status(200).json({ token: accessToken });
+    }
   } catch (error) {
     next(error);
   }
@@ -61,8 +66,14 @@ const ResetPassword = async (req, res, next) => {
 
 const RefreshToken = async (req, res, next) => {
   try {
-    const refreshToken = req.cookies?.refreshToken;
-    const { newAccessToken, newRefreshToken } = await userService.refreshToken(refreshToken);
+    const clientType = req.headers['x-client-type'];
+    const refreshToken = clientType === "native" ? req.body?.refreshToken : req.cookies?.refreshToken;
+    const { newAccessToken, newRefreshToken, user } = await userService.refreshToken(refreshToken);
+
+    if (clientType === "native") {
+      return res.status(200).json({ newAccessToken, newRefreshToken, user });
+    }
+
     res.cookie('refreshToken', newRefreshToken, {
       httpOnly: true,
       secure: true,

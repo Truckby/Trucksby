@@ -13,7 +13,7 @@ router.get('/get-all', truckController.getAllTrucks);
 router.post('/send-message', truckController.sendMessage);
 router.post('/news-letter', truckController.subscribeToNewsletter);
 
-router.get('/:id', authMiddleware.authenticateRequest, truckController.fetchTruckById);
+router.get('/:id', truckController.fetchTruckById);
 
 router.get('/inventory/:userId', truckController.getUserInventory);
 

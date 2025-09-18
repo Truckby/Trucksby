@@ -29,7 +29,7 @@ export default function InventoryTruckCard({ data }) {
                                 alt={`Truck image ${idx + 1}`}
                                 className="w-full h-[200px] object-cover"
                                 /* allow clicking the image to open details, like the button */
-                                onClick={() => navigate("/detail", { state: data })}
+                                onClick={() => navigate(`/detail/${data._id}`, { state: data })}
                             />
                         )
                     )}
@@ -68,7 +68,7 @@ export default function InventoryTruckCard({ data }) {
                 </div>
 
                 <button
-                    onClick={() => navigate("/detail", { state: data })}
+                    onClick={() => navigate(`/detail/${data._id}`, { state: data })}
                     className="mt-4 bg-black text-white py-2 rounded-md text-sm hover:bg-gray-800 transition cursor-pointer"
                 >
                     View

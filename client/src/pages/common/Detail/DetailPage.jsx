@@ -2,12 +2,37 @@ import { Carousel } from 'react-responsive-carousel';
 import { formatNumberWithCommas, formatPhoneNumber } from '../../../utils/extra';
 import DetailInfo from './components/DetailInfo';
 import Info from './components/Info';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { ShowLoading, HideLoading } from '../../../redux/loaderSlice';
+import truckService from '../../../services/truckService';
 
 const DetailPage = () => {
 
+  const { id } = useParams();
   const location = useLocation();
-  const data = location?.state || {};
+  const [data, setData] = useState(location?.state || {});
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    if (!location?.state && id) {
+      const fetchData = async () => {
+        try {
+          dispatch(ShowLoading());
+          const response = await truckService.getTruckById(id);
+          setData(response);
+        } catch (err) {
+          console.error("Error fetching truck:", err);
+        } finally {
+          dispatch(HideLoading());
+        }
+      };
+      fetchData();
+    }
+  }, [id, location?.state]);
+
 
   const sampleData = {
     General: {
@@ -55,8 +80,6 @@ const DetailPage = () => {
     }
   };
 
-  // console.log(sampleData, 'sampleData');
-
   return (
     <div className='pb-10 max-w-[1300px] mx-auto px-4 pt-10 lg:pt-20 lg:px-0'>
 
@@ -78,7 +101,7 @@ const DetailPage = () => {
 
       <div className='grid lg:grid-cols-2 lg:mx-4'>
         <div className='hidden lg:block'>
-          <DetailInfo data={sampleData} images={data.images} />
+          <DetailInfo data={sampleData} images={data?.images} />
         </div>
 
         <div className='mb-8 lg:mb-0'>
@@ -86,7 +109,7 @@ const DetailPage = () => {
         </div>
 
         <div className='block lg:hidden'>
-          <DetailInfo data={sampleData} images={data.images} />
+          <DetailInfo data={sampleData} images={data?.images} />
         </div>
       </div>
     </div>

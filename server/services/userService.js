@@ -68,7 +68,23 @@ const loginUser = async (loginData) => {
   let refreshToken = authUtils.createRefreshToken(payload);
   user.refreshToken = refreshToken;
   await user.save();
-  return { accessToken, refreshToken };
+
+  const safeUser = {
+    _id: user._id,
+    name: user.name,
+    userName: user.userName,
+    email: user.email,
+    role: user.role,
+    image: user.image,
+    city: user.city,
+    state: user.state || null,
+    country: user.country,
+    phone: user.phone || null,
+    companyName: user.companyName || null,
+    gender: user.gender,
+  };
+
+  return { accessToken, refreshToken, user: safeUser };
 };
 
 const createResetToken = async (email) => {
@@ -118,7 +134,23 @@ const refreshToken = async (refreshToken) => {
   const newRefreshToken = authUtils.createRefreshToken(newPayload);
   user.refreshToken = newRefreshToken;
   await user.save();
-  return { newAccessToken, newRefreshToken };
+
+  const safeUser = {
+    _id: user._id,
+    name: user.name,
+    userName: user.userName,
+    email: user.email,
+    role: user.role,
+    image: user.image,
+    city: user.city,
+    state: user.state || null,
+    country: user.country,
+    phone: user.phone || null,
+    companyName: user.companyName || null,
+    gender: user.gender,
+  };
+
+  return { newAccessToken, newRefreshToken, user: safeUser };
 };
 
 const logoutUser = async (refreshToken) => {

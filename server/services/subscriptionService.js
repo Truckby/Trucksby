@@ -23,7 +23,7 @@ const addSubscription = async (data) => {
             await existingUserSubscription.save();
         }
     } catch (error) {
-        // console.log(error, 'addSubscriptionError')
+        console.log('AddSubscriptionError: ', error);
         const newError = new Error(`Unable to add subscription!`);
         newError.code = 400;
         throw newError;

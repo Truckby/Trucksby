@@ -87,15 +87,20 @@ const RefreshToken = async (req, res, next) => {
 
 const Logout = async (req, res, next) => {
   try {
-    const refreshToken = req.cookies?.refreshToken;
+    const clientType = req.headers['x-client-type'];
+    const refreshToken = clientType === "native" ? req.body?.refreshToken : req.cookies?.refreshToken;
+
     if (refreshToken) {
       await userService.logoutUser(refreshToken);
     }
-    res.clearCookie('refreshToken', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'Strict'
-    });
+
+    if (clientType !== "native") {
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict'
+      });
+    }
     res.status(200).json({ message: 'Logged out successfully' });
   } catch (error) {
     next(error);

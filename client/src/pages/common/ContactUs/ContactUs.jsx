@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
+import ReactGA from "react-ga4";
 
 const ContactUs = () => {
     const user = useSelector((state) => state.user.user);
+
+    useEffect(() => {
+        const VITE_ENV = import.meta.env.VITE_ENV;
+        if (VITE_ENV === "production") {
+            ReactGA.send({ hitType: "pageview", page: "/contact-us", title: "Contact Us Page" });
+        }
+    }, []);
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 sm:py-20">

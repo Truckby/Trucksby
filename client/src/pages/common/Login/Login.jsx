@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LoginSelector from "./components/LoginSelector";
-import bgImage from '../../../assets/images/truck_image.png'
+import bgImage from '../../../assets/images/truck_image.png';
+import ReactGA from "react-ga4";
 
 export default function Login() {
+  useEffect(() => {
+    const VITE_ENV = import.meta.env.VITE_ENV;
+    if (VITE_ENV === "production") {
+      ReactGA.send({ hitType: "pageview", page: "/login", title: "Login Page" });
+    }
+  }, []);
+
   return (
     <div>
       <div className="min-h-screen flex flex-col relative px-4">

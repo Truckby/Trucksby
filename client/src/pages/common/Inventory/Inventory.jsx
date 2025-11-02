@@ -8,6 +8,7 @@ import truckService from '../../../services/truckService';
 import { formatPhoneNumber } from '../../../utils/extra';
 import InventoryTruckCard from './components/InventoryTruckCard';
 import InventoryFallback from './components/InventoryFallback';
+import ReactGA from "react-ga4";
 
 const Inventory = () => {
     const { userId } = useParams();
@@ -20,6 +21,12 @@ const Inventory = () => {
 
     const isValidUserId = /^[0-9a-fA-F]{24}$/.test(userId);
 
+    useEffect(() => {
+        const VITE_ENV = import.meta.env.VITE_ENV;
+        if (VITE_ENV === "production") {
+            ReactGA.send({ hitType: "pageview", page: "/inventory", title: "Inventory Page" });
+        }
+    }, []);
 
     useEffect(() => {
         if (userId && isValidUserId) {

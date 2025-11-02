@@ -15,7 +15,7 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
       <div className="relative h-[170px] overflow-hidden rounded-t-[10px]">
         <Carousel showThumbs={false} infiniteLoop showStatus={false}>
           {images.map((img, index) => (
-            <div key={index} onClick={() => navigate("/detail", { state: data })}>
+            <div key={index} onClick={() => navigate(`/detail/${data._id}`, { state: data })}>
               <img
                 src={img}
                 alt={`${title} - ${index + 1}`}
@@ -26,7 +26,7 @@ const TruckCard = ({ images, title, price, location, miles, data }) => {
         </Carousel>
       </div>
 
-      <div className="p-[15px] pt-[10px]" onClick={() => navigate("/detail", { state: data })}>
+      <div className="p-[15px] pt-[10px]" onClick={() => navigate(`/detail/${data._id}`, { state: data })}>
         <h3
           className="text-base font-medium overflow-hidden text-ellipsis whitespace-nowrap"
           title={title}

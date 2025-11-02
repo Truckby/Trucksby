@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { ShowLoading, HideLoading } from '../../../redux/loaderSlice';
 import truckService from '../../../services/truckService';
+import ReactGA from "react-ga4";
 
 const DetailPage = () => {
 
@@ -15,6 +16,12 @@ const DetailPage = () => {
   const [data, setData] = useState(location?.state || {});
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const VITE_ENV = import.meta.env.VITE_ENV;
+    if (VITE_ENV === "production") {
+      ReactGA.send({ hitType: "pageview", page: "/detail", title: "Detail Page" });
+    }
+  }, []);
 
   useEffect(() => {
     if (!location?.state && id) {

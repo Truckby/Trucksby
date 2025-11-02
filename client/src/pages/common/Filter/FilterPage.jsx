@@ -9,8 +9,8 @@ import truckService from '../../../services/truckService'
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice'
 import { useDispatch } from 'react-redux'
 import { useSearchParams } from 'react-router-dom';
-import useDebounce from '../../../utils/useDebounce'
-
+import useDebounce from '../../../utils/useDebounce';
+import ReactGA from "react-ga4";
 
 const FilterPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -59,6 +59,12 @@ const FilterPage = () => {
 
   const debouncedFilters = useDebounce(filters, 500);
 
+  useEffect(() => {
+    const VITE_ENV = import.meta.env.VITE_ENV;
+    if (VITE_ENV === "production") {
+      ReactGA.send({ hitType: "pageview", page: "/filter", title: "Filter Page" });
+    }
+  }, []);
 
   const fetchTrucks = useCallback(async (pageIndex = 1) => {
     dispatch(ShowLoading());

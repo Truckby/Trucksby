@@ -21,6 +21,7 @@ import RV from '../../../assets/images/trucks/RV.png'
 import Trailer from '../../../assets/images/trucks/Trailer.png'
 import trucks from '../../../assets/images/trucks/trucks.png'
 import { truckSubCategories } from '../../../data/Content';
+import ReactGA from "react-ga4";
 
 const Home = () => {
   const [listData, setListData] = useState([]);
@@ -40,7 +41,12 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ totalPages: 0, totalCount: 0, currentPage: 1 });
 
-
+  useEffect(() => {
+    const VITE_ENV = import.meta.env.VITE_ENV;
+    if (VITE_ENV === "production") {
+      ReactGA.send({ hitType: "pageview", page: "/", title: "Home Page" });
+    }
+  }, []);
 
   const fetchAllTrucks = async (pageIndex = 1) => {
     dispatch(ShowLoading());

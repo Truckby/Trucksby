@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import ReactGA from "react-ga4";
 
 const PrivacyPage = () => {
+    useEffect(() => {
+        const VITE_ENV = import.meta.env.VITE_ENV;
+        if (VITE_ENV === "production") {
+            ReactGA.send({ hitType: "pageview", page: "/privacy", title: "Privacy Page" });
+        }
+    }, []);
+
     return (
         <div className='my-[65px] max-w-[1300px] mx-auto bg-white shadow rounded-[20px]'>
             <div className='p-6 md:px-[79px] md:py-[65px]'>

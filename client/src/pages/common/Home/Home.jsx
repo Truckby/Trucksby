@@ -242,10 +242,10 @@ const Home = () => {
               }}
 
               key={index}
-              className='w-[188px] m-2 h-[218px] mt-8 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
+              className='w-[calc(50%-1rem)] h-[170px] mt-4 sm:w-[188px] sm:h-[218px] sm:mt-8 m-2 rounded-[20px] bg-white flex flex-col justify-center items-center hover:shadow-md  transition-shadow cursor-pointer'
             >
-              <img src={truck.image} alt={truck.name} className='w-[145px] h-[100px] object-contain' />
-              <span className="text-lg sm:text-xl font-semibold pt-9 text-center">
+              <img src={truck.image} alt={truck.name} className='w-[90px] h-[65px] sm:w-[145px] sm:h-[100px] object-contain' />
+              <span className="text-sm sm:text-xl font-semibold pt-4 sm:pt-9 text-center px-1">
                 {truck.name}
               </span>
 

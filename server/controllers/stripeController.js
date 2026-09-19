@@ -63,7 +63,27 @@ const StripeHooks = async (req, res, next) => {
     }
 };
 
+const MobileRedirectSuccess = (req, res, next) => {
+    try {
+        const redirectUrl = req.query.redirectUrl || '';
+        res.send(stripeService.buildRedirectPage(redirectUrl));
+    } catch (error) {
+        next(error);
+    }
+};
+
+const MobileRedirectCancel = (req, res, next) => {
+    try {
+        const redirectUrl = req.query.redirectUrl || '';
+        res.send(stripeService.buildRedirectPage(redirectUrl));
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     CreateCheckoutSession,
     StripeHooks,
+    MobileRedirectSuccess,
+    MobileRedirectCancel,
 };

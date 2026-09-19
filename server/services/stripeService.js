@@ -91,10 +91,10 @@ const createCheckoutSession = async (priceId, stripeCustomerId, redirectBase, is
         const encodedCancel = cancelRedirectUrl ? encodeURIComponent(cancelRedirectUrl) : '';
 
         const successUrl = isMobile
-            ? `${redirectBase}/mobile-redirect/success?redirectUrl=${encodedSuccess}`
+            ? `${redirectBase}/api/stripe/mobile-redirect/success?redirectUrl=${encodedSuccess}`
             : `${redirectBase}/seller/success`;
         const cancelUrl = isMobile
-            ? `${redirectBase}/mobile-redirect/cancel?redirectUrl=${encodedCancel}`
+            ? `${redirectBase}/api/stripe/mobile-redirect/cancel?redirectUrl=${encodedCancel}`
             : `${redirectBase}/seller/plans`;
 
         const session = await stripe.checkout.sessions.create({
@@ -182,11 +182,25 @@ const handlePaymentSucceededEvent = async (event) => {
     }
 };
 
+const buildRedirectPage = (redirectUrl) => {
+    return `
+        <!DOCTYPE html>
+        <html>
+        <head></head>
+        <body>
+            <script>window.location.href = "${redirectUrl}";</script>
+            <a href="${redirectUrl}">Tap here if not redirected</a>
+        </body>
+        </html>
+    `;
+};
+
 module.exports = {
     fetchProductInfo,
     createCustomer,
     updateCustomerEmail,
     constructEvent,
     handlePaymentSucceededEvent,
-    createCheckoutSession
+    createCheckoutSession,
+    buildRedirectPage
 }

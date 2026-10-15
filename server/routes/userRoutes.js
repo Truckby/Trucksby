@@ -3,7 +3,6 @@ const controller = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const userSchemas = require('../validationSchemas/userSchemas');
 const validationMiddleware = require('../middleware/validationMiddleware');
-const upload = require("../configs/multer.config");
 
 router.post(
   "/:userType-register",
@@ -49,12 +48,6 @@ router.get(
 router.patch(
   "/update-user-info",
   authMiddleware.authenticateRequest,
-  validationMiddleware.validateRequest(userSchemas.updateUserSchema),
-  controller.UpdateUserInfo
-);
-
-router.patch(
-  "/update-user-profile/:id",
   validationMiddleware.validateRequest(userSchemas.updateUserSchema),
   controller.UpdateUserInfo
 );

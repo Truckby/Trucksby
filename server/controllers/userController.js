@@ -139,6 +139,26 @@ const ChangeUserPassword = async (req, res, next) => {
   }
 };
 
+const DeleteAccount = async (req, res, next) => {
+  try {
+    const clientType = req.headers['x-client-type'];
+    const userId = req.user?.id;
+    const { password } = req.body;
+    await userService.deleteAccount(userId, password);
+
+    if (clientType !== "native") {
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict'
+      });
+    }
+    res.status(200).json({ message: "Account deleted successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   Register,
   Login,
@@ -148,5 +168,6 @@ module.exports = {
   Logout,
   FetchUserInfo,
   UpdateUserInfo,
-  ChangeUserPassword
+  ChangeUserPassword,
+  DeleteAccount
 };

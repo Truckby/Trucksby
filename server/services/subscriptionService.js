@@ -123,8 +123,27 @@ const getUserSubscriptionInfo = async (userId) => {
     };
 };
 
+const getUserSubscription = async (userId) => {
+    return await Subscription.findOne({ user: userId });
+};
+
+// Keeps the subscription record for stats but marks it as belonging to a
+// deleted account and turns off auto renew on every entry
+const markUserDeleted = async (userId) => {
+    const subscription = await Subscription.findOne({ user: userId });
+    if (!subscription) return;
+
+    subscription.subscriptions.forEach((sub) => {
+        sub.autoRenew = false;
+    });
+    subscription.userDeletedAt = new Date();
+    await subscription.save();
+};
+
 module.exports = {
     addSubscription,
     getUserSubscriptionStatus,
     getUserSubscriptionInfo,
+    getUserSubscription,
+    markUserDeleted,
 }

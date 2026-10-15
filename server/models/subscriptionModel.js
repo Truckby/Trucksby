@@ -101,6 +101,11 @@ const subscriptionSchema = new mongoose.Schema({
     subscriptions: {
         type: [subscriptionsArraySchema],
         required: true
+    },
+    // Set when the user deletes their account. The record is kept for stats.
+    userDeletedAt: {
+        type: Date,
+        default: null
     }
 });
 

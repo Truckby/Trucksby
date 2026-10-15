@@ -77,6 +77,10 @@ const searchUsersSchema = yup.object().shape({
 
 });
 
+const deleteAccountSchema = yup.object().shape({
+  password: yup.string().trim().required('Password is required'),
+});
+
 const changeUserPasswordSchema = yup.object().shape({
   oldPassword: yup.string().trim().required('Old Password is required'),
   newPassword: yup.string().trim().required('New Password is required'),
@@ -92,5 +96,6 @@ module.exports = {
   updateUserSchema,
   userIdSchema,
   searchUsersSchema,
-  changeUserPasswordSchema
+  changeUserPasswordSchema,
+  deleteAccountSchema
 };

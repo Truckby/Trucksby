@@ -1,4 +1,8 @@
 const User = require("../models/userModel");
+const stripeService = require("./stripeService");
+const subscriptionService = require("./subscriptionService");
+const truckService = require("./truckService");
+const imageService = require("./imageService");
 const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
 
@@ -220,21 +224,51 @@ const updateUser = async (userId, updateData) => {
   return updatedUser;
 };
 
-const deleteUser = async (userId, role) => {
-  const userToDelete = await User.findById(userId);
-
-  if (!userToDelete) {
+// Permanently deletes a user's account: cancels their Stripe subscriptions,
+// deletes their trucks, images and the user itself. Subscription records are
+// kept (marked with userDeletedAt) for stats.
+const deleteAccount = async (userId, password) => {
+  const user = await User.findById(userId);
+  if (!user) {
     const error = new Error('User not found!');
     error.code = 404;
     throw error;
   }
-  if (!userToDelete.role === role) {
-    const error = new Error('Cannot delete other type of user via this endpoint!');
-    error.code = 405;
+
+  const passwordMatched = await authUtils.comparePassword(user.password, password);
+  if (!passwordMatched) {
+    const error = new Error('Incorrect password!');
+    error.code = 400;
     throw error;
   }
-  const deletedUser = await User.findByIdAndDelete(userId);
-  return deletedUser;
+
+  const subscription = await subscriptionService.getUserSubscription(userId);
+
+  // Stop all future charges first. If this fails, the account is left intact
+  // so the user is never billed for an account that no longer exists.
+  const customerIds = [...new Set([user.stripeCustomerId, subscription?.customerId].filter(Boolean))];
+  try {
+    await stripeService.cancelCustomerSubscriptions(customerIds);
+  } catch (err) {
+    console.log('CancelStripeSubscriptionsError: ', err);
+    const error = new Error('Unable to cancel your subscription. Your account was not deleted, please try again.');
+    error.code = 502;
+    throw error;
+  }
+
+  await subscriptionService.markUserDeleted(userId);
+
+  const imageUrls = await truckService.deleteUserTrucks(userId);
+  if (user.image) imageUrls.push(user.image);
+
+  await User.findByIdAndDelete(userId);
+
+  // Image cleanup is best effort: the account is already deleted at this point
+  try {
+    await imageService.deleteImages(imageUrls);
+  } catch (err) {
+    console.log('DeleteAccountImagesError: ', err);
+  }
 };
 
 const changeUserPassword = async (userId, oldPassword, newPassword) => {
@@ -279,7 +313,7 @@ module.exports = {
   logoutUser,
   fetchUser,
   updateUser,
-  deleteUser,
+  deleteAccount,
   changeUserPassword,
   fetchUserStripeCustomerId,
 };

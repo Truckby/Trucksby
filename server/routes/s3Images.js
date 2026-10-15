@@ -1,17 +1,12 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const AWS = require("aws-sdk");
 const multer = require("multer");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
+const s3 = require("../configs/s3.config");
 
 router.post("/upload", upload.array("images", 20), async (req, res) => {
     try {

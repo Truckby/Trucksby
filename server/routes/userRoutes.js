@@ -59,4 +59,11 @@ router.patch(
   controller.ChangeUserPassword
 );
 
+router.delete(
+  "/delete-account",
+  authMiddleware.authenticateRequest,
+  validationMiddleware.validateRequest(userSchemas.deleteAccountSchema),
+  controller.DeleteAccount
+);
+
 module.exports = router;

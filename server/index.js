@@ -46,6 +46,11 @@ app.get('/', (req, res) => {
 // Routes
 app.use("/api", routes);
 
+// Unknown routes get a JSON error instead of Express's default HTML page
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not found' });
+});
+
 //Error Handler
 app.use(errorHandlerMiddleware);
 

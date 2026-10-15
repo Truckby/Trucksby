@@ -157,6 +157,13 @@ const deleteTruck = async (id) => {
   return await Truck.findByIdAndDelete(id);
 };
 
+// Deletes all of a user's trucks and returns their image URLs
+const deleteUserTrucks = async (userId) => {
+  const trucks = await Truck.find({ userId }, { images: 1 });
+  await Truck.deleteMany({ userId });
+  return trucks.flatMap((truck) => truck.images || []);
+};
+
 
 module.exports = {
   getAllTrucksWithFilter,
@@ -165,5 +172,6 @@ module.exports = {
   createTruck,
   updateTruck,
   deleteTruck,
+  deleteUserTrucks,
   getUserTrucks,
 };

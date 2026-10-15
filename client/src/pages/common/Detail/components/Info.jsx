@@ -11,6 +11,7 @@ import { PiAddressBookTabsFill } from "react-icons/pi";
 import { formatPhoneNumber } from '../../../../utils/extra';
 import { formatNumberWithCommas } from '../../../../utils/extra';
 import { BiSolidBriefcase } from "react-icons/bi";
+import ReportListing from './ReportListing';
 
 const Info = ({ data }) => {
   const dispatch = useDispatch();
@@ -143,6 +144,8 @@ const Info = ({ data }) => {
             </div>
 
           </div>
+
+          <ReportListing truckId={data?._id} />
         </div>
       </div>
 

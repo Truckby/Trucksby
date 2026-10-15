@@ -2,6 +2,7 @@ import Home from '../pages/common/Home/Home.jsx';
 import Login from '../pages/common/Login/Login.jsx';
 import NotFound from '../pages/common/NotFound/NotFound.jsx';
 import PrivacyPage from '../pages/common/Privacy/PrivacyPage.jsx';
+import DeleteAccountPage from '../pages/common/DeleteAccount/DeleteAccountPage.jsx';
 import SellerProfile from '../pages/common/Profile/SellerProfile.jsx';
 import SignUp from '../pages/common/Signup/SignUp.jsx';
 import AddTruckPage from '../pages/seller/AddTruck/AddTruckPage.jsx';
@@ -29,6 +30,7 @@ const routes = [
   { path: "/detail/:id", element: <DetailPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/signup", element: <SignUp />, protected: false, authRedirect: true, showHeader: true, showFooter: true },
   { path: "/privacy", element: <PrivacyPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
+  { path: "/delete-account", element: <DeleteAccountPage />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/contact-us", element: <ContactUs />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "/inventory/:userId", element: <Inventory />, protected: false, authRedirect: false, showHeader: true, showFooter: true },
   { path: "*", element: <NotFound />, protected: false, authRedirect: false, showHeader: false, showFooter: false },

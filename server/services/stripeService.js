@@ -195,6 +195,31 @@ const buildRedirectPage = (redirectUrl) => {
     `;
 };
 
+// Stripe subscription statuses that can still lead to a charge
+const CHARGEABLE_SUBSCRIPTION_STATUSES = ['active', 'trialing', 'past_due', 'unpaid', 'incomplete'];
+
+// Cancels every live subscription of the given customers right away, without
+// a refund. Throws if any cancellation fails.
+const cancelCustomerSubscriptions = async (customerIds) => {
+    for (const customerId of customerIds) {
+        let subscriptions;
+        try {
+            subscriptions = await stripe.subscriptions.list({ customer: customerId, status: 'all', limit: 100 })
+                .autoPagingToArray({ limit: 1000 });
+        } catch (err) {
+            // Customer no longer exists in Stripe, so there is nothing left to bill
+            if (err?.code === 'resource_missing') continue;
+            throw err;
+        }
+
+        for (const subscription of subscriptions) {
+            if (CHARGEABLE_SUBSCRIPTION_STATUSES.includes(subscription.status)) {
+                await stripe.subscriptions.cancel(subscription.id);
+            }
+        }
+    }
+};
+
 module.exports = {
     fetchProductInfo,
     createCustomer,
@@ -202,5 +227,6 @@ module.exports = {
     constructEvent,
     handlePaymentSucceededEvent,
     createCheckoutSession,
-    buildRedirectPage
+    buildRedirectPage,
+    cancelCustomerSubscriptions
 }

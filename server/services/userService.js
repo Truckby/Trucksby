@@ -1,9 +1,14 @@
 const User = require("../models/userModel");
+const stripeService = require("./stripeService");
+const subscriptionService = require("./subscriptionService");
+const truckService = require("./truckService");
+const imageService = require("./imageService");
 const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
 
-const createUser = async (userData, role) => {
-  const { name, email, userName, image, gender, city, country, state, password, userId, phone, companyName } = userData;
+// imageFile is the optional profile photo sent with the signup request
+const createUser = async (userData, role, imageFile) => {
+  const { name, email, userName, gender, city, country, state, password, userId, phone, companyName } = userData;
   let existingUser = await User.findOne({ email });
   if (existingUser) {
     const error = new Error('A user with that email has already been registered!');
@@ -13,33 +18,45 @@ const createUser = async (userData, role) => {
 
   let passwordDigest = await authUtils.hashPassword(password);
 
+  // Upload only after the signup has passed validation and the email check
+  const image = imageFile ? (await imageService.uploadImages([imageFile]))[0] : undefined;
+
   let user;
 
-  if (role === 'user') {
-    user = await User.create({
-      email,
-      password: passwordDigest,
-      image,
-      role,
-      userId,
-      userName
-    });
-  } else {
-    user = await User.create({
-      name,
-      email,
-      userName,
-      image,
-      gender,
-      city,
-      country,
-      state,
-      password: passwordDigest,
-      role,
-      userId,
-      phone,
-      companyName
-    });
+  try {
+    if (role === 'user') {
+      user = await User.create({
+        email,
+        password: passwordDigest,
+        image,
+        role,
+        userId,
+        userName
+      });
+    } else {
+      user = await User.create({
+        name,
+        email,
+        userName,
+        image,
+        // Optional: leave it unset instead of storing an empty string
+        gender: gender || undefined,
+        city,
+        country,
+        state,
+        password: passwordDigest,
+        role,
+        userId,
+        phone,
+        companyName
+      });
+    }
+  } catch (error) {
+    // Don't leave the photo in S3 for an account that was never created
+    if (image) {
+      imageService.deleteImages([image]).catch((err) => console.log('DeleteSignupImageError: ', err));
+    }
+    throw error;
   }
 
   return user;
@@ -197,8 +214,13 @@ const updateUser = async (userId, updateData) => {
     throw error;
   }
 
-  if (updateData.password) {
-    updateData.password = await authUtils.hashPassword(updateData.password);
+  // Never change these through a profile update, even if the request has them
+  delete updateData.password;
+  delete updateData.role;
+
+  // Gender is optional; an empty value means "not chosen", so keep the current one
+  if (updateData.gender === '') {
+    delete updateData.gender;
   }
 
   let existingUser;
@@ -220,21 +242,51 @@ const updateUser = async (userId, updateData) => {
   return updatedUser;
 };
 
-const deleteUser = async (userId, role) => {
-  const userToDelete = await User.findById(userId);
-
-  if (!userToDelete) {
+// Permanently deletes a user's account: cancels their Stripe subscriptions,
+// deletes their trucks, images and the user itself. Subscription records are
+// kept (marked with userDeletedAt) for stats.
+const deleteAccount = async (userId, password) => {
+  const user = await User.findById(userId);
+  if (!user) {
     const error = new Error('User not found!');
     error.code = 404;
     throw error;
   }
-  if (!userToDelete.role === role) {
-    const error = new Error('Cannot delete other type of user via this endpoint!');
-    error.code = 405;
+
+  const passwordMatched = await authUtils.comparePassword(user.password, password);
+  if (!passwordMatched) {
+    const error = new Error('Incorrect password!');
+    error.code = 400;
     throw error;
   }
-  const deletedUser = await User.findByIdAndDelete(userId);
-  return deletedUser;
+
+  const subscription = await subscriptionService.getUserSubscription(userId);
+
+  // Stop all future charges first. If this fails, the account is left intact
+  // so the user is never billed for an account that no longer exists.
+  const customerIds = [...new Set([user.stripeCustomerId, subscription?.customerId].filter(Boolean))];
+  try {
+    await stripeService.cancelCustomerSubscriptions(customerIds);
+  } catch (err) {
+    console.log('CancelStripeSubscriptionsError: ', err);
+    const error = new Error('Unable to cancel your subscription. Your account was not deleted, please try again.');
+    error.code = 502;
+    throw error;
+  }
+
+  await subscriptionService.markUserDeleted(userId);
+
+  const imageUrls = await truckService.deleteUserTrucks(userId);
+  if (user.image) imageUrls.push(user.image);
+
+  await User.findByIdAndDelete(userId);
+
+  // Image cleanup is best effort: the account is already deleted at this point
+  try {
+    await imageService.deleteImages(imageUrls);
+  } catch (err) {
+    console.log('DeleteAccountImagesError: ', err);
+  }
 };
 
 const changeUserPassword = async (userId, oldPassword, newPassword) => {
@@ -279,7 +331,7 @@ module.exports = {
   logoutUser,
   fetchUser,
   updateUser,
-  deleteUser,
+  deleteAccount,
   changeUserPassword,
   fetchUserStripeCustomerId,
 };

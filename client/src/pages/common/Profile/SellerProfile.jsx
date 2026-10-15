@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import './style.css';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 import userService from "../../../services/userService";
 import toast from "react-hot-toast";
-import { fetchUserInfo } from "../../../redux/userSlice";
+import { clearUser, fetchUserInfo } from "../../../redux/userSlice";
+import { setLoggedOut } from "../../../redux/logoutSlice";
 import { uploadImg } from "../../../services/image";
 import subscriptionService from "../../../services/subscriptionService";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import './style.css';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
+import DeleteAccountModal from "./components/DeleteAccountModal";
 
 const ToggleSwitch = ({ checked, onChange }) => (
   <button
@@ -29,6 +33,7 @@ const ToggleSwitch = ({ checked, onChange }) => (
 const SellerProfile = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [error, setError] = useState({});
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(user?.image || null);
@@ -55,6 +60,9 @@ const SellerProfile = () => {
   })
 
   const [autoRenew, setAutoRenew] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -154,6 +162,31 @@ const SellerProfile = () => {
       toast.error("Failed to update Auto Renew");
     } finally {
       dispatch(HideLoading());
+    }
+  };
+
+  const openDeleteModal = () => {
+    setDeleteError('');
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteAccount = async (password) => {
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      await userService.deleteAccount({ password });
+      setDeleteOpen(false);
+      // Leave the profile before clearing auth, otherwise its ProtectedRoute
+      // sends the user to Login instead of Home
+      navigate('/');
+      Cookies.remove('truck-jwt-token');
+      dispatch(setLoggedOut());
+      dispatch(clearUser());
+      toast.success('Your account has been deleted');
+    } catch (error) {
+      setDeleteError(error?.response?.data?.error || 'Unable to delete your account. Please try again.');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -342,6 +375,27 @@ const SellerProfile = () => {
           </div>
         </form>
       </div>
+
+      {/* Delete Account */}
+      <div className="max-w-[1147px] mx-auto bg-white rounded-[20px] md:px-[79px] md:py-[40px] p-4 shadow mt-8">
+        <h2 className="text-xl font-bold">Delete Account</h2>
+        <p className="text-gray-500 mt-2">Permanently delete your account and all your listings. This can't be undone.</p>
+        <button
+          type="button"
+          onClick={openDeleteModal}
+          className="cursor-pointer mt-4 h-[48px] px-6 border border-red-600 text-red-600 rounded-[10px] font-semibold hover:bg-red-50"
+        >
+          Delete my account
+        </button>
+      </div>
+
+      <DeleteAccountModal
+        isOpen={deleteOpen}
+        deleting={deleting}
+        error={deleteError}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleDeleteAccount}
+      />
     </div>
   );
 };

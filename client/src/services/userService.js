@@ -95,6 +95,18 @@ const userService = {
       throw error;
     }
   },
+  deleteAccount: async (payload) => {
+    try {
+      const response = await axiosInstance.delete(`${BASE_URL}/delete-account`, {
+        data: payload,
+        // Lets the server clear the refresh token cookie
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
   changeUserPassword: async (payload) => {
     try {
       const response = await axiosInstance.patch(

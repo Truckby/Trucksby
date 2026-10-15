@@ -14,16 +14,16 @@ const PrivacyPage = () => {
             <div className='p-6 md:px-[79px] md:py-[65px]'>
                 {/* Privacy Policy */}
                 <h1 className='text-[24px] sm:text-[32px] font-bold'>TRUCKBY PRIVACY POLICY</h1>
-                <p className='text-sm text-gray-500 mt-2'>Last Updated: May 5, 2025</p>
+                <p className='text-sm text-gray-500 mt-2'>Last Updated: October 15, 2026</p>
 
                 <div className='mt-8 space-y-6 text-sm md:text-base leading-relaxed text-gray-700'>
                     <section>
                         <h2 className='font-semibold text-lg mb-2'>1. INTRODUCTION</h2>
-                        <p>Truckby ("we", "our", or "us") is committed to protecting the privacy of our users. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our platform, including www.truckby.com.</p>
+                        <p>Truckby ("we", "our", or "us") is committed to protecting the privacy of our users. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our platform, including www.truckby.com and the Truckby mobile app.</p>
                     </section>
                     <section>
                         <h2 className='font-semibold text-lg mb-2'>2. INFORMATION WE COLLECT</h2>
-                        <p>We may collect personal information such as your name, email, phone number, location, IP address, device information, cookies, and usage data. This includes data submitted by you (e.g., inquiry forms, account registration) and collected automatically (e.g., analytics, log files, third-party integrations).</p>
+                        <p>We may collect personal information such as your name, email, phone number, location, IP address, device information, cookies, and usage data. This includes data submitted by you (e.g., inquiry forms, account registration) and collected automatically (e.g., analytics, log files, third-party integrations). For sellers, this also includes your company name, address, profile photo, the details and photos of your listings, and your subscription and payment history. Card details are handled by our payment processor, Stripe, and are never stored by us.</p>
                     </section>
                     <section>
                         <h2 className='font-semibold text-lg mb-2'>3. USE OF INFORMATION</h2>
@@ -34,7 +34,7 @@ const PrivacyPage = () => {
                         <p>We may share your information with:</p>
                         <ul className='list-disc ml-6 mt-2 space-y-1'>
                             <li>Sellers and advertisers you engage with</li>
-                            <li>Third-party service providers (e.g., hosting, analytics, payment processors)</li>
+                            <li>Third-party service providers (e.g., Stripe for payments, Amazon Web Services for photo storage, hosting and analytics providers)</li>
                             <li>Legal authorities where required</li>
                             <li>Our affiliates for internal business purposes</li>
                         </ul>
@@ -49,18 +49,22 @@ const PrivacyPage = () => {
                     </section>
                     <section>
                         <h2 className='font-semibold text-lg mb-2'>7. YOUR RIGHTS</h2>
-                        <p>You may request access, correction, or deletion of your personal data by contacting info@truckby.com. Residents of California may have additional rights under the CCPA.</p>
+                        <p>You may request access to or correction of your personal data by contacting info@truckby.com. You can delete your account at any time from My Profile on www.truckby.com or in the Truckby app; see <a href='/delete-account' className='text-blue-600 underline'>www.truckby.com/delete-account</a> for details. Residents of California may have additional rights under the CCPA.</p>
                     </section>
                     <section>
-                        <h2 className='font-semibold text-lg mb-2'>8. CHILDREN</h2>
+                        <h2 className='font-semibold text-lg mb-2'>8. DATA RETENTION & ACCOUNT DELETION</h2>
+                        <p>When you delete your account, we delete your profile, your listings and their photos, and any active subscription is cancelled immediately without a refund for the remaining time. We keep a record of past subscription payments (plan, amount and dates), without your name or contact details, for accounting and business statistics. Stripe keeps its own payment records as required by law.</p>
+                    </section>
+                    <section>
+                        <h2 className='font-semibold text-lg mb-2'>9. CHILDREN</h2>
                         <p>Our services are not intended for users under 18. We do not knowingly collect personal data from minors.</p>
                     </section>
                     <section>
-                        <h2 className='font-semibold text-lg mb-2'>9. CHANGES</h2>
+                        <h2 className='font-semibold text-lg mb-2'>10. CHANGES</h2>
                         <p>We may update this policy periodically. Continued use of our services constitutes acceptance.</p>
                     </section>
                     <section>
-                        <h2 className='font-semibold text-lg mb-2'>10. CONTACT US</h2>
+                        <h2 className='font-semibold text-lg mb-2'>11. CONTACT US</h2>
                         <p>Email: <a href='mailto:info@truckby.com' className='text-blue-600 underline'>info@truckby.com</a></p>
                     </section>
                 </div>

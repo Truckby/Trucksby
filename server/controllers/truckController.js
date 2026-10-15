@@ -212,8 +212,16 @@ const addTruck = async (req, res, next) => {
 
 const updateTruck = async (req, res, next) => {
   try {
-    const updatedTruck = await truckService.updateTruck(req.params.id, req.body);
-    if (!updatedTruck) return res.status(404).json({ message: 'Equipment not found' });
+    const truck = await truckService.getTruckById(req.params.id);
+    if (!truck) return res.status(404).json({ error: 'Equipment not found' });
+    if (truck.userId.toString() !== req.user?.id) {
+      return res.status(403).json({ error: 'You can only edit your own listings' });
+    }
+
+    // A listing can't be moved to another user
+    const { userId, ...data } = req.body;
+    const updatedTruck = await truckService.updateTruck(req.params.id, data);
+    if (!updatedTruck) return res.status(404).json({ error: 'Equipment not found' });
     res.status(200).json({ message: 'Equipment updated successfully', truck: updatedTruck });
   } catch (error) {
     next(error);
@@ -222,8 +230,21 @@ const updateTruck = async (req, res, next) => {
 
 const deleteTruck = async (req, res, next) => {
   try {
-    const deletedTruck = await truckService.deleteTruck(req.params.id);
-    if (!deletedTruck) return res.status(500).json({ message: 'Equipment not found' });
+    const truck = await truckService.getTruckById(req.params.id);
+    if (!truck) return res.status(404).json({ error: 'Equipment not found' });
+    if (truck.userId.toString() !== req.user?.id) {
+      return res.status(403).json({ error: 'You can only delete your own listings' });
+    }
+
+    await truckService.deleteTruck(req.params.id);
+
+    // Photo cleanup is best effort: the listing is already deleted at this point
+    try {
+      await imageService.deleteImages(truck.images || []);
+    } catch (err) {
+      console.log('DeleteTruckImagesError: ', err);
+    }
+
     res.status(200).json({ message: 'Equipment deleted successfully' });
   } catch (error) {
     next(error);

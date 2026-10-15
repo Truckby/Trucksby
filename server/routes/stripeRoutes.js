@@ -18,15 +18,16 @@ router.post(
 );
 
 
-router.get(
-    "/mobile-redirect/success",
-    controller.MobileRedirectSuccess
-);
+// Checkout redirects for the mobile app, which no longer takes payments
+// router.get(
+//     "/mobile-redirect/success",
+//     controller.MobileRedirectSuccess
+// );
 
-router.get(
-    "/mobile-redirect/cancel",
-    controller.MobileRedirectCancel
-);
+// router.get(
+//     "/mobile-redirect/cancel",
+//     controller.MobileRedirectCancel
+// );
 
 
 module.exports = router;

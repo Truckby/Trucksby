@@ -24,6 +24,17 @@ const getS3KeyFromUrl = (url) => {
   return null;
 };
 
+// Uploads files (from imageUploadMiddleware) to S3 and returns their URLs
+const uploadImages = async (files) => {
+  const results = await Promise.all(files.map((file) => s3.upload({
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `${Date.now()}-${Math.round(Math.random() * 1e9)}-${file.originalname}`,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+  }).promise()));
+  return results.map((result) => result.Location);
+};
+
 // Deletes images from S3. URLs that aren't in our bucket are ignored.
 const deleteImages = async (urls) => {
   const keys = [...new Set(urls.map(getS3KeyFromUrl).filter(Boolean))];
@@ -43,5 +54,6 @@ const deleteImages = async (urls) => {
 };
 
 module.exports = {
+  uploadImages,
   deleteImages,
 };

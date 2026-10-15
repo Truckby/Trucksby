@@ -6,7 +6,6 @@ import { IoIosMail } from 'react-icons/io';
 import { BiSolidLock } from 'react-icons/bi';
 import userService from '../../../../services/userService';
 import toast from 'react-hot-toast';
-import { uploadImg } from '../../../../services/image';
 import { useNavigate } from 'react-router';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
@@ -29,7 +28,7 @@ const SellerSignupForm = () => {
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Full Name is required'),
     userName: Yup.string().required('Username is required'),
-    gender: Yup.string().required('Gender is required'),
+    gender: Yup.string().optional(),
     country: Yup.string().required('Country is required'),
     state: Yup.string().when('country', (country, schema) =>
       country === 'United States'
@@ -66,41 +65,22 @@ const SellerSignupForm = () => {
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      let imageUrl = '';
       setLoading(true);
-      // Handle image upload if an image is selected
-      if (image) {
-        try {
-          const imgForm = new FormData();
-          imgForm.append('images', image);
-          const res = await uploadImg(imgForm);
 
-          if (res?.success && res?.urls?.length > 0) {
-            imageUrl = res.urls[0]; // Get the URL of the uploaded image
-          } else {
-            toast.error('Image upload failed');
-            return;
-          }
-        } catch (error) {
-          toast.error('Error uploading image');
-          return;
-        }
-      }
-
-      // Create the payload object with form values and imageUrl
-      const payload = {
-        name: values.fullName,
-        userName: values.userName,
-        gender: values.gender,
-        country: values.country,
-        state: values.state,// new field
-        city: values.city,
-        email: values.email,
-        password: values.password,
-        companyName: values.companyName, // New field
-        phone: Number(values.phone), // New field
-        image: imageUrl,
-      };
+      // The photo goes with the signup request; the server only uploads it
+      // once the signup is valid, so there is no public upload endpoint
+      const payload = new FormData();
+      payload.append('name', values.fullName);
+      payload.append('userName', values.userName);
+      payload.append('gender', values.gender);
+      payload.append('country', values.country);
+      payload.append('state', values.state);
+      payload.append('city', values.city);
+      payload.append('email', values.email);
+      payload.append('password', values.password);
+      payload.append('companyName', values.companyName);
+      payload.append('phone', values.phone);
+      if (image) payload.append('image', image);
 
       try {
         // Call the user registration service with payload
@@ -177,7 +157,7 @@ const SellerSignupForm = () => {
               onBlur={formik.handleBlur}
               className="p-4 block w-full border rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-[#DF0805] focus:border-[#DF0805]"
             >
-              <option value="">Select Gender</option>
+              <option value="">Select Gender (optional)</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>

@@ -12,7 +12,6 @@ const registerSchema = yup.object().shape({
   country: yup.string().trim().optional(),
   state: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
-  image: yup.string().trim().optional(),
   role: yup.string().trim().optional(),
   phone: yup.number(),
   companyName: yup.string().trim().optional(),
@@ -28,7 +27,8 @@ const forgotPasswordSchema = yup.object().shape({
 });
 
 const userTypeSchema = yup.object().shape({
-  userType: yup.string().oneOf(['user', 'seller'], 'Invalid user type').required('User type is required')
+  // Buyer signup ('user') is turned off in the web and mobile app
+  userType: yup.string().oneOf(['seller'], 'Invalid user type').required('User type is required')
 });
 
 const resetPasswordSchema = yup.object().shape({
@@ -50,17 +50,17 @@ const createUserSchema = yup.object().shape({
   companyName: yup.string().trim().optional(),
 });
 
+// Password and role can't be changed here: passwords go through
+// change-user-password (which checks the old one) and roles are fixed
 const updateUserSchema = yup.object().shape({
   name: yup.string().trim().optional(),
   userName: yup.string().trim().optional(),
   email: yup.string().trim().email('Invalid email address').optional(),
-  password: yup.string().trim().optional(),
   image: yup.string().trim().optional(),
   city: yup.string().trim().optional(),
   country: yup.string().trim().optional(),
   state: yup.string().trim().optional(),
   gender: yup.string().trim().optional(),
-  role: yup.string().trim().optional(),
   phone: yup.number(),
   companyName: yup.string().trim().optional(),
 });

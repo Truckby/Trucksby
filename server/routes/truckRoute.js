@@ -5,7 +5,8 @@ const authMiddleware = require('../middleware/authMiddleware')
 const validationMiddleware = require('../middleware/validationMiddleware');
 const truckSchemas = require('../validationSchemas/truckSchemas');
 
-router.get('/', truckController.fetchAllTrucks);
+// Not used by the web or mobile app
+// router.get('/', truckController.fetchAllTrucks);
 router.get('/by-user', authMiddleware.authenticateRequest, truckController.fetchAllTrucks);
 
 router.get('/get-all', truckController.getAllTrucks);

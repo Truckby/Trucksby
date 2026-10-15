@@ -14,6 +14,7 @@ router.post('/send-message', truckController.sendMessage);
 router.post('/news-letter', truckController.subscribeToNewsletter);
 
 router.get('/:id', truckController.fetchTruckById);
+router.post('/:id/report', validationMiddleware.validateRequest(truckSchemas.reportTruckSchema), truckController.reportTruck);
 
 router.get('/inventory/:userId', truckController.getUserInventory);
 

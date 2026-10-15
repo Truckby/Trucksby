@@ -1,5 +1,8 @@
 const truckService = require('../services/truckService');
 const emailService = require('../services/emailService');
+const imageService = require('../services/imageService');
+
+const LISTING_BASE_URL = 'https://truckby.com/detail';
 const subscriptionService = require('../services/subscriptionService');
 const Product = require('../models/prooductModel');
 const User = require("../models/userModel");
@@ -271,7 +274,45 @@ const getUserInventory = async (req, res) => {
 
 
 
+const escapeHtml = (value) => String(value ?? '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+// Emails a report about a listing to the Truckby team for manual review
+const reportTruck = async (req, res, next) => {
+  try {
+    const truck = await truckService.getTruckById(req.params.id);
+    if (!truck) return res.status(404).json({ error: 'Equipment not found' });
+
+    const seller = await User.findById(truck.userId, { name: 1, email: 1, companyName: 1 });
+    const { reason, details, email } = req.body;
+    const listingUrl = `${LISTING_BASE_URL}/${truck._id}`;
+
+    const emailHtml = `
+      <h1 style="color: #DF0805;">Listing Reported</h1>
+      <p><strong>Listing:</strong> ${escapeHtml(truck.vehicleName) || 'N/A'}</p>
+      <p><strong>Listing ID:</strong> ${truck._id}</p>
+      <p><strong>Link:</strong> <a href="${listingUrl}">${listingUrl}</a></p>
+      <p><strong>Seller:</strong> ${escapeHtml(seller?.name || seller?.companyName) || 'N/A'} (${escapeHtml(seller?.email) || 'N/A'})</p>
+      <hr />
+      <p><strong>Reason:</strong> ${escapeHtml(reason)}</p>
+      <p><strong>Details:</strong> ${escapeHtml(details) || 'None'}</p>
+      <p><strong>Reported by:</strong> ${escapeHtml(email) || 'Anonymous'}</p>
+    `;
+
+    await emailService.sendEmail(process.env.CLIENT_EMAIL, `Listing reported: ${reason}`, null, emailHtml);
+
+    res.status(200).json({ message: "Thanks, we'll review this listing." });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
+  reportTruck,
   subscribeToNewsletter,
   sendMessage,
   fetchAllTrucks,

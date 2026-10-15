@@ -12,6 +12,20 @@ const ObjectId = yup.string()
 
 const transformToNull = (value, originalValue) => originalValue === '' ? null : value;
 
+const REPORT_REASONS = [
+  'Spam or scam',
+  'Misleading information',
+  'Offensive content',
+  'Already sold or no longer available',
+  'Other',
+];
+
+const reportTruckSchema = yup.object().shape({
+  reason: yup.string().trim().oneOf(REPORT_REASONS, 'Invalid reason').required('Reason is required'),
+  details: yup.string().trim().max(1000, 'Details must be at most 1000 characters').optional(),
+  email: yup.string().trim().email('Invalid email address').optional(),
+});
+
 const truckSchema = yup.object().shape({
   userId: ObjectId.optional(),
 
@@ -101,5 +115,6 @@ const truckSchema = yup.object().shape({
 });
 
 module.exports = {
+  reportTruckSchema,
   truckSchema
 };

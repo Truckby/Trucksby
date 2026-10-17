@@ -8,6 +8,7 @@ const connectDB = require("./configs/db.config");
 const routes = require('./routes/index');
 const trimMiddleware = require('./middleware/trimMiddleware');
 const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware');
+const imageCleanupJob = require('./jobs/imageCleanupJob');
 
 //Express Server Setup
 const app = express();
@@ -56,4 +57,5 @@ app.use(errorHandlerMiddleware);
 
 app.listen(port, () => {
     console.log(`Node/Express Server is Up......\nPort: localhost:${port}`);
+    imageCleanupJob.start();
 });

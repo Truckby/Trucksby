@@ -3,6 +3,7 @@ const stripeService = require("./stripeService");
 const subscriptionService = require("./subscriptionService");
 const truckService = require("./truckService");
 const imageService = require("./imageService");
+const imageCleanupService = require("./imageCleanupService");
 const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
 
@@ -223,6 +224,12 @@ const updateUser = async (userId, updateData) => {
     delete updateData.gender;
   }
 
+  // Neither app can remove a profile photo; an empty value only comes from a form that
+  // didn't load the user, so keep the current photo instead of erasing (and deleting) it
+  if (!updateData.image) {
+    delete updateData.image;
+  }
+
   let existingUser;
   if (updateData.email && updateData.email !== userToUpdate.email) {
     existingUser = await User.findOne({ email: updateData.email });
@@ -238,6 +245,14 @@ const updateUser = async (userId, updateData) => {
     updateData,
     { new: true }
   );
+
+  // The profile photo was replaced or removed: delete the old one. Best effort, the
+  // profile is already saved, and the daily cleanup retries anything left behind.
+  const oldImage = userToUpdate.image;
+  if (oldImage && updatedUser && oldImage !== updatedUser.image) {
+    imageCleanupService.deleteUnusedImages([oldImage])
+      .catch((err) => console.log('DeleteOldProfileImageError: ', err));
+  }
 
   return updatedUser;
 };
@@ -283,7 +298,7 @@ const deleteAccount = async (userId, password) => {
 
   // Image cleanup is best effort: the account is already deleted at this point
   try {
-    await imageService.deleteImages(imageUrls);
+    await imageCleanupService.deleteUnusedImages(imageUrls);
   } catch (err) {
     console.log('DeleteAccountImagesError: ', err);
   }

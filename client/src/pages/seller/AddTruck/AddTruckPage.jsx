@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './style.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -18,21 +18,16 @@ import {
   Draggable,
 } from "@hello-pangea/dnd";
 
+const MAX_IMAGES = 20;
+const MAX_IMAGE_SIZE = 6 * 1024 * 1024; // 6MB
+const VALID_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+
 const AddTruckPage = () => {
   const location = useLocation();
   const oldTruckData = location.state;
-  const [previewImages, setPreviewImages] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // Add this useEffect to handle existing images
-  useEffect(() => {
-    if (oldTruckData?.images && Array.isArray(oldTruckData.images)) {
-      setPreviewImages(oldTruckData.images);
-    }
-  }, [oldTruckData]);
-
 
 
   const formik = useFormik({
@@ -70,7 +65,10 @@ const AddTruckPage = () => {
       backAxleWeight: oldTruckData?.backAxleWeight || "",
       country: oldTruckData?.country || "",
       state: oldTruckData?.state || "",
-      images: oldTruckData?.images || [],
+      // One list drives the previews, order, validation and upload. Each photo is
+      // { src } for one already on the listing, or { src, file } for a new one,
+      // where src is a preview URL until the file is uploaded.
+      images: (oldTruckData?.images || []).map((src) => ({ src })),
       model: oldTruckData?.model || "",
       unitNumber: oldTruckData?.unitNumber || "",
     },
@@ -93,10 +91,7 @@ const AddTruckPage = () => {
       images: Yup.array().min(1, "At least one image is required"), // <-- Add this line
     }),
 
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      dispatch(ShowLoading());
-
-      setSubmitting(true);
+    onSubmit: async (values, { resetForm }) => {
       const numericFields = [
         "vehiclePrice",
         "modelYear",
@@ -109,45 +104,39 @@ const AddTruckPage = () => {
         "phone"
       ];
 
-      let imageUrls = [];
+      // Formik keeps isSubmitting true until this promise settles, and the finally
+      // below always hides the loader, even when the upload fails
+      dispatch(ShowLoading());
+      try {
+        const newImages = values.images.filter((image) => image.file);
+        let uploadedUrls = [];
 
-      // Upload new images if any
-      if (selectedFiles.length > 0) {
-        const form = new FormData();
-        selectedFiles.forEach(file => {
-          form.append("images", file);
+        if (newImages.length > 0) {
+          const form = new FormData();
+          newImages.forEach((image) => form.append("images", image.file));
+
+          const res = await uploadImg(form);
+          uploadedUrls = Array.isArray(res?.urls) ? res.urls : res?.urls ? [res.urls] : [];
+          if (!res?.success || uploadedUrls.length !== newImages.length) {
+            toast.error("Failed to upload images");
+            return;
+          }
+        }
+
+        // Kept photos keep their URL, new ones get theirs from the upload, in the order shown
+        let uploadedIndex = 0;
+        const truckData = {
+          ...values,
+          images: values.images.map((image) => (image.file ? uploadedUrls[uploadedIndex++] : image.src)),
+        };
+
+        // Convert numeric fields to numbers if present
+        numericFields.forEach((field) => {
+          if (truckData[field] !== "") {
+            truckData[field] = Number(truckData[field]);
+          }
         });
 
-        const res = await uploadImg(form);
-        if (res?.success) {
-          if (Array.isArray(res.urls)) {
-            imageUrls = res.urls;
-          } else if (res.urls) {
-            imageUrls = [res.urls];
-          }
-        } else {
-          toast.error("Failed to upload images");
-          setSubmitting(false);
-          return;
-        }
-      } else if (values.images && values.images.length > 0) {
-        // If editing and there are already image URLs
-        imageUrls = values.images.filter(img => typeof img === "string");
-      }
-
-      const truckData = {
-        ...values,
-        images: imageUrls // Only URLs, no File objects!
-      };
-
-      // Convert numeric fields to numbers if present
-      numericFields.forEach((field) => {
-        if (truckData[field] !== "") {
-          truckData[field] = Number(truckData[field]);
-        }
-      });
-
-      try {
         if (oldTruckData?._id) {
           await truckService.updateTruck(oldTruckData._id, truckData);
           toast.success('Equipment updated successfully!');
@@ -155,8 +144,6 @@ const AddTruckPage = () => {
           await truckService.createTruck(truckData);
           toast.success('Equipment listed successfully!');
           resetForm();
-          setPreviewImages([]);
-          setSelectedFiles([]);
         }
         navigate('/seller/listing');
       } catch (error) {
@@ -165,7 +152,6 @@ const AddTruckPage = () => {
       } finally {
         dispatch(HideLoading());
       }
-      setSubmitting(false);
     }
 
 
@@ -174,46 +160,49 @@ const AddTruckPage = () => {
   // console.log(formik.errors, 'formik.errors')
 
 
+  // Free the preview URLs of picked photos when leaving the page
+  const previewUrlsRef = useRef(new Set());
+  useEffect(() => () => {
+    previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+  }, []);
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const maxSize = 6 * 1024 * 1024; // 6MB
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    // Reset the input so picking the same file again (e.g. after removing it) still fires
+    e.target.value = '';
 
-    const validFiles = [];
-    const previews = [];
-
+    const newImages = [];
     files.forEach(file => {
-      if (!validImageTypes.includes(file.type)) {
+      if (!VALID_IMAGE_TYPES.includes(file.type)) {
         toast.error(`${file.name} is not a valid image format`);
         return;
       }
 
-      if (file.size > maxSize) {
+      if (file.size > MAX_IMAGE_SIZE) {
         toast.error(`${file.name} must be less than 6MB`);
         return;
       }
 
-      validFiles.push(file);
-      previews.push(URL.createObjectURL(file));
+      const src = URL.createObjectURL(file);
+      previewUrlsRef.current.add(src);
+      newImages.push({ src, file });
     });
 
-
-    setSelectedFiles(validFiles);
-    setPreviewImages(previews);
-
-    // Update Formik's images field
-    formik.setFieldValue('images', validFiles);
+    // Add to the photos already there instead of replacing them
+    const images = [...formik.values.images, ...newImages];
+    if (images.length > MAX_IMAGES) {
+      toast.error(`You can add up to ${MAX_IMAGES} images`);
+    }
+    formik.setFieldValue('images', images.slice(0, MAX_IMAGES));
   };
 
-
-
   const handleRemoveImage = (index) => {
-    const updatedPreviews = previewImages.filter((_, i) => i !== index);
-    const updatedImageUrls = formik.values.images.filter((_, i) => i !== index);
-
-    setPreviewImages(updatedPreviews);
-    formik.setFieldValue('images', updatedImageUrls);
-
+    const removed = formik.values.images[index];
+    if (removed?.file) {
+      URL.revokeObjectURL(removed.src);
+      previewUrlsRef.current.delete(removed.src);
+    }
+    formik.setFieldValue('images', formik.values.images.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async () => {
@@ -230,16 +219,10 @@ const AddTruckPage = () => {
   const handleImageDragEnd = (result) => {
     if (!result.destination) return;
 
-    const reorderedImages = Array.from(previewImages);
+    const reorderedImages = Array.from(formik.values.images);
     const [moved] = reorderedImages.splice(result.source.index, 1);
     reorderedImages.splice(result.destination.index, 0, moved);
-
-    setPreviewImages(reorderedImages);
-
-    const reorderedFormikImages = Array.from(formik.values.images);
-    const [movedFile] = reorderedFormikImages.splice(result.source.index, 1);
-    reorderedFormikImages.splice(result.destination.index, 0, movedFile);
-    formik.setFieldValue("images", reorderedFormikImages);
+    formik.setFieldValue("images", reorderedImages);
   };
 
 
@@ -431,7 +414,7 @@ const AddTruckPage = () => {
 
 
                   {/* Show image previews */}
-                  {previewImages.length > 0 && (
+                  {formik.values.images.length > 0 && (
                     <DragDropContext onDragEnd={handleImageDragEnd}>
                       <Droppable droppableId="images-droppable" direction="horizontal">
                         {(provided) => (
@@ -440,10 +423,11 @@ const AddTruckPage = () => {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                           >
-                            {previewImages.map((image, index) => (
+                            {formik.values.images.map((image, index) => (
+                              // Keyed by the photo itself so dragging and removing move the right one
                               <Draggable
-                                key={`image-${index}`}
-                                draggableId={`image-${index}`}
+                                key={image.src}
+                                draggableId={image.src}
                                 index={index}
                               >
                                 {(provided) => (
@@ -454,7 +438,7 @@ const AddTruckPage = () => {
                                     className="relative w-24 h-24"
                                   >
                                     <img
-                                      src={typeof image === "string" ? image : URL.createObjectURL(image)}
+                                      src={image.src}
                                       alt={`preview-${index}`}
                                       className="w-full h-full object-cover rounded-md"
                                     />

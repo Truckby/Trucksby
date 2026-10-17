@@ -7,10 +7,25 @@ const imageCleanupService = require("./imageCleanupService");
 const CryptoJS = require('crypto-js')
 const authUtils = require('../utils/authUtils');
 
+// Emails are matched regardless of case, so "John@x.com" and "john@x.com" are the same
+// account. New and changed emails are stored lowercase; older accounts may still have capitals.
+const normalizeEmail = (email) => String(email || '').trim().toLowerCase();
+const CASE_INSENSITIVE = { locale: 'en', strength: 2 };
+
+// Finds a user by email regardless of case. An exact match wins, so if older data has two
+// accounts that differ only in case, each can still log in with its own spelling.
+const findUserByEmail = async (email) => {
+  const trimmed = String(email || '').trim();
+  if (!trimmed) return null;
+  return await User.findOne({ email: trimmed })
+    || await User.findOne({ email: trimmed }).collation(CASE_INSENSITIVE);
+};
+
 // imageFile is the optional profile photo sent with the signup request
 const createUser = async (userData, role, imageFile) => {
-  const { name, email, userName, gender, city, country, state, password, userId, phone, companyName } = userData;
-  let existingUser = await User.findOne({ email });
+  const { name, userName, gender, city, country, state, password, userId, phone, companyName } = userData;
+  const email = normalizeEmail(userData.email);
+  let existingUser = await findUserByEmail(email);
   if (existingUser) {
     const error = new Error('A user with that email has already been registered!');
     error.code = 409;
@@ -65,7 +80,7 @@ const createUser = async (userData, role, imageFile) => {
 
 const loginUser = async (loginData) => {
   const { email, password } = loginData;
-  const user = await User.findOne({ email });
+  const user = await findUserByEmail(email);
   if (!user) {
     const error = new Error('User not found!');
     error.code = 404;
@@ -106,7 +121,7 @@ const loginUser = async (loginData) => {
 };
 
 const createResetToken = async (email) => {
-  const user = await User.findOne({ email });
+  const user = await findUserByEmail(email);
   if (!user) {
     const error = new Error('User not found!');
     error.code = 404;
@@ -230,13 +245,19 @@ const updateUser = async (userId, updateData) => {
     delete updateData.image;
   }
 
-  let existingUser;
-  if (updateData.email && updateData.email !== userToUpdate.email) {
-    existingUser = await User.findOne({ email: updateData.email });
-    if (existingUser) {
-      const error = new Error('A user with that email has already been registered!');
-      error.code = 409;
-      throw error;
+  if (updateData.email) {
+    const newEmail = normalizeEmail(updateData.email);
+    if (newEmail === normalizeEmail(userToUpdate.email)) {
+      // Same address (maybe different capitals): leave the stored email as it is
+      delete updateData.email;
+    } else {
+      const existingUser = await findUserByEmail(newEmail);
+      if (existingUser) {
+        const error = new Error('A user with that email has already been registered!');
+        error.code = 409;
+        throw error;
+      }
+      updateData.email = newEmail;
     }
   }
 

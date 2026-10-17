@@ -199,7 +199,7 @@ const SellerSignupForm = () => {
             <input
               type="text"
               name="city"
-              placeholder="Location"
+              placeholder="City"
               value={formik.values.city}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

@@ -1,6 +1,6 @@
 const truckService = require('../services/truckService');
 const emailService = require('../services/emailService');
-const imageService = require('../services/imageService');
+const imageCleanupService = require('../services/imageCleanupService');
 
 const LISTING_BASE_URL = 'https://truckby.com/detail';
 const subscriptionService = require('../services/subscriptionService');
@@ -220,8 +220,22 @@ const updateTruck = async (req, res, next) => {
 
     // A listing can't be moved to another user
     const { userId, ...data } = req.body;
+
+    // Both apps require at least one photo, so an empty list only comes from a form that
+    // didn't load the listing: keep the current photos instead of erasing (and deleting) them
+    if (Array.isArray(data.images) && data.images.length === 0) {
+      delete data.images;
+    }
+
     const updatedTruck = await truckService.updateTruck(req.params.id, data);
     if (!updatedTruck) return res.status(404).json({ error: 'Equipment not found' });
+
+    // Delete the photos this edit removed. Best effort, the listing is already saved,
+    // and the daily cleanup retries anything left behind.
+    const removedImages = (truck.images || []).filter((url) => !updatedTruck.images.includes(url));
+    imageCleanupService.deleteUnusedImages(removedImages)
+      .catch((err) => console.log('DeleteRemovedTruckImagesError: ', err));
+
     res.status(200).json({ message: 'Equipment updated successfully', truck: updatedTruck });
   } catch (error) {
     next(error);
@@ -240,7 +254,7 @@ const deleteTruck = async (req, res, next) => {
 
     // Photo cleanup is best effort: the listing is already deleted at this point
     try {
-      await imageService.deleteImages(truck.images || []);
+      await imageCleanupService.deleteUnusedImages(truck.images || []);
     } catch (err) {
       console.log('DeleteTruckImagesError: ', err);
     }

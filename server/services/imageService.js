@@ -35,9 +35,14 @@ const uploadImages = async (files) => {
   return results.map((result) => result.Location);
 };
 
-// Deletes images from S3. URLs that aren't in our bucket are ignored.
+// Deletes images from S3 by URL. URLs that aren't in our bucket are ignored.
 const deleteImages = async (urls) => {
-  const keys = [...new Set(urls.map(getS3KeyFromUrl).filter(Boolean))];
+  await deleteImageKeys(urls.map(getS3KeyFromUrl));
+};
+
+// Deletes S3 objects by key
+const deleteImageKeys = async (keys) => {
+  keys = [...new Set(keys.filter(Boolean))];
 
   // deleteObjects accepts at most 1000 keys per request
   for (let i = 0; i < keys.length; i += 1000) {
@@ -53,7 +58,25 @@ const deleteImages = async (urls) => {
   }
 };
 
+// Lists every object in the bucket as { Key, LastModified }
+const listImages = async () => {
+  const objects = [];
+  let ContinuationToken;
+  do {
+    const page = await s3.listObjectsV2({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      ContinuationToken,
+    }).promise();
+    page.Contents?.forEach(({ Key, LastModified }) => objects.push({ Key, LastModified }));
+    ContinuationToken = page.IsTruncated ? page.NextContinuationToken : undefined;
+  } while (ContinuationToken);
+  return objects;
+};
+
 module.exports = {
+  getS3KeyFromUrl,
   uploadImages,
   deleteImages,
+  deleteImageKeys,
+  listImages,
 };
